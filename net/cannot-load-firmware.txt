@@ -1,0 +1,8 @@
+If you have a problem after performing a kernel build where a device's
+firmware cannot be loaded, it is probably due to a change in the SELinux
+security setting for the files in /lib/firmware.
+
+To fix ...
+
+# restorecon -r -v /lib/firmware
+

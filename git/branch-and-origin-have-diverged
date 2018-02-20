@@ -1,0 +1,4 @@
+$ git log HEAD..origin/master
+$ git pull
+
+see http://stackoverflow.com/questions/2452226/master-branch-and-origin-master-have-diverged-how-to-undiverge-branches

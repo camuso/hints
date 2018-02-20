@@ -1,0 +1,130 @@
+Return-Path: rhkernel-list-bounces@redhat.com
+Received: from zmta04.collab.prod.int.phx2.redhat.com (LHLO
+ zmta04.collab.prod.int.phx2.redhat.com) (10.5.81.11) by
+ zmail15.collab.prod.int.phx2.redhat.com with LMTP; Mon, 12 Aug 2013
+ 13:17:43 -0400 (EDT)
+Received: from zmta04.collab.prod.int.phx2.redhat.com (localhost [127.0.0.1])
+	by zmta04.collab.prod.int.phx2.redhat.com (Postfix) with ESMTP id AD72DDA1F6;
+	Mon, 12 Aug 2013 13:17:43 -0400 (EDT)
+Received: from int-mx10.intmail.prod.int.phx2.redhat.com (int-mx10.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+	by zmta04.collab.prod.int.phx2.redhat.com (Postfix) with ESMTP id 62EF9DA1D1;
+	Mon, 12 Aug 2013 13:17:43 -0400 (EDT)
+Received: from lists01.intranet.prod.int.phx2.redhat.com (lists01.intranet.prod.int.phx2.redhat.com [10.5.30.73])
+	by int-mx10.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id r7CHHg01010394;
+	Mon, 12 Aug 2013 13:17:42 -0400
+Received: from lists01.intranet.prod.int.phx2.redhat.com (localhost.localdomain [127.0.0.1])
+	by lists01.intranet.prod.int.phx2.redhat.com (8.13.8/8.13.8) with ESMTP id r7CHHgCs026032;
+	Mon, 12 Aug 2013 13:17:42 -0400
+Received: from int-mx12.intmail.prod.int.phx2.redhat.com
+	(int-mx12.intmail.prod.int.phx2.redhat.com [10.5.11.25])
+	by lists01.intranet.prod.int.phx2.redhat.com (8.13.8/8.13.8) with ESMTP
+	id r7CHHfCV026024 for <rhkernel-list@post-office.corp.redhat.com>;
+	Mon, 12 Aug 2013 13:17:41 -0400
+Received: from griffin (ovpn-113-83.phx2.redhat.com [10.3.113.83])
+	by int-mx12.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP
+	id r7CHHd4S021144
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NO);
+	Mon, 12 Aug 2013 13:17:41 -0400
+Date: Mon, 12 Aug 2013 19:17:38 +0200
+From: Jiri Benc <jbenc@redhat.com>
+To: Cong Wang <amwang@redhat.com>
+Subject: Re: [RHEL7 Patch net 23/38] ip_tunnel: Protect tunnel functions
+	with CONFIG_INET guard.
+Message-ID: <20130812191738.549326ec@griffin>
+In-Reply-To: <1376269314.17589.7.camel@cr0>
+References: <1376052430-15968-1-git-send-email-amwang@redhat.com>
+	<1376052430-15968-24-git-send-email-amwang@redhat.com>
+	<20130809155417.4c11346c@griffin> <1376269314.17589.7.camel@cr0>
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="MP_/bJDZqT8Ow0hc0=mirciJZOp"
+X-Scanned-By: MIMEDefang 2.68 on 10.5.11.23
+X-Scanned-By: MIMEDefang 2.68 on 10.5.11.25
+X-loop: rhkernel-list@redhat.com
+Cc: Red Hat INTERNAL-ONLY kernel discussion list <rhkernel-list@redhat.com>
+X-BeenThere: rhkernel-list@redhat.com
+X-Mailman-Version: 2.1.12
+Precedence: junk
+Reply-To: Red Hat INTERNAL-ONLY kernel discussion list
+	<rhkernel-list@redhat.com>
+List-Id: Red Hat INTERNAL-ONLY kernel discussion list
+	<rhkernel-list.redhat.com>
+List-Unsubscribe: <https://post-office.corp.redhat.com/mailman/options/rhkernel-list>,
+	<mailto:rhkernel-list-request@redhat.com?subject=unsubscribe>
+List-Archive: <http://post-office.corp.redhat.com/archives/rhkernel-list>
+List-Post: <mailto:rhkernel-list@redhat.com>
+List-Help: <mailto:rhkernel-list-request@redhat.com?subject=help>
+List-Subscribe: <https://post-office.corp.redhat.com/mailman/listinfo/rhkernel-list>,
+	<mailto:rhkernel-list-request@redhat.com?subject=subscribe>
+Sender: rhkernel-list-bounces@redhat.com
+Errors-To: rhkernel-list-bounces@redhat.com
+Content-Length: 3285
+Lines: 68
+
+--MP_/bJDZqT8Ow0hc0=mirciJZOp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+On Mon, 12 Aug 2013 09:01:54 +0800, Cong Wang wrote:
+> I know I can cherry-pick them manually, and then modify them one by one,
+> but this wastes time... If you know how to do this automatically,
+> probably by some cmdline option of git cherry-pick and git format-patch,
+> I am very happy to know and use it.
+
+I'm using the two attached scripts. My workflow is: collect a list of
+commit ids in a file (one per line). Run git-to-quilt to create a quilt
+patch series. Using quilt, modify the patches that need to be
+backported. Edit description of the patches that had to be modified.
+Apply the quilt series to git using quilt-to-git. If anything goes
+wrong, git --reset to the latest master (the quilt patches are still
+around, so nothing is lost).
+
+When I'm satisfied, I use some sed-ery to add bugzilla, brew and
+testing info to each patch.
+
+Hope this helps,
+
+ Jiri
+
+-- 
+Jiri Benc
+
+--MP_/bJDZqT8Ow0hc0=mirciJZOp
+Content-Type: application/octet-stream; name=git-to-quilt
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=git-to-quilt
+
+IyEvYmluL2Jhc2gKdHJlZT1+L2dpdC92YW5pbGxhCmlmIFtbIC16ICQxIF1dOyB0aGVuCgllY2hv
+ICJVc2FnZTogRklMRSBbR0lUX1RSRUVdIgoJZWNobwoJZWNobyAiICBGSUxFCQlmaWxlIHdpdGgg
+Y29tbWl0IGlkcyIKCWVjaG8gIiAgR0lUX1RSRUUJJHRyZWUgYnkgZGVmYXVsdCIKCWV4aXQgMQpm
+aQpbWyAtbiAkMiBdXSAmJiB0cmVlPSQyCmlmIFtbIC1lIHBhdGNoZXMvc2VyaWVzIF1dOyB0aGVu
+CgllY2hvICJXb24ndCBvdmVyd3JpdGUgcGF0Y2hlcy9zZXJpZXMuIgoJZXhpdCAxCmZpCm1rZGly
+IC1wIHBhdGNoZXMKd2hpbGUgcmVhZCBjb21taXQ7IGRvCglwYXRjaD0kKGNkICR0cmVlIDsgZ2l0
+LWdldC1wYXRjaCAkY29tbWl0KQoJbXYgJHRyZWUvJHBhdGNoIHBhdGNoZXMvCgllY2hvICRwYXRj
+aCA+PiBwYXRjaGVzL3Nlcmllcwpkb25lIDwgIiQxIgo=
+
+--MP_/bJDZqT8Ow0hc0=mirciJZOp
+Content-Type: application/octet-stream; name=quilt-to-git
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=quilt-to-git
+
+IyEvYmluL2Jhc2gKaWYgW1sgISAtZSBwYXRjaGVzL3NlcmllcyBdXTsgdGhlbgoJZWNobyAicXVp
+bHQgcmVwb3NpdG9yeSBub3QgZm91bmQuIiA+JjIKCWV4aXQgMQpmaQpyZWFkIC1wICJSZWFsbHkg
+YXBwbHkgcXVpbHQgdG8gZ2l0ICh5L04pPyIKW1sgJFJFUExZID09ICJ5IiBdXSB8fCBleGl0IDAK
+Y250PSQocXVpbHQgYXBwbGllZCB8IHdjIC1sKQppZiAoKCBjbnQgPiAwICkpOyB0aGVuCglxdWls
+dCBwb3AgLWEgfHwgZXhpdApmaQoKc2hvcHQgLXMgZXh0Z2xvYgphdXRob3I9IiQoZ2l0IGNvbmZp
+ZyB1c2VyLm5hbWUpICQoZ2l0IGNvbmZpZyB1c2VyLmVtYWlsKSIKCmZ1bmN0aW9uIGdldF9zdWJq
+ZWN0KCkKewoJc3Viaj0kKGhlYWQgLW4gMSAiJDEiKQoJaWYgW1sgJHN1YmogPT0gWystXSogXV07
+IHRoZW4KCQllY2hvICJObyBuYW1lIgoJCXJldHVybgoJZmkKCWlmIFtbICRzdWJqID09IGNvbW1p
+dCogXV07IHRoZW4KCQlnZXRpdD0KCQl3aGlsZSBJRlM9IHJlYWQgLXIgbGluZTsgZG8KCQkJaWYg
+W1sgJGxpbmUgJiYgJGdldGl0IF1dOyB0aGVuCgkJCQllY2hvICIke2xpbmUjIyooWyAJXSl9IgoJ
+CQkJcmV0dXJuCgkJCWZpCgkJCVtbIC16ICRsaW5lIF1dICYmIGdldGl0PTEKCQlkb25lIDwgIiQx
+IgoJZmkKfQoKdG1wZj1fX3RtcF9wYXRjaF9fLiQkCndoaWxlIElGUz0gcmVhZCAtciBwbjsgZG8K
+CVtbICRwbiA9PSBcIyogfHwgLXogJHBuIF1dICYmIGNvbnRpbnVlCglzdWJqPSQoZ2V0X3N1Ympl
+Y3QgInBhdGNoZXMvJHBuIikKCXsKCWVjaG8gIkZyb206ICRhdXRob3IiCglpZiBbWyAkc3ViaiBd
+XTsgdGhlbgoJCWVjaG8gIlN1YmplY3Q6ICRzdWJqIgoJCWVjaG8KCWVsc2UKCQllY2hvIC1uICJT
+dWJqZWN0OiAiCglmaQoJY2F0ICJwYXRjaGVzLyRwbiIKCX0gPiAkdG1wZgoJZ2l0IGFtICR0bXBm
+IHx8IGV4aXQKZG9uZSA8IHBhdGNoZXMvc2VyaWVzCnJtIC1mICR0bXBmCg==
+
+--MP_/bJDZqT8Ow0hc0=mirciJZOp--
+

@@ -1,0 +1,9 @@
+Fedora 20
+---------
+
+yum install -y PackageKit-gtk3-module
+
+# if not already installed ...
+yum install gnome-terminal
+
+

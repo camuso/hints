@@ -1,0 +1,25 @@
+Subject:
+Re: converting text to pdf
+From:
+Ed Greshko <Ed.Greshko@greshko.com>
+Date:
+06/16/2013 06:52 AM
+To:
+Community support for Fedora users <users@lists.fedoraproject.org>
+
+On 06/16/13 18:29, Timothy Murphy wrote:
+> Tom Horsley wrote:
+>
+>> You could install cups-pdf then use any tool you like
+> such as?
+
+Such as lpr.
+
+Installing cups-pdf creates a printer called Cups-PDF.
+
+So, you would use....
+
+lpr -P Cups-PDF whatever
+
+And you'd get a whatever.pdf on your desktop (default behavior).
+

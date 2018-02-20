@@ -1,0 +1,16 @@
+tl;dr ipv6 is -ENOWORKY with virtio ATM.  Disable ipv6, reboot.   git WORKY.
+
+
+What I did ...
+
+/etc/sysctl.conf  :  net.ipv6.conf.all.disable_ipv6 = 1
+
+/etc/sysconfig/network  : NETWORKING_IPV6=no
+
+/etc/sysconfig/network-scripts/ifcfg-eth0 : IPV6INIT=”no”
+
+disable iptables6 by "chkconfig ip6tables off"
+
+reboot.
+
+P.

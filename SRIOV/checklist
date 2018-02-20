@@ -1,0 +1,176 @@
+
+
+Tony,
+
+attached is latest rev of RH's SRIOV/VF checklist we
+are giving to PCIe device partners.
+
+Numerous attributes of devices &/or drivers
+for non-SRIOV devices that want to be used for device-assignment
+apply.
+
+Let me know if you have questions or see anything missing.
+
+- Don
+
+
+SRIOV-guidelines.txt
+
+Isaac & Bhavna,
+
+Here's an SRIOV and device-assignment checklist I've worked
+up w/Chris Wright that we can share with vendors/partners
+asking our advice on SRIOV hw & sw designs.
+
+- Don
+=============================================================
+
+
+A checklist of how to design and test VFs in an SRIOV device.
+
+When a recommendation is tagged as "for PCIe device assignment"
+that means it is recommended if the VF is assigned to a KVM guest.
+Otherwise, the recommendation applies to the VF in the host operating system.
+
+
+VF Design:
+==========
+(0) Driver model:
+    No preference if PF and VF have the same driver or show up
+    as different devices w/ different drivers.  Advantage
+    of separate driver might be to blacklist it in the host.
+    (exclusive access in guest VMs).
+
+(1) VF <-> PF communication must be done in hw.
+    There should be no dependency on the hypervisor
+    for a communication channel between the PF (in the hypervisor)
+    and the VF (in a virtual machine).
+
+(2) For PCIe device assignment, when a VF is assigned to a VM,
+    PCI config space dependencies should be minimized to
+    the lower 256 bytes of a PCI device.
+    (Note: This is true if a PF is device assigned to a VM as well).
+
+(3) By default, the B:D.F that the device resides in the host/HV will
+    not be the same B:D.F in the guest.  Such dependency should not
+    be built into the software.
+    Note: when a VF is device assigned into a KVM guest, all config
+          cycles are trapped by the hypervisor and remapped to the host
+          B:D.F if the access is played out to the PCIe device.
+          Some accesses are trapped and emulated (trying to read a BAR, for example).
+
+(4) Minimize MMIO space per VF (see Testing (2) below).
+    Target: If possible make Total VF space < 1M.
+
+(5) If VF is dependent on PF driver being operational in the host/HV,
+    ensure that a PF driver remove checks if any VF has been assigned
+    to a guest (check PCI_DEV_FLAGS_ASSIGNED).
+    (See igb/ixgbe drivers for example checks & handling).
+
+(6) For PCIe device assignment, if a device is connected to a
+    PCIe hierarchy via a PCIe switch, the PCIe switch must support ACS.
+    There are hooks to defeat this (security) requirement for testing/development
+    reasons, but not in production environments.
+
+(7) VF NICs should have a predictably fixed way to assign macaddr
+    of each VF.  If device/hw/driver doesn't automatically assign a
+    fixed, predictable mac addr, then a host, control plane function
+    should, e.g., "ip link set eth0 vf <NUM> mac <ADDR>".
+    Summary: The PF is the control plane.
+
+(7a) The PF should expose that it is a SRIOV capable device via netlink
+     interface. 
+ 
+     - For NICs, ethtool support for query and configuration via
+     netlink is required - number of VFs to expose, bridge configuration.
+
+     - For HBA, a simialr control plane in the PF is required.  
+
+(8) For a VF NIC, if VF is to be shared by VMs via a bridge we
+    need a way to program the VF to add mac filters for vnics.
+    Don't do something silly w/ broadcast/multicast (like deliver then to
+    a single port) -- this causes hypervisor to have to replicate manually.
+    Deliver broadcast/multicast packets  to each (relevant) VF.
+
+(9) For a VF NIC, provide all the details of how your switch can be
+    managed, please, please, pretty please!
+
+(10) Similar req for VF iSCSI ???   VF FC (NPIV value)??
+    Note: RHEL has no support in these areas, so we are looking
+          to help define it. We are also looking for a ethtool-like utility
+          to help with the control plane
+
+(11) Don't hardcode PCI config space offsets in your driver.
+     Read from PCI config space and use provided offsets.
+     Note: PCI emulation may remap where PCI caps reside.
+
+(12) For PCIe device assignment we will do (at least one) FLR on attach
+     and (at least one) FLR on detach. (See Testing (9) below).
+     Done for security.  Make sure device and driver work when
+     FLR is performed between BIOS setup and assignment to/from guest VM.
+
+(13) Only reset the VF via the PCIe architected FLR bit (device ctrl reg
+      in VF capability structure).
+     Do not reset through some device-specific method, e.g., a bit in a
+     device-specific BAR-based register.
+     note: use PCI (optional) reset bit in Command register to reset PF
+           if necessary.
+ 
+
+Testing:
+========
+(1) Ensure the parent port has ARIFwd support in its
+    Dev Cap2/Ctrl2 registers.
+    Note: It is not required, but significantly avoids a set
+          of failed VF configuration issues.
+        : BIOS dependencies exist here -- reserving enough
+          bus numbers between PCI bridges to support ARIFwd.
+          Sometimes a BIOS spaces PCI bus numbers far enough apart
+          that it happens to work when needed.
+        : some success with Linux kernel command line option
+           pci=assign-busses  (on x86).
+
+(2) Ensure BIOS supports SRIOV VFs -- provides sufficient
+    MMIO space for VFs, i.e., BIOS scans PCI cfg cap structures
+    for SRIOV and allocates address space for VFs in the
+    bus hierarchy.
+    Some BIOS don't scan PCIe caps for SRIOV, but allocate
+    extra MMIO space in the bus hierarchy for hot-plug support.
+    Additionally, by PCI architecture, PCI bridges have 1MB granularity
+    for MMIO space, so a single device consuming 64KB of MMIO space still
+    has 960KB of available MMIO space on the PCIe 'bus', which can be
+    used by the VFs.
+
+(3) For PCIe device assignment, system must have IOMMU support.
+    Make sure it is turned on in BIOS and enabled in the Linux host kernel.
+    VFs used on host (macvtap or bridge connection) do not require IOMMU.
+
+(4) Same requirement for Interrupt Remapping support as IOMMU
+    support in (3).
+
+(5) If planning to support PCIe device assignment to a KVM guest,
+    have a least one test that does a large number
+    of dynamic device attach/detach to a guest, i.e., 3000 attach/detach,
+    and ensure no leakage of memory and/or MSI interrupts.
+
+(6) Varying number of VF enablement. e.g., if device supports
+    32 VFs, bring driver up with various VF numbers,
+    if possible, e.g., 1, 4, 8, 16, 32.
+
+(7) For PCIe device assignment, ensure VF is completely configured
+    in the guest.  For VF NICs, fixed macaddr assignment
+    enables auto dhcp configuration.  (see VF (7) above).
+
+(8) Ensure test system has sufficient number of MSI vector support for VFs.
+
+(9) For PCIe device assignment, perform a host/hypervisor loop test of
+    unbind-from-host; reset; bind-to-pci_stub; unbind, reset, bind-to-guest; unbind-from-guest, reset, bind-to-host.
+    Device and driver re-configuration should work through this sequence.
+    If not, it will not predictably be able to do PCIe device assignment.
+
+(10) Bonding: The PF and VF NIC drivers need to support bonding, with priority
+     given to mode 1 (active-backup) and mode 4 (802.3ad). The PF driver bonding
+     test needs work with a second NIC that may not have SRIOV.  The VF NIC
+     bonding should be tested with the virtio/vhost-net/PV driver.
+
+

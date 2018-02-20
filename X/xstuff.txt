@@ -1,0 +1,47 @@
+Use runlevel to determine if X is running.
+
+runlevel
+
+yum install nmap
+yum grouplist | grep X
+yum grouplist | grep -i desk
+
+yum groupinstall "X Window System"
+yum groupinstall Desktop
+
+# The following is not necessary if Desktop has been installed.
+# It's included here for reference purposes.
+
+yum groupinstall "Destop Platform"
+
+look in /var/log/Xorg.0.log for errors
+
+--------------------------
+
+Subject:
+Re: polkit-gnome-authentication-agent-1 fails to start after F17->F18 update
+From:
+poma <pomidorabelisima@gmail.com>
+Date:
+06/23/2013 07:23 AM
+To:
+users@lists.fedoraproject.org
+
+On 22.06.2013 16:57, Corinna Vinschen wrote:
+
+> The same message is in the vncserver log file, btw.  I'm starting the
+> XFCE4 desktop via `exec startxfce4 --with-ck-launch' and ck-launch-session
+> starts and runs.  What else can I do?!?
+>
+>
+> Thanks for any help,
+> Corinna
+
+- yum erase ConsoleKit*
+- rpmrebuild xfce4-session-4.10.1-1.fc18.src.rpm
+  with *systemd-logind.diff
+- $HOME/.vnc/xstartup
+  #!/bin/sh
+  startxfce4
+
+

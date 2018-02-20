@@ -1,0 +1,22 @@
+[root@camuso ~]# alternatives --config libjavaplugin.so
+
+There are 2 programs which provide 'libjavaplugin.so'.
+
+  Selection    Command
+-----------------------------------------------
+*+ 1           /usr/java/default/lib/i386/libnpjp2.so
+   2           /usr/lib/jvm/jre-1.6.0-openjdk/lib/i386/IcedTeaPlugin.so
+
+Enter to keep the current selection[+], or type selection number: ^C
+[root@camuso ~]# alternatives --config java
+
+There are 3 programs which provide 'java'.
+
+  Selection    Command
+-----------------------------------------------
+*+ 1           /usr/java/default/bin/java
+   2           /usr/lib/jvm/jre-1.6.0-openjdk/bin/java
+   3           /usr/lib/jvm/jre-1.5.0-gcj/bin/java
+
+Enter to keep the current selection[+], or type selection number: 
+

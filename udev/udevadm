@@ -1,0 +1,7 @@
+from http://possiblelossofprecision.net/?p=343
+
+How to get the udev info when you do not know the complete dev path,
+all you have is the dev node.
+
+   udevadm info -a -p  $(udevadm info -q path -n /dev/ipmi0)
+

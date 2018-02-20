@@ -1,0 +1,6 @@
+
+From:	https://bugs.freedesktop.org/show_bug.cgi?id=54712
+	Bug 54712 - RFE: Simplify watchdog configuration on Servers with
+	IPMI compatible hardware
+
+

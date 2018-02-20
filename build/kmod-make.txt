@@ -1,0 +1,32 @@
+Example using hpwdt.c
+
+Go to top of kernel tree.
+
+$ cd rpmbuild/BUILD/kernel/linux-2.6
+$ make modules_prepare
+$ KDIR=$PWD
+$ export KDIR
+$ echo $KDIR  # check your work
+$ cd drivers/watchdog
+$ make -C $KDIR M=$PWD hpwdt.o
+
+Or you can create this Make file
+
+$ vim mkhpwdt
+
+obj-m := hpwdt.o
+
+# KDIR is the kernel directory that is the top-level
+# of the kernel Makefile and header files.
+KDIR := /lib/modules/$(shell uname -r)/build
+
+# PWD is print working directory where your kernel
+# module code resides.
+PWD := $(shell pwd)
+
+default:
+	$(MAKE) -C $(KDIR) M=$(PWD) hpwdt.ko
+
+clean:
+	rm -vf hpwdt.o hpwdt.mod.c hpwdt.ko hpwdt.mod.o hpwdt.ko.unsigned
+

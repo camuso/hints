@@ -1,0 +1,11 @@
+# create a list in chronological order (oldest first) starting 8 commits down
+# from the top of the git log, which is presented in reverse chronological
+#  order (most recent first).
+#
+git log --reverse -n8 --oneline
+
+# This is useful for capturing the upstream commit part of a RHEL commit
+# message.
+#
+git log --reverse -n8 | grep "    commit" | cut -d' ' -f6
+

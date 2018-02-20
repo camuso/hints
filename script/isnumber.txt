@@ -1,0 +1,5 @@
+                #
+                # Continue if i is NOT a number
+                #
+                [[ "${i//*([[:digit:]])}" ]] || continue;
+

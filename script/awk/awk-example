@@ -1,0 +1,28 @@
+On 12.04.2013 19:27, Bob Goodwin - Zuni, Virginia, USA wrote:
+> On 12/04/13 13:04, Reindl Harald wrote:
+>> Am 12.04.2013 18:31, schrieb Bob Goodwin - Zuni:
+>>>>
+>>>> If I do "less syslog.txt | grep DST=17." I get a mixture of outputs
+>>> containing "17."
+>> escaping and quotes are your friend
+>> less syslog.txt | grep "DST=17\."
+>>
+>>
+>>
+> Thanks much, I messed with that for an hour and got no where!
+
+"clouds"? 
+
+awk '{print $11}' syslog.txt | uniq
+DST=17.171.4.13
+DST=174.35.3.56
+or
+awk '{sub("DST=","",$11); print $11}' syslog.txt | uniq
+17.171.4.13
+174.35.3.56
+
+man 1 gawk
+man 1 uniq
+
+poma
+

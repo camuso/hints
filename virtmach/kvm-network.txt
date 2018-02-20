@@ -1,0 +1,13 @@
+46     <interface type='direct'>
+47       <mac address='52:54:00:65:fe:af'/>
+48       <source dev='eth0' mode='bridge'/>
+49       <model type='virtio'/>
+50       <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+51     </interface>
+
+virt-manager:
+NIC:
+Source device: Host device eth0: macvtap
+Device model : virtio
+Source mode  : Bridge
+

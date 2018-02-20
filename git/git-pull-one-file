@@ -1,0 +1,70 @@
+
+
+    you can use git archive (see Jared Forsyth's answer and Robert Knight's answer), since git1.7.9.5 (March 2012):
+
+    git archive --remote=git://git.foo.com/project.git HEAD:path/to/directory filename | tar -x
+
+    That will save a copy of 'filename' from the HEAD of the remote
+    repository in the current directory.
+
+    The :path/to/directory part is optional. If excluded, the fetched
+    file will be saved to <current working
+    dir>/path/to/directory/filename.
+
+Fizer Khan mentions below specifying the tar format explicitly:
+
+git archive --format=tar --remote=origin HEAD -- <file> | tar xf -
+
+It is similar to Paul Brannan's answer:
+
+git archive --format=tar --remote=origin HEAD:path/to/directory -- filename | tar -O -xf -
+
+As commented by Doron Gold, for git archive --remote=xxx to work, you
+MUST first run this inside the directory of your repository on your git
+server (where git daemon runs):
+
+git config daemon.uploadarch true
+
+See patthoyts' comment of 2009 Jakub Narębski's answer on "git: Retrieve
+a single file from a repository".
+
+    or you must clone first the repo, meaning you get the full history:
+        in the .git repo
+        in the working tree.
+
+    But then you can do a sparse checkout (if you are using Git1.7+),:
+        enable the sparse checkout option (git config core.sparsecheckout true)
+        adding what you want to see in the .git/info/sparse-checkout file
+        re-reading the working tree to only display what you need
+
+To re-read the working tree:
+
+$ git read-tree -m -u HEAD
+
+That way, you end up with a working tree including precisely what you
+want (even if it is only one file) shareedit
+	
+edited Nov 8 '14 at 16:45
+	
+answered Mar 18 '10 at 4:58
+VonC
+603k18216951780
+	
+   	 
+	
+can you commit the changes in the sparse checkout? – Tilo Jan 11 '12 at
+6:10 1 	 
+	
+@Tilo: not sure, but it should be possible, considering the clone has
+been a full one. – VonC Jan 11 '12 at 7:02 1 	 
+	
+How's this better than "git checkout HASH path-to-file" as noted in
+other answers? was that just not available at the time? – thatjuan Aug
+30 '12 at 17:47 1 	 
+	
+@juand the idea was to not have to load the all working tree before
+doing git checkout. – VonC Aug 30 '12 at 18:04 1 	 
+	
+btw we can use git archive now. – Jared Forsyth Sep 10 '13 at 7:14
+show 6 more comments 
+

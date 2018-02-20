@@ -1,0 +1,6 @@
+# Sequence for checking out RHEL6+ from the upstream Linux tree.
+#
+git tag | sort
+git checkout -b rh6 v2.6.32
+show HEAD
+git pull --log -t git://git.app.eng.bos.redhat.com/rhel6.git

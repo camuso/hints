@@ -1,0 +1,1 @@
+console -l tcamuso hp-dl580g7-02.rhts.eng.bos.redhat.com

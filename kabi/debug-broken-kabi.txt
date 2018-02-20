@@ -1,0 +1,66 @@
+So here is the deal with kabi checking:
+
+You compile a kernel and find out you broke kabi.  How do you know which
+part of your patch caused the breakage, especially if the broken symbol
+has _nothing_ to do with your patch?  It used to involve guessing and
+recompiling.  Not any more!!!
+
+It isn't fully automated or scripted yet, but this patch continues the
+groundwork laid out by Novell.  Novell added some code awhile ago that
+would save the genksym symbol backtrace when compiling *.o files.  Using
+this backtrace one can easily determine where the kabi broke by comparing
+the old backtrace with the new one.
+
+Here's an example of how it works:
+
+- make sure you have a clean master branch in git and another branch with
+your changes (it is just easier this way)
+- make sure you have your .config setup
+- pick a symbol that brew said broke in kabi, call it 'foo'
+
+git checkout master                    #need the original kabi checksum
+git grep foo |grep EXPORT_SYMBOL       #find the file that exports foo
+make <file>.symtypes                   #generate backtrace
+cp <file>.symtypes <file>.symref       #save the backtrace
+git checkout <branch with change>      #switch to patched branch
+KBUILD_PRESERVE=1 make <file>.symtypes #generate and compare new backtrace
+
+- this should fail and print out the struct that caused the breakage for
+example:
+
+KBUILD_PRESERVE=1 make init/version.symtypes
+...
+init/version.c:37: error: init_uts_ns: modversion changed because of changes in struct uts_namespace
+...
+
+and sure enough it would be right in include/linux/utsname.h:
+
+-@ -40,6 +40,7 @@ struct new_utsname {
+struct uts_namespace {
+    struct kref kref;
+    struct new_utsname name;
++       struct dummy;
+};
+extern struct uts_namespace init_uts_ns;
+
+Most kabi breakages center around usually a single change, but sometimes
+more than one change breaks kabi.  You can either perform all the above
+steps for each symbol that broke kabi or just recompile and what you
+missed.  For now recompiling is probably easiest.
+
+This is a lot of typing, I know.  I am trying to work on a solution that
+automates this more and makes it arch independent so you can run 'make
+rh-kabi' and have it check kabi against predefined kabi files without
+compiling.  But for now, enjoy this piece of the puzzle.
+
+Any questions, feel free to ping me.
+
+Cheers,
+Don
+
+-----------------------------------------------------------------------
+
+Some tricks by Don ...
+
+git log -p drivers/char/ipmi
+

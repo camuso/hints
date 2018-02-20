@@ -1,0 +1,4 @@
+When adding a new Kconfig entry, must initialize config-generic-rhel
+with the default value.
+
+echo "CONFIG_LPC_SCH=m" >> config-generic-rhel

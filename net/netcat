@@ -1,0 +1,42 @@
+From http://nc110.sourceforge.net/
+
+You can use netcat to generate huge amounts of useless network data for
+various performance testing.  For example, doing
+
+	yes AAAAAAAAAAAAAAAAAAAAAA | nc -v -v -l -p 2222 > /dev/null
+
+on one side and then hitting it with
+
+	yes BBBBBBBBBBBBBBBBBBBBBB | nc othermachine 2222 > /dev/null
+
+
+Use netcat to test a network link.
+
+On the sender side ...
+
+$ nc ipaddress portnumber < filenam
+
+Examples
+
+$ nc 127.0.0.1 1234 < /dev/stdin
+
+# nc 172.16.17.241 1234 < /dev/zero
+
+$ nc 0.16.44.11 1234 < bitimage
+
+
+On the receiver side ...
+
+$ nc -l portnumber
+
+... where -l is "listen"
+
+Examples
+
+$ nc -l 1234 > /dev/stdout
+
+# nc -l 1234 > /dev/null
+
+$ nc -l 1234 | hexdump -C > /dev/stdout
+
+

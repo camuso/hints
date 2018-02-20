@@ -1,0 +1,6 @@
+# Configuration file for mailtunnel.  Only the "accept" and "connect" options
+# will be taken from this file.  Everything else is ignored.
+
+# Provide an SSL tunnel for sendmail to smtp.comcast.net port 465 (smtps).
+accept = 127.0.0.25:465
+connect = smtp.comcast.net:465

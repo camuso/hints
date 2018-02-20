@@ -1,0 +1,94 @@
+INSTALL THESE TOOLS
+===================
+
+yum install gnome-tweak-tool dconf dconf-editor gconf-editor
+
+See http://www.scribd.com/doc/52625225/Customizing-the-GNOME-3-Shell
+
+---------------------------------------------------------------------
+
+gnome-tweak-tool (without this, almost nothing can be fixed):
+ yum install gnome-tweak-tool
+
+Sane key bindings (gtk3 and gtk2) - note this can finally be done in
+gnome-tweak-tool, after years of the GNOME trying to hinder usability
+by forcing us unto unusable Windows style bindings:
+ gnome-tweak-tool
+  Theme->Keybinding theme
+ (manual way:
+   dconf write /org/gnome/desktop/interface/gtk-key-theme "'Emacs'"
+   gconftool-2 --set /desktop/gnome/interface/gtk_key_theme Emacs --type string
+ )
+
+Set keyboard shortcuts to jump to workspaces >=5:
+ dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-5 [\'\<Alt\>F5\']
+ dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-6 [\'\<Alt\>F6\']
+
+Set keyboard shortcuts to move window to workspaces >=5:
+ dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-6 [\'\<Alt\>F6\']
+  dconf write /org/gnome/desktop/wm/keybindings/switch-to-workspace-6 [\'\<Alt\>F6\']
+
+Stop gnome-terminal from hijacking important key-bindings (like Alt-b):
+ Edit->Keyboard Shortcuts->Enable Menu Access Keys (uncheck)
+
+Focus-follows-mouse:
+ gnome-tweak-tool
+  Windows->Window focus mode
+
+Icons back on the desktop:
+ gnome-tweak-tool
+  File Manager->Have file manager handle the desktop
+
+Reboot/shutdown buttons in menu:
+ yum install gnome-shell-extension-alternative-status-menu.noarch
+
+Swap CTRL vs CAPS-LOCK:
+ Settings->Region and Language->Layouts->Options->Ctrl key position
+
+Stop gnome-shell from constantly full-screening a window when you move
+it too close to the edge (note this one is tricky, gnome-shell needs
+to be restarted for the change to take effect or Alt-F2 r):
+ dconf write /org/gnome/shell/overrides/edge-tiling false
+ gconftool-2 --set /desktop/gnome/shell/windows/edge_tiling --type Bool false
+
+Import saved VPN profiles:
+ nm-connection-editor
+
+Mobile broadband configuration (not that they work in the first place):
+ nm-connection-editor
+
+Auto-enable wired Ethernet:
+ Network->Network Settings->Wired->Options->Connect automatically
+
+XChat notifications:
+ Settings->Preferences->Chatting->Alerts->Show tray balloons
+
+Get rid of idiotic animations when switching workspaces:
+ https://extensions.gnome.org/extension/119/disable-window-animations/
+
+Get back your static workspaces (regain your sanity):
+ https://extensions.gnome.org/extension/12/
+
+Replace chaotic activities with application menu:
+ https://extensions.gnome.org/extension/13/applications-menu/
+
+Get back the shutdown menu:
+ https://extensions.gnome.org/extension/14/
+
+Disable 5^#&*^$%^%$ 'tracker' retardedness eating your battery
+ gnome-session-properties  (untick all items under tracker-*)
+
+Information I am looking for
+============================
+
+1) How to get Empathy to pop up proper chat windows instead of using the
+annoying pointless notification bar?
+
+2) How to be able to specify default parameters for apps launched from
+gnome-shell. Ie. I want firefox launched with --no-remote *always*
+
+3) How to default to opening a new window for a given app, rather than
+jumping to the already open one. I run many terminal windows and I
+don't want to rely on just one.
+
+

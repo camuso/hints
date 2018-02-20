@@ -1,0 +1,7 @@
+Permissive
+
+# sudo setenforce 0
+
+Tell us the security level enforce, permissive, or off. 
+
+# getenforce

@@ -1,0 +1,1 @@
+rpm2cpio ol-hw-cert-0.1-31.el5.noarch.rpm | cpio -idmv

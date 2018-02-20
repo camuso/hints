@@ -1,0 +1,10 @@
+# To follow the definition path of any function, type at  
+# your command prompt:
+
+grep cli 'find / -name '*.[ch]'
+-print'
+
+# This will search all files with extension c and h in the 
+# root directory for the word cli. Also, you can issue the 
+# command man 2 intro to see something about system calls. 
+

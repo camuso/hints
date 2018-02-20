@@ -1,0 +1,54 @@
+http://www.gnu.org/software/freeipmi/manpages/man8/ipmi-raw.8.html
+
+http://www.gnu.org/software/freeipmi/manpages/man8/ipmi-sel.8.html
+
+# sierra12 /root > ipmi-raw 0x00 0x06 0x31
+rcvd: 31 00 02
+
+     0x31 is "get message flags", and the response of 0x02 means the event
+message buffer is full. So rightfully, the driver next attempts to read a
+message from the event message buffer:
+
+# sierra12 /root > ipmi-raw 0x00 0x06 0x35
+rcvd: 35 80
+
+     The 0x80 response is "data not available (queue / buffer empty)"
+according to the spec.  And so we get stuck in an endless loop trying to
+clear a buffer that's simultaneously full and empty.  So to delve a bit
+further, I did a "Get BMC global enables":
+
+# sierra12 /root > ipmi-raw 0x00 0x06 0x2f
+rcvd: 2F 00 0D
+
+     The 0x0d tells us that the event message buffer is indeed enabled.
+So let's try clearing the event message flag and reading the result:
+
+
+# sierra12 /root > ipmi-raw 0x00 0x06 0x30 0x02
+rcvd: 30 00
+# sierra12 /root > ipmi-raw 0x00 0x06 0x31
+rcvd: 31 00 02
+
+     Nope, the bit is still stuck.  OK, well, let's try something drastic.
+Let's tell the BMC to do a cold reset.
+
+
+# sierra12 /root > ipmi-raw 0x00 0x06 0x02
+rcvd: 02 00
+
+     This caused IPMI commands to start timing out for a while (30-60
+seconds maybe, I wasn't paying enough attention).  But when things started
+responding again,
+
+# sierra12 /root > ipmi-raw 0x00 0x06 0x01
+rcvd: 01 00 25 01 01 26 02 BF 59 50 00 34 00 6E 6D 00 00
+# sierra12 /root > ipmi-raw 0x00 0x06 0x31
+rcvd: 31 00 00
+
+     Voila, our stuck flag bit is cleared!
+
+     I tried a warm reset as well, which didn't seem to be enough to clear out
+the issue.  The spec seems to warn against doing a cold reset on a running
+system, so if there are any suggestions for less invasive things to try to
+clear the stuck bit, I'll gladly test them.
+

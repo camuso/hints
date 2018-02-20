@@ -1,0 +1,1 @@
+dd conv=noerror,notrunc bs=1048576 if=/dev/sda of=/dev/sdb & 

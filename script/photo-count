@@ -1,0 +1,1 @@
+find ~/Photos/ -type f -iname jec*.jpg | wc -

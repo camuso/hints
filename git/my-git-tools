@@ -1,0 +1,61 @@
+
+renpat <directory> <prefix>
+
+	Renames files in the <directory> as "<prefix>-xx.yy.patch"
+	where xx is the patch number in the set and yy is the total
+	number of patches in the set.
+
+gitfor1pat <directory> <patch-number> <commit>
+	directory    - destination of patch
+	patch-number - number of the patch
+	commit       - commit number of patch to be formatted
+
+	Patch will be named "patch-number.patch"
+
+genpatset <directory>
+
+	Generate a patchset from non-contiguous patches in <directory>.
+	Patches will be named with leading sequential numbers followed
+	by the one-line description and ".patch".
+
+patcmp <dir-1> <dir-2>
+
+	Call vimdiff to compare the files in the two directories.
+	The two directories must have the same number of files.
+
+The above tools are used for examining patches and patchsets.
+Typically, the sequence is as follows.
+
+* Use mutt to tag and extract the patchset into a directory (see
+  ~/hints/mutt).
+
+* Use renpat to rename the files in the Mail directory from the
+  mutt-generated names to something that makes sense.
+
+* Use git am to apply the patches from the Mail directory to the kernel
+  tree.
+
+* Invoke genpatset to generate a set of upstream patches based on the
+  upstream commits listed in the RHEL patchset.
+
+* Invoke patcmp to vimdiff the upstream patches with the RHEL patches.
+
+
+gitblame1 <string> <path/file>
+
+	Finds the most recent commit associated with the <string> in the
+	given <path/file>.
+
+gitrevcommits <revision-1> <revision-2> <string>
+
+	Creates a file of oneline commit messages between the two revisions
+	whose first line contains <string> and outputs them to a file.
+
+gitrevpatches <commitsFile>
+
+	Creates a file containing the complete patches using the oneline
+	commits in the provided <commitsFile>, which is most easily created
+	by calling gitrevcommits (see above).
+
+ - File created by invoking "gitrevcommits"
+

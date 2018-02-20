@@ -1,0 +1,104 @@
+<dmarlin> tcamuso: notice that the version is in the source file name:
+<dmarlin>   Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+<dmarlin> so the version and the tarball file name have to match
+<dmarlin> did you change the source tarball?
+* dmarlin does not know what changed, or needed to change
+<dmarlin> if you just added a patch, or changed something in the spec (config, etc.), then you should only change the 'Release' and not the version
+<dmarlin> that way the tarball filename would still match
+<dmarlin> if you changed the source itself (tarball), then just make sure the version matches the tarball file name
+<tcamuso> I ichanged the tarball. 
+<tcamuso> But I have the tarball in the same directory as the spec file
+<dmarlin> ok, then you should just need to make sure the filename matches what's in the spec
+<dmarlin> ah, the tarball should be in the SOURCES directory, if using rpm locally
+<tcamuso> tboot-1.8.3.tar.gz is what I have
+<dmarlin> anything in the spec labeled as SourceX: will be searched in SOURCES
+<dmarlin> patches as well
+<tcamuso> No, I'm trying to run a brew biuld with "rhpkg scratch-build"
+<dmarlin> hmm... ok... how did you make the srpm?
+<tcamuso> you can see the output at https://brewweb.devel.redhat.com/taskinfo?taskID=10323556
+<dmarlin> ok, thanks
+<dmarlin> looking...
+<tcamuso> Hmmm. I didn't make an srpm.
+<tcamuso> I thought the rhpkg app would do it.
+<dmarlin> sorry, so many ways to do these things, and I only know the few I use
+<tcamuso> Understood.
+<dmarlin> looking at the logs now...
+<tcamuso> I'm running on notes I took a couple years ago. 
+<tcamuso> Don't even know where I got them.
+<dmarlin> let me look for some rhpkg notes...
+* dmarlin has not used it in a while
+<tcamuso> MANY thanks
+<dmarlin> np... I should know these things, but... so many tools...   :-/
+<dmarlin> ok, when I used it last I did the following:
+<dmarlin> rhpkg clone <package>
+<dmarlin> pushd <package>
+<tcamuso> Yup
+<dmarlin> rhpkg switch-branch <branch>
+<dmarlin>   (make any changes)
+<dmarlin> rhpkg --dist=<distribution> srpm
+<tcamuso> OK, I don't have those in my notes.
+<dmarlin> rhpkg build --scratch --target <target>  --srpm <SRPM>
+<tcamuso> I'll send you ca copy of the notes I have for critique.
+<dmarlin> "rhpkg --dist=<distribution> srpm"  makes the SRPM
+<dmarlin> there are probably other ways to do it... this is just what I've used
+<dmarlin> if you commited everything to git and pushed it, then you could probably build 'from' git, but I typically just use local sources for scratch builds
+<tcamuso> I'll try your method, since it seems to be more specific than the one I was using.
+<dmarlin> I think " --dist=<distribution>  " is optional, but I use it to be sure I'm not getting the wrong default
+<dmarlin> i.e., for aarch64 I use --dist=rhel-7.2-aarch64
+<tcamuso> Heh. tboot only supports x86_64
+<tcamuso> BUT it can't hurt to be specific
+<dmarlin> well, I won't be building that one.    ;-)
+<dmarlin> from your notes, did you attempt "rhpkg local" ?
+<tcamuso> Yes.
+<dmarlin> and no errors?
+<tcamuso> I got an error at the end that I didn't understand/
+<tcamuso> Dest dir longer than base dir is not supported
+<tcamuso> error: Bad exit status from /var/tmp/rpm-tmp.FUUVsa (%install)
+<tcamuso> RPM build errors:
+<tcamuso>     Bad exit status from /var/tmp/rpm-tmp.FUUVsa (%install)
+<tcamuso> Could not execute local: Non zero exit
+<dmarlin> hmm... that is an odd one
+<tcamuso> Dest dir longer than base dir? What's that supposed to mean?
+<dmarlin> really... not sure
+<tcamuso> Who would know?
+<tcamuso> Who is maintainer for rhpkg?
+<dmarlin> good question... one of our 'internal' tools
+<tcamuso> Better questions is how can I find out who is maintainer.
+<dmarlin> so if you are still in the directory (git) please try:
+<tcamuso> yes
+<dmarlin>  rhpkg  srpm
+<dmarlin> and see if it can make one
+<tcamuso> $ rhpkg srpm
+<tcamuso> error getting product information for rhel-6.8, assuming it's unreleased
+<tcamuso> Wrote: /work/tboot/tboot-1.8.3-1.el6.src.rpm
+<dmarlin> ok, so it made an srpm
+<dmarlin> please see what's in it:
+<dmarlin>   rpm -qlp -1.8.3-1.el6.src.rpm
+<tcamuso> $ rpm -q --filesbypkg -p tboot-1.8.3-1.el6.src.rpm
+<tcamuso> tboot                     tboot-1.8.3-README.patch
+<tcamuso> tboot                     tboot-1.8.3-cmdline-size.patch
+<tcamuso> tboot                     tboot-1.8.3-coverity.patch
+<tcamuso> tboot                     tboot-1.8.3.tar.gz
+<tcamuso> tboot                     tboot.spec
+<dmarlin> looks good
+<tcamuso> JUst the tar file and a couple patches.
+<tcamuso> Yes, intersetingly.
+<dmarlin> one moment... call
+<tcamuso> call?
+<dmarlin> I got a call
+<tcamuso> Oh.
+<tcamuso> I've gotta run. I'll try your method and see if I can get better results.
+<dmarlin>   rhpkg build --scratch --target <TARGET> --srpm tboot-1.8.3-1.el6.src.rpm
+<dmarlin> if that works, then the only issue would be in the git operations (behind the scenes)
+<dmarlin>  please make sure the "rhpkg upload tboot-1.8.3.tar.gz " had the right file name and completed successfully
+<dmarlin> and that the 'sources file' is correct and was part of the commit
+<dmarlin> (steps 7 and 8)
+* dmarlin did not see where "the sources file" was added to the commit... maybe a missing step?
+<tcamuso> Thanks!
+<dmarlin>    $ git add tboot.spec
+<dmarlin>    $ git commit 
+<tcamuso> Hmmm. I think I did a git commit -a
+<tcamuso> But I will check.
+<dmarlin> ok, thanks
+<tcamuso> That would be a killer if I did something stupid like that.
+<dmarlin> easy to overlook

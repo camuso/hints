@@ -1,0 +1,79 @@
+
+# be sure that impi service has been started and all modules are loaded.
+#
+# ipmitool mc watchdog get
+Could not open device at /dev/ipmi0 or /dev/ipmi/0 or /dev/ipmidev/0: No such file or directory
+Get Watchdog Timer command failed
+
+OR ...
+
+a=$(awk '/ipmidev/{print $1}' < /proc/devices)
+echo $a
+246
+
+awk will go through file /proc/devices and search for the line containing the
+string "ipmidev", whereupon it will print the first field in the line, which is
+a number.
+
+From /proc/devices ...
+
+ :
+203 cpu/cpuid
+246 ipmidev
+247 ptp
+ :
+
+
+# service ipmi status (pre-6.4 only)
+ipmi_msghandler module in kernel.
+ipmi_si module in kernel.
+ipmi_devintf module not loaded.
+/dev/ipmi0 does not exist.
+
+# modprobe ipmi_devintf
+
+# service ipmi status
+ipmi_msghandler module in kernel.
+ipmi_si module in kernel.
+ipmi_devintf module loaded.
+/dev/ipmi0 exists.
+
+# ipmitool mc info
+Device ID                 : 19
+Device Revision           : 2
+Firmware Revision         : 1.20
+IPMI Version              : 2.0
+Manufacturer ID           : 11
+Manufacturer Name         : Hewlett-Packard
+Product ID                : 8192 (0x2000)
+Product Name              : Unknown (0x2000)
+Device Available          : yes
+Provides Device SDRs      : no
+Additional Device Support :
+    Sensor Device
+    SDR Repository Device
+    SEL Device
+    FRU Inventory Device
+    Chassis Device
+Aux Firmware Rev Info     : 
+    0x20
+    0x00
+    0x00
+    0x00
+
+# ipmitool mc watchdog info
+usage: watchdog <command>:
+   get    :  Get Current Watchdog settings
+   reset  :  Restart Watchdog timer based on most recent settings
+   off    :  Shut off a running Watchdog timer
+
+# ipmitool mc watchdog get
+Watchdog Timer Use:     Reserved (0x00)
+Watchdog Timer Is:      Stopped
+Watchdog Timer Actions: No action (0x00)
+Pre-timeout interval:   0 seconds
+Timer Expiration Flags: 0x00
+Initial Countdown:      0 sec
+Present Countdown:      0 sec
+
+

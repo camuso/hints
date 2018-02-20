@@ -1,0 +1,22 @@
+
+Load watchdog with timeout=60
+
+# modprobe -v ipmi_watchdog timeout=60
+
+Install OpenIPMI and start the app
+# yum install OpenIPMI
+# vim /etc/sysconfig/ipmi
+
+Uncomment the following line
+IPMI_WATCHDOG_OPTIONS="timeout=60"
+
+# systemctl start ipmi
+
+# vim /etc/systemd/system.conf
+
+Uncomment the following line
+RuntimeWatchdogSec=60
+
+# systemctl daemon-reexec
+
+

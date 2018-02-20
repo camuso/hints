@@ -1,0 +1,67 @@
+# Say you have a bunch of .tar.gz files, each representing a certain
+# version of a program source code. If you want to compare their contents
+# and see what changed, git would help a lot.
+#
+# So I wrote a script that would do the work for me and create a repository
+# for those file. It then unpacks the .tar.gz files and adds the files to
+# the repository and commits a new version:
+
+#!/bin/bash
+
+mkdir new_repo
+cd new_repo
+git init
+cd ..
+
+for archive in $(ls eth*tar.gz)
+do
+    tar -xf $archive
+    cd new_repo; git rm -rf *; cd ..
+    archive_dir=$(basename $archive .tar.gz)
+    mv $archive_dir/* new_repo/
+    cd new_repo; git add .; git commit -m $archive_dir; cd ..
+    rm -rf $archive_dir
+done
+
+
+# and from http://www.kernel.org/pub/software/scm/git/docs/everyday.html
+#
+
+Use a tarball as a starting point for a new repository.
+
+    $ tar zxf frotz.tar.gz
+    $ cd frotz
+    $ git init
+    $ git add . <1>
+    $ git commit -m "import of frotz source tree."
+    $ git tag v2.43 <2>
+
+       1.
+
+          add everything under the current directory.
+       2.
+
+          make a lightweight, unannotated tag.
+
+Create a topic branch and develop.
+
+    $ git checkout -b alsa-audio <1>
+    $ edit/compile/test
+    $ git checkout -- curses/ux_audio_oss.c <2>
+    $ git add curses/ux_audio_alsa.c <3>
+    $ edit/compile/test
+    $ git diff HEAD <4>
+    $ git commit -a -s <5>
+    $ edit/compile/test
+    $ git reset --soft HEAD^ <6>
+    $ edit/compile/test
+    $ git diff ORIG_HEAD <7>
+    $ git commit -a -c ORIG_HEAD <8>
+    $ git checkout master <9>
+    $ git merge alsa-audio <10>
+    $ git log --since='3 days ago' <11>
+    $ git log v2.43.. curses/ <12>
+
+       1.
+
+

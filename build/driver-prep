@@ -1,0 +1,4 @@
+make oldconfig		# take all the defaults
+make prepare
+make modules_prepare
+make M=drivers/<directory>

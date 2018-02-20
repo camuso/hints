@@ -1,0 +1,42 @@
+# list loop mounted devices and filesystems
+#
+losetup -a
+
+# Show which loop devices are being used by which processes
+#
+# pgrep -l loop
+390 loop1
+11915 loop4
+17057 loop0
+17403 loop5
+20732 loop7
+31418 loop3
+
+# To umount a loop mounted device
+#
+umount -d /mnt/distro/x86_64
+
+# If the device is busy, because you have it exported, shut down the exported
+# mount point.
+#
+exportfs -u /mnt/distro/x86_64
+
+# ..or shut down all exports
+#
+exportfs -ua
+
+# Delete a loop device
+#
+losetup -d /dev/loop0
+
+# If you get the following message ...
+# 	loop: can't delete device /dev/loop4: Device or resource busy
+# .. be sure that you have stopped all processes using the loop mounted filesystem.
+# Look for exports, virtual machines, etc.
+
+# Show wich processes are attached to a loop mounted device.
+#
+# fuser -m /home/work/distros/rhel5.5/RHEL5.5-Server-20100322.0-x86_64-DVD.iso
+/home/work/distros/rhel5.5/RHEL5.5-Server-20100322.0-x86_64-DVD.iso:  2759c  2810c  2832c  2848c  2953  2955c  2958c  2959c  2960c  2967c  2968c  2972c  2974c  2981c  2984c  2996  3264c  3266c  3297c  4508c  6927c  6935c  6936c  6997c  7011  7012c  7019c  7020c  7021c  7022c  7028c  7029c  7031c  7035c  7038c  7052m  7053c  7055c  7078  7374c  7392c  8152c  8154c  8373c  8395c  8420c  8464c  8468c  8758c  9592c 10943c 11280c 16113c 23402c 27633 27871c 32676c 32681c
+
+

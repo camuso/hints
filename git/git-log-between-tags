@@ -1,0 +1,26 @@
+Count the number of patches between two tags. 
+
+# git log RHEL6.3..RHEL6.4 --oneline | wc -l
+
+
+find all the usb patches between two revisions
+
+# git log RHEL6.3..RHEL6.4 --oneline | grep usb
+
+Find number of commits on branch or tag (leave blank if current branch is desired):
+
+$ git log <branch/tag/blank> --pretty=oneline | wc -l 
+
+Will output e.g.
+
+5164
+
+Find commit id by commit number (replace 5614 with your commit number)
+
+$ git log <branch/tag/blank> --pretty=oneline --reverse | sed -n 5614p
+
+Will output e.g.
+
+e5c303d47afb7c3a98bc138049024d24924e6a9b Minor code fixes
+
+

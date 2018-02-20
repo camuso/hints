@@ -1,0 +1,335 @@
+    1  service network restart
+    2  /sbin/service network restart
+    3  ifconfig
+    4  /sbin/ifconfig
+    5  /sbin/ifconfig
+    6  cat /etc/localhost
+    7  cat /etc/localhosts
+    8  find / -name localhost*
+    9  ifconfig
+   10  reboot -h now
+   11  service network restart
+   12  /sbin/service network restart
+   13  /sbin ifcofig
+   14  /sbin/ifconfig
+   15  df
+   16  ls /dev
+   17  vim /boot/grub/grub.conf
+   18  ls /dev/VolGroup00/
+   19  mkdir /mnt
+   20  ls /mnt
+   21  mkdir /mnt/sata-guest
+   22  ls /dev/VolGroup00/LogVol0
+   23  ls /dev/VolGroup00/LogVol00
+   24  ls /dev/VolGroup00/LogVol01
+   25  df
+   26  cat /etc/fstab
+   27  mount /dev/VolGroup00/LogVol01 /mnt/guest-sata
+   28  lsdev
+   29  lsmnt
+   30  lsdisk
+   31  ping 192.168.1.77
+   32   /sbin/ifconfig
+   33  route
+   34  mount /dev/sdb /mnt/sata-guest
+   35  mkdir /mnt/g1
+   36  mount /dev/sdb /mnt/g1
+   37  man mount
+   38  mount -t reiserfs /dev/sdb /mnt/g1
+   39  mount -t reiserfs /dev/sdb1 /mnt/g1
+   40  mount -t reiserfs /dev/sdb /mnt/g1
+   41  dmesg | tail
+   42  man mount
+   43  mount -t autofs /dev/sdb /mnt/g1
+   44  dmesg | tail
+   45  /sbin/ifconfig
+   46  /sbin/service network start
+   47  /sbin/ifconfig
+   48  route
+   49  /sbin/route
+   50  cd
+   51  ls
+   52  ls -alF
+   53  vim .bashrc
+   54  echo $PAH
+   55  echo $PATH
+   56  ping ftp.webhero.com
+   57  kinit
+   58  ls /bin
+   59  ls /sbin
+   60  ls /kerberos
+   61  echo $PATH
+   62  ls /usr/kerberos/bin
+   63  PATH=$PATH:/sbin
+   64  echo $PATH
+   65  export PATH
+   66  ifconfig
+   67  netconfig
+   68  netcfg
+   69  ls /etc/sysconfig
+   70  ls /etc/sysconfig/netconsole
+   71  /etc/sysconfig/netconsole
+   72  netstat
+   73  ping 192.168.3.1
+   74  ping 192.168.3.2
+   75  ssh 192.168.3.2
+   76  traceroute
+   77  traceroute -p eth0
+   78  traceroute eth0
+   79  traceroute 192.168.1.1
+   80  traceroute 192.168.1.77
+   81  service iptables stop
+   82  ifconfig
+   83  service network restart
+   84  ifconfig
+   85  yum install vnc
+   86  vim .bashrc
+   87  wget --user=RH_Partner$ --password=11*toOne http://www.camusofamily.com/Files/code/basrc
+   88  wget --user=RH_Partner$ --password=11*toOne http://www.camusofamily.com/Files/code/bashrc
+   89  wget --user=RH_Partner$ --password=11*toOne http://www.camusofamily.com/Files/code/vimrc
+   90  vim .bashrc
+   91  cat.bashrc
+   92  cat .bashrc
+   93  find / -name '*vimrc'
+   94  mv /etc/vimrc /etc/vimrc.orig
+   95  mv vimrc /etc/.
+   96  vim
+   97  vim .bashrc
+   98  vim .bashrc
+   99  cd /home/camuso
+  100  cat .bashrc
+  101  mv .bashrc .bashrc.orig
+  102  cp bashrc /home/camuso/.bashrc
+  103  cp .bashrc /home/camuso/.bashrc
+  104  cp /bashrc /home/camuso/.bashrc
+  105  cp ~/bashrc /home/camuso/.bashrc
+  106  ls
+  107  cat .bashrc
+  108  LS_COLORS='no=00:fi=00:di=01;93:ln=00;36:pi=40;33:so=01;95:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=01;32:*.cmd=01;32:*.exe=01;32:*.com=01;32:*.btm=01;32:*.bat=01;32:*.sh=01;32:*.csh=01;32:*.tar=01;31:*.tgz=01;31:*.svgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.bz2=01;31:*.tbz2=01;31:*.bz=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;95:*.jpeg=01;95:*.gif=01;95:*.bmp=01;95:*.pbm=01;95:*.pgm=01;95:*.ppm=01;95:*.tga=01;95:*.xbm=01;95:*.xpm=01;95:*.tif=01;95:*.tiff=01;95:*.png=01;95:*.mng=01;95:*.pcx=01;95:*.mov=01;95:*.mpg=01;95:*.mpeg=01;95:*.m2v=01;95:*.mkv=01;95:*.ogm=01;95:*.mp4=01;95:*.m4v=01;95:*.mp4v=01;95:*.vob=01;95:*.qt=01;95:*.nuv=01;95:*.wmv=01;95:*.asf=01;95:*.rm=01;95:*.rmvb=01;95:*.flc=01;95:*.avi=01;95:*.fli=01;95:*.gl=01;95:*.dl=01;95:*.xcf=01;95:*.xwd=01;95:*.yuv=01;95:*.svg=01;95:'
+  109  export LS_COLORS
+  110  cat .bashrc
+  111  ls
+  112  ls sdb
+  113  ls sdb1
+  114  ls /mnt
+  115  rmdir /mnt/sata-guest
+  116  ls
+  117  shutdown -h now
+  118  vim .bashrc
+  119  cd /etc/
+  120  chmod 640 sudoers
+  121  chmod +w sudoers
+  122  ps aux | grep vim
+  123  kill 3057
+  124  ls -alf sudoers
+  125  ls -al sudoers
+  126  chmod -w sudoers
+  127  ls -al sudoers
+  128  echo $PATH
+  129  vim .bashrc
+  130  cd /etc
+  131  ls
+  132  vim sudoers
+  133  cd /etc
+  134  ls -alF sudoers
+  135  chmod +w sudoers
+  136  ls -alF sudoers
+  137  service start network
+  138  service network start
+  139  ifconfig
+  140  chmod 440 sudoers
+  141  vm sudoers
+  142  vim sudoers
+  143  vim sudoers
+  144  ls rc.conf
+  145  find / -name rc.conf
+  146  vim /etc/sysconfig/network-scripts/ifcfg-eth0
+  147  chkconfig network
+  148  chkconfig 
+  149  chkconfig --level 345 on
+  150  chkconfig --level 345 network on
+  151  chkconfig | grep network
+  152  ls /dev
+  153  mount -t autofs sdb
+  154  mount -t autofs /ev/sdb
+  155  mount -t autofs /dev/sdb
+  156  mount -t autofs /dev/sdb
+  157  mount -t autofs /dev/sdb
+  158  cat /etc/fstab
+  159  reiserfsck --rebuild-tree -S -l /root/recovery.log /dev/sdb
+  160  fsck sdb
+  161  fsck -v /dev/sdb
+  162  yum install reiserfsck
+  163  yum install reiserfsprogs
+  164  man ddrescue
+  165  man dd
+  166  cd
+  167  wget http://anduin.linuxfromscratch.org/sources/BLFS/svn/r/reiserfsprogs-3.6.20.tar.gz
+  168  ls /usr/
+  169  ls /usr/bin
+  170  ls /usr/
+  171  ls /usr/src
+  172  ls /usr/etc
+  173  ls
+  174  mv reiserfsprogs-3.6.20.tar.gz /usr/etc
+  175  cd /usr/etc
+  176  ls
+  177  tar -xvf reiserfsprogs-3.6.20.tar.gz 
+  178  ls
+  179  cd reiserfsprogs-3.6.20
+  180  ./configure --prefix=/usr --sbindir=/sbin && make
+  181  make install && ln -sf reiserfsck /sbin/fsck.reiserfs && ln -sf mkreiserfs /sbin/mkfs.reiserfs
+  182  debugreiserfs
+  183  debugreiserfs -q sdb
+  184  debugreiserfs -q /dev/sdb
+  185  reiserfsck --check /dev/sdb
+  186  reiserfsck --check /dev/sdb
+  187  reiserfsck --rebuild-sb /dev/sdb
+  188  reiserfsck --rebuild-sb /dev/sdb
+  189  reiserfsck --rebuild-sb --no-journal-available /dev/sdb
+  190  reiserfsck --rebuild-sb --no-journal-available /dev/sdb
+  191  reiserfsck --rebuild-sb --no-journal-available /dev/sdb
+  192  reiserfsck --check
+  193  reiserfsck --check /dev/sdb
+  194  ls /dev/sd*
+  195  init /dev/sdb
+  196  man init
+  197  sfdisk -l -x 
+  198  mount -t vfat sdb
+  199  man mount
+  200  mount -t vfat /dev/sdb
+  201  mount -t vfat /dev/sdb
+  202  mount -t vfat /dev/sdb
+  203  mount -t vfat /mnt/g1 /dev/sdb
+  204  ls /mnt/g1
+  205  ls /mnt
+  206  umount /mnt/g1
+  207  dmesg | grep -i sdb
+  208  man cfdisk
+  209  dmesg | grep -i sdb
+  210  sfdisk /dev/sdb
+  211  cfdisk /dev/sdb
+  212  ls /dev/sd*
+  213  mount /dev/sdb1
+  214  ls /dev/sdb1
+  215  cd
+  216  ls
+  217  mkdir /dev/sdb1/test
+  218  init /dev/sdb1
+  219  fsck /dev/sdb1
+  220  df
+  221  cat /etc/fstab
+  222  man fdisk
+  223  mount /mnt/g1 /dev/sdb1
+  224  mount /dev/sdb1 /mnt/g1
+  225  mount -t autofs /dev/sdb1 /mnt/g1
+  226  dmesg | tail
+  227  man mkfs
+  228  mkfs -c -t ext3 /dev/sdb1
+  229  mkfs -v -c -t ext3 /dev/sdb1
+  230  mount -o rw /dev/sdb1 /mnt/g1
+  231  mount -fs ext2 -o rw /dev/sdb1 /mnt/g1
+  232  mount -t ext2 -o rw /dev/sdb1 /mnt/g1
+  233  mount -t ext3 -o rw /dev/sdb1 /mnt/g1
+  234  mount -t ext3 -o rw /dev/sdb1 /mnt/g1
+  235  cfdisk /dev/sdb1
+  236  mount -t ext3 -o rw /dev/sdb1 /mnt/g1
+  237  mount -t ext2 -o rw /dev/sdb1 /mnt/g1
+  238  mount -t autofs -o rw /dev/sdb1 /mnt/g1
+  239  ls -al sudoers
+  240  ls -al /etc/sudoers
+  241  cat .bashrc
+  242  ls /dev/sd*
+  243  fsck /dev/sdb1
+  244   e2fsck -b 8193
+  245   e2fsck -b 8193 /dev/sdb1
+  246  umount /mnt/g1
+  247  umount /dev/sdb1
+  248   e2fsck -b 8193 /dev/sdb1
+  249  fdisk /dev/sdb1
+  250  reboot
+  251  cat /etc/fstab
+  252  ls /dev/sd*
+  253  dmesg | egrep -i sdb
+  254  df
+  255  mount /dev/sdb1
+  256  mount /dev/sdb1 /mnt/g1
+  257  fsck /dev/sdb1
+  258  e2fsck -b 8193 /dev/sdb1
+  259  ifconfig
+  260  df
+  261  ls /dev/mapper
+  262  ls /dev/mapper/control
+  263  mkfs -t ext3 /dev/sdb1
+  264  ls /dev/sdb1
+  265  mount -t ext3 /dev/sdb1 /mnt/g1
+  266  mkdir /mnt/g1/xft
+  267  ls /mnt/d1
+  268  ls /mnt/g1
+  269  rmdir /mnt/gi/xft
+  270  rmdir /mnt/g1/xft
+  271  lspci -vt
+  272  cat /proc/interrupts
+  273  vim /etc/fstab
+  274  reboot
+  275  df
+  276  fdisk -l /dev/sdb
+  277  fdisk /dv/sdb1
+  278  fdisk /dv/sdb
+  279  fdisk /dev/sdb
+  280  uname -a
+  281  mount
+  282  df -h
+  283  cat /etc/fstab
+  284  cat /etc/fstab
+  285  df
+  286  lpci
+  287  lspci
+  288  lspci | grep -i net
+  289  lspci -v
+  290  cat /etc/fstab
+  291  df -h
+  292  man ext3
+  293  man fstab
+  294  man mount
+  295  man fstab
+  296  mkdir /mnt/data1
+  297  reboot
+  298  service NetworkManager stop
+  299   chkconfig NetworkManager off
+  300  shutdown
+  301  shutdown -h now
+  302  df
+  303  ls /etc/rc?.d/*network*
+  304  ls /etc/rc?.d/*Net*
+  305  cat /etc/sysconfig/network-scripts/ifcfg-eth0
+  306  ps auxw | grep -i firefox
+  307  dmesg | grep -i sdb
+  308  dmesg | grep -i sdc
+  309  mount
+  310  fdisk /dev/sdb
+  311  fdisk /dev/sdc
+  312  df
+  313  pvcreate /dev/sdb1
+  314  pvcreate /dev/sdc1
+  315  vgcreate VolGroup01 /dev/sdb1
+  316  vgcreate VolGroup02 /dev/sdc1
+  317  vgdisplay VolGroup01
+  318  vgdisplay VolGroup02
+  319  lvcreate --extents 119234 --name data1 VolGroup01
+  320  lvcreate --extents 119234 --name data2 VolGroup02
+  321  mkfs -t ext3 /dev/VolGroup01/data1
+  322  ls
+  323  df
+  324  vim /etc/fstab
+  325  mkdir /mnt/data2
+  326  ls /mnt
+  327  cat /etc/fstab
+  328  vim /etc/fstab
+  329  cat /etc/fstab
+  330  mount /mnt/data1
+  331  mount /mnt/data2
+  332  vim /etc/fstab
+  333  mount /mnt/data2
+  334  df
+  335  history > logical-volumes.txt

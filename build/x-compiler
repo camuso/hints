@@ -1,0 +1,36 @@
+Tony needed these, so I'm assuming others do as well.  This is known to work
+well on pristine or near-to-pristine latest RHEL6.4 environments (ie, systems
+reserved from beaker).
+
+1.  check out a rhel6 git tree.
+2.  apply my patch
+3.  If you don't have one, set up /etc/yum.repos.d/rhel6-optional.repo
+
+[rhel6 optional]
+name=rhel6-optional
+baseurl=http://download.eng.bos.redhat.com/nightly/latest-RHEL6/6.4/Server/optional/x86_64/os
+enabled=1
+gpgcheck=0
+skip_if_unavailable=1
+
+NOTE: You should use an appropriate repo for your OS.  For example, if you're
+using 6.3, use
+
+baseurl=http://download.eng.bos.redhat.com/released/RHEL-6/6.3/Server/optional/x86_64/os/
+
+NOTE: beaker sets up a beaker-optional.repo that should just work.
+
+4.  go back to
+ git tree and as *root* execute
+
+make rh-cross-download
+
+which will install a tonne of rpms onto your system.  These rpms are required
+for building glibc, gcc, binutils, gdb and the kernel rpms.
+
+[Note, this step should only have to be executed a single time.]
+
+5.  As anyuser, pick a target, preferably make rh-cross-all-builds
+
+P.
+

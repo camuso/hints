@@ -1,0 +1,44 @@
+# grub
+
+grub> root (hd0,0)
+ Filesystem is ext2fs, partition type 0x83
+
+grub> setup (hd0)
+ Checking if "/boot/grub/stage1" exists... no
+ Checking if "/grub/stage1" exists... yes 
+ Checking if "/grub/stage2" exists... yes 
+ Checking if "/grub/e2fs_stage1_5" exists ... yes 
+ Running "embed /grub/e2fs_stage1_5 (hd0)"... 17 sectors are embedded
+succeeded
+ Running "install /grub/stage1 (hd0) (hd0)1+17 p (hd0,0)/grub/stage2 /grub/menu.lst"... succeeded
+Done
+
+grub> quit
+
+# vim /menu/grub/menu.lst
+
+# This is a custom grub menu to boot various distros installed in different
+# partitions on this system using "configfile" to tell grub where to find
+# the new menu.lst file for the corresponding partition.
+#
+# To add a new partition to this list, simply add the "title" and "configfile"
+# lines for each one. Remember that grub enumerates partitions differently
+# than Linux. For example, sda1 is (hd0,0), sda5 is (hd0,4), sdb2 is (hd1,1),
+# etc.
+#
+# The default entry is the first one when default=0. That means the system
+# will automatically boot the first entry if no keys are pressed within 10
+# seconds of showing this menu. This allows the system to boot unattended.
+
+default=0
+timeout=10
+
+serial --port=0x03f8 --speed=115200
+terminal --timeout=5 serial console
+
+title RHEL6.4
+        configfile (hd0,2)/boot/grub/menu.lst
+
+title RHEL6.3
+        configfile (hd0,1)/boot/grub/menu.lst
+

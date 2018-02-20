@@ -1,0 +1,94 @@
+# Linus tree
+#
+[remote "origin"]
+        fetch = +refs/heads/*:refs/remotes/origin/*
+        url = git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+
+# RHEL7 branch
+#
+[remote "rh7-origin"]
+        url = git://git.app.eng.bos.redhat.com/rhel7.git
+        fetch =  +refs/heads/*:refs/remotes/rh7-origin/*
+[branch "rh7"]
+        remote = rh7-origin
+        merge = refs/heads/master
+
+# RHEL6 branch
+[remote "rh6-origin"]
+        url = git://git.app.eng.bos.redhat.com/rhel6.git
+        fetch =  +refs/heads/*:refs/remotes/rh6-origin/*
+[branch "rh6"]
+        remote = rh6-origin
+        merge = refs/heads/master
+
+# RHEL6.4 branch
+[remote "rh6.4-origin"]
+        url = git://git.app.eng.bos.redhat.com/rhel-6.4.z.git
+        fetch =  +refs/heads/*:refs/remotes/rh6.4-origin/*
+[branch "rh6.4"]
+        remote = rh6.4-origin
+        merge = refs/heads/master
+
+# RHEL5 branch
+#
+[remote "rh5-origin"]
+        url = git://git.app.eng.bos.redhat.com/rhel5/kernel.git
+        fetch = +refs/heads/*:refs/remotes/rh5-origin/*
+[branch "rh5"]
+        remote = rh5-origin
+        merge = refs/heads/master
+
+# linux-next
+#
+[remote "next"]
+        url = git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        fetch = +refs/heads/*:refs/remotes/next/*
+[branch "linux-next"]
+        remote = next
+        merge = refs/heads/master
+
+# xhci-next
+#
+[remote "xhci-next-origin"]
+        url = git://git.kernel.org/pub/scm/linux/kernel/git/sarah/xhci.git
+        fetch = +refs/heads/*:refs/remotes/xchi-next/*
+[branch "xhci-next"]
+        remote = xhci-next-origin
+        merge = refs/heads/master
+
+# net-next
+#
+[remote "net-next-origin"]
+        url = git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+        fetch = +refs/heads/*:refs/remotes/net-next-origin/*
+[branch "net-next"]
+        remote = net-next-origin
+        merge = refs/heads/master
+
+# davem
+#
+[remote "davem-origin"]
+        url = git://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git
+        fetch = +refs/heads/*:refs/remotes/davem-origin/*
+[branch "davem"]
+        remote = davem-origin
+        merge = refs/heads/master
+
+[remote "stable-origin"]
+        url = git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        fetch = +refs/heads/*:refs/remotes/stable-origin/*
+[branch "stable"]
+        remote = stable-origin
+        merge = refs/heads/master
+
+#[remote "f19-origin"]
+#       url = git://pkgs.fedoraproject.org/kernel.git
+#       fetch = +refs/heads/*:refs/remotes/f19-origin/*
+[remote "jbenc7"]
+        url = git://git.engineering.redhat.com/users/jbenc/rhel7-net.git
+        fetch = +refs/heads/*:refs/remotes/jbenc7/*
+

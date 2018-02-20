@@ -1,0 +1,21 @@
+One backup plan that should help give us a clue is using ftrace
+(_extremely_ verbose on console)
+
+mount -t debugfs debugfs /sys/kernel/debug
+cd /sys/kernel/debug/tracing
+
+echo 0 > tracing_on
+echo function > current_tracer
+echo FUNCTIONS  >> set_ftrace_filter
+echo 1 > tracing_on
+cat trace
+
+where FUNCTIONS can be limited to "*idle* *irq* *raid*" for now
+and we can build it up later.  This is to limit the noise spewed on the
+console.
+
+see 'cat available_filter_functions' for a complete list of functions to trace
+
+just remember to use '>>' to append to set_ftrace_filter (or just cat the file
+to make sure everything took correctly)
+

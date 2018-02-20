@@ -1,0 +1,25 @@
+Andre Costa wrote:
+> Some follow up on this: found on this thread
+> <https://bugs.launchpad.net/ubuntu/+source/gnome-shell/+bug/1064095/comments/8>
+> that setting
+>
+> CLUTTER_VBLANK=none
+>
+> makes it a *whole* lot better. In fact, AFAICS the problem is gone -- even if
+> NVidia driver is still set to sync to vblank. Other performance problems which
+> were also very noticeable on GNOME 3.6 (eg. moving windows around) are also gone.
+>
+> Not sure if this is a GNOME or a NVidia bug (or both), will dive deeper into it
+> later.
+>
+> Regards,
+>
+> Andre
+>
+THANK YOU!!
+
+--
+Bill Davidsen <davidsen@tmr.com>
+  "We have more to fear from the bungling of the incompetent than from
+the machinations of the wicked."  - from Slashdot
+

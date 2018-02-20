@@ -1,0 +1,173 @@
+
+
+Create the tree
+---------------
+git clone <yadayadayada>/linus.git
+git checkout -b rh6 -v2.6.32
+git pull
+git fetch --tags 	// cover all bases
+
+Patch workflow
+--------------
+git checkout -b rh6.test
+git cherry-pick <commit>
+
+	Resolve any conflicts
+	---------------------
+	vim <files>
+	Search for <<<<
+	Resolve the differences
+	exit vim
+	git add <conflicted files>
+	git commit -c <commit>
+
+git log // Copy header (down to the descriptor line) info into
+        // a buffer
+
+git amend --author="Your Name <your.email>" --date=$date
+	//
+	// The above line will invoke your editor
+	//
+	// Paste the header you copied from the git log to above
+	// the existing comments. Don't wrap it or truncate it.
+	// It should look exactly like the original commit log.
+	//
+	// Copy the descriptor line and put it at the very top,
+	// leaving an empty line between it and the original
+	// commit header.
+	//
+	// Create a new line below the descriptor line and add
+	// your comments. If there were no conflicts, I usually
+	// write something like ...
+	// Cherry-picked from upstream with no conflicts.
+	//
+	// At this point your edited commit should look like this ..
+	//
+
+	descriptor line
+
+	Begin your comments
+	:
+	End your comments
+
+	commit: 	// Original commit information
+	Author:
+	Date:
+
+	    descriptor line
+
+	    begin original comments
+	    :
+	    :
+	    end original comments
+
+	//
+	// Save and exit from the editor.
+
+
+Create the patchset
+-------------------
+
+// Set the subject prefix in your git config
+
+git config format.subjectprefix "RHEL6.5 PATCH"
+
+// Set the format to numbering
+
+git config format.numbered true
+
+// You should only have to do the above steps once, unless
+// you do RHEL7 or Fedora patches, in which event you only
+// need to change the format.subjectprefix string.
+
+git format-patch <your-first-commit>..<your-last-commit> -o <directory>
+
+// You should then see a listing like the following in the
+// directory.
+
+	0001-descriptor-of-first-commit.patch
+	   :        :         :         :
+	000n-descriptor-of-last-commit.patch
+
+
+Create the prologue patch
+-------------------------
+
+cd <directory>
+vim 0000-prologue.patch
+
+// I have attached an example of a prologue format. It is
+// important that you include the From, Subject, and Date
+// lines, because git send-email requires them.
+
+Send the patchset to yourself first
+-----------------------------------
+
+git send-email --to <my.email.address> <directory>/*.patch
+
+
+Send the patchset to RHKL
+-------------------------
+
+git send-email --to rhkernel-list@redhat.com \
+               --cc <any.specific.reviewer> \
+               --cc <another.specific.reviewer>
+               <directory>/*.patch
+
+
+0000-ipmi-bug-fixes-and-updates
+
+From: Tony Camuso <tcamuso@redhat.com>
+Date: Mon, 25 Mar 2013 16:19:47 -0400
+Subject: [RHEL6.5 PATCH 00/21] ipmi: bug fixes and updates
+
+Description
+-----------
+This set of patches backports a series of ipmi bug fixes and updates
+that have been committed upstream. While some of these fixes are for
+corner cases, they were observed by customers and vendors. Applying
+these patches can avoid support calls.
+
+Some of the patches were cosmetic, but they were backported for
+compatibility.
+
+There were some upstream patches that were not backported, because
+churn/benefit ratio was too high. For example, patches for ARM support
+were not included.
+
+Tested for functionality and regression using ipmitool. Because the
+ipmi message handler and system interface drivers are statically linked,
+a system that has no ipmi hardware was also booted with the patched
+kernel to be sure that there are no regressions in such systems.
+
+Brew build
+----------
+http://brewweb.devel.redhat.com/brew/taskinfo?taskID=5612932
+
+Upstream commits in this patch set
+----------------------------------
+18a3e0bfbcd589599d0affbfd484ba9a97e5f122
+d1da96aada79fd1d29ae4e3157120d1ce1e77594
+2f95d51308a72288d877c3c8dc4597c9a93f7344
+6edb6764409392836b44a61b06d94954efd6200f
+c7df670bf702d1c25ae22b4cd49deb05c1e55ecc
+f46c77c283e514a747aee7e8c4f5afc70274c232
+279fbd0c5daa60c76e59df33f436ca2300f2b603
+7faefea66a6d1f0d9da0a18615f57dc969e00d99
+7bb671e3d053226f870c333f701924986b39ee7f
+a9e31765e7d528858e1b0c202b823cf4df7577ca
+561f8182dbf24b1be9207038aa5f82e34be4bad1
+de5e2ddf9bb3ce7b643223b9b0718062254f302f
+60ee6d5faf5f7920ba88b82c072864596f5b88af
+37bf501bdda1d5d6ea73ce29d4b00d291b6f3811
+d2478521afc20227658a10a8c5c2bf1a2aa615b3
+0dcf334c44d99cd08515f4fc5cc9075abd92b2ff
+4c418ba9695a24917a1fcfa48f7db3fd76337eb7
+895dcfd1cab84d7e1c22af645a7f2f3c9bb5f24e
+f60adf42ad55405d1b17e9e5c33fdb63f1eb8861
+423a5bb49ec530ec8bbfc73fd2ded83da8e58684
+f2afae4629d74287aaac39d0532aac5819e77e70
+
+Signed-off-by: Tony Camuso <tcamuso@redhat.com>
+
+

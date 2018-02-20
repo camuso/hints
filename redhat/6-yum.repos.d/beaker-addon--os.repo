@@ -1,0 +1,6 @@
+[beaker-addon--os]
+name=beaker-addon--os
+#baseurl=http://lab2.rhts.eng.bos.redhat.com/distros/vol/engineering/devarchive/redhat/rel-eng/RHEL6.0-20100722.0/6/Client/x86_64/os
+baseurl=http://porkchop.redhat.com/rel-eng/RHEL6.0-Snapshot-8/6.0/WebServer/x86_64/os/
+enabled=0
+gpgcheck=0

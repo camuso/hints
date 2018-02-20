@@ -1,0 +1,13 @@
+IPMI 	- Intelligent Platform Management Interface
+IPMB	- Intelligent Platform Management Bus
+PET 	- Platform Event Trap
+SMI	- System Management Interface
+BMC	- Baseboard Management Controller
+SMBUS	- System Management Bus
+PMBUS	- Power Management Bus
+DRAC	- Dell Remote Access Card - Dell's IPMI implementation
+iLO	- integrated Lights Out - HP ISS IPMI implementation
+SDHC	- Secure Digital High Capacity flash memory - 32 GB limit
+SDXC	- Secure Digital eXtended Capacity flash memory - 2TB limit
+OF	- Open Firmware used by Sun, Apple, IBM ppc, etc.
+

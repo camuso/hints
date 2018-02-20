@@ -1,0 +1,25 @@
+krn="kernel-pegas-4.11.0-x86_64.config"
+
+# substitute '-' and '.' with ' '
+#
+IFS='-.' read -r -a ary <<< "$krn"
+echo ${ary[@]}
+kernel pegas 4 11 0 x86_64 config
+
+# substitute '-' with ' '
+#
+ary=(${krn//-/ })
+
+echo ${ary[@]}
+kernel pegas 4.11.0 x86_64.config
+
+# substitute '.' with ' '
+#
+k1="${ary[@]}"
+ary=(${k1//./ })
+
+# string is now tokenized into a string array, ${ary[@]}
+#
+echo ${ary[@]}
+kernel pegas 4 11 0 x86_64 config
+

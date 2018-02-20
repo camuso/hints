@@ -1,0 +1,91 @@
+    1  ifconfig
+    2  ethtool -i eth0
+    3  ethtool -i eth4
+    4  ifconfig
+    5  ping 10.16.185.217
+    6  ip link add link eth4 dev eth4.200 type vlan id 200
+    7  ifconfig -a
+    8  ping 192.168.1.1
+    9  route 192.168.1.1
+   10  ip route show
+   11  ip addr add 192.168.1.2 dev eth4.200
+   12  ip link set dev eth4.200 up
+   13  ip route show
+   14  tcpdump -i eth4
+   15  tcpdump -i eth4 "! port 22"
+   16  tcpdump -i eth4 "icmp"
+   17  ip route add 192.168.1.0/24 dev eth4.200
+   18  ping 192.168.1.1
+   19  ip route del 192.168.1.0/24 dev eth4.200
+   20  ifconfig
+   21  ip link del dev eth4.200
+   22  ifconfig
+   23  uname -a
+   24  ethtool -i eth1
+   25  exit
+   26  ifconfig
+   27  ip addr add 192.168.1.1 dev eth1
+   28  ping 192.168.1.2
+   29  ip route show
+   30  ip route add 192.168.1.0/24 dev eth1
+   31  ping 192.168.1.1
+   32  ping 192.168.1.2
+   33  ifconfig
+   34  ping www.google.com
+   35  ip addr del 192.168.1.1/32 dev eth1
+   36  ip route show
+   37  ip addr show
+   38  ip link show
+   39  ifconfig
+   40  ip addr add 192.168.1.2 dev eth2
+   41  ip route add 192.168.1.0/24 dev eth2
+   42  ping 192.168.1.1
+   43  ip addr del 192.168.1.2/32 dev eth2
+   44  ip route show
+   45  ip addr add 192.168.1.1 dev eth1
+   46  ip addr del 192.168.1.1/32 dev eth1
+   47  ip addr add 192.168.1.2 dev eth1
+   48  ip route add 192.168.1.0/24 dev eth1
+   49  ip route show
+   50  ip addr show
+   51  ping 192.168.1.1
+   52  journalctl
+   53  tail -f /var/log/messages 
+   54  ip addr del 192.168.1.2/32 dev eth1
+   55  ip route show
+   56  tail -f /var/log/messages 
+   57  ip addr add 192.168.1.2 dev eth1
+   58  ip route add 192.168.1.0/24 dev eth1
+   59  ping 192.168.1.1
+   60  cd /etc/sysconfig/network-scripts/
+   61  ifconfig
+   62  vi ifcfg-eth1 
+   63  vi ifcfg-eth1.200
+   64  ifconfig
+   65  ip addr del 192.168.1.2/32 dev eth1
+   66  ip addr del 192.168.1.2/32 dev eth3
+   67  vi /var/log/messages 
+   68  ifconfig
+   69  ip addr del 192.168.1.2/32 dev eth3
+   70  ip addr show
+   71  ip addr del 192.168.1.2/24 dev eth2
+   72  ip addr del 192.168.1.2/32 dev eth3
+   73  ifconfig
+   74  ip addr del 192.168.1.2/32 dev eth0
+   75  ifconfig
+   76  vi ifcfg-eth1
+   77  vi ifcfg-eth4 
+   78  service NetworkManager restart
+   79  ifconfig
+   80  service network restart
+   81  ifconfig
+   82  ping 192.168.1.1
+   83  reboot
+   84  ifconfig
+   85  ping 191.168.1.1
+   86  ping 192.168.1.1
+   87  exit
+   88  ifconfig
+   89  ping 192.168.1.1
+   90  history
+   91  history > vlan-host-2.history

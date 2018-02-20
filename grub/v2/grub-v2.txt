@@ -1,0 +1,218 @@
+Okay, so grub v2 is here to stay, and it ain't going away.
+
+I have a few systems that I want to boot multiple distros from one
+main grub menu.
+
+With grub v1, what I did was install grub to a standalone boot partition
+and copy the grub secondary stage files to the /boot/grub directory of
+the partitions for the other distros. The primary boot loads the grub menu
+from the standalone boot partition, and that "Main Menu" in turn linked
+to the grub menus in the partitions of the other distros using the grub
+"configfile" command.
+
+When making/installing kernels in those distros, the install would update
+the corresponding /boot/grub/menu.lst, and life was good.
+
+Accoring to http://www.gnu.org/software/grub/, "legacy" grub's days are
+dwindling, so I thought it was time to learn how to do this with grub v2.
+
+grub v2 does have a nice feature called os_prober that sniffs partitions
+looking for OS's that can be included in the grub v2 boot options menu
+presented to the user at boot time.
+
+This is a really nice feature, but the wording of the automaton-generated
+menu can be a bit awkward, meaning no disrespect to Aho, Weinberger and
+Kernigan.
+
+If you're happy with that, then all that's needed is to install OS's
+that use grub v1 first and the ones that use grub v2 OS's last. If you
+later add a grub v1 OS, take care not to install grub v1 in the boot
+sector. Just copy the /boot/grub directory from another OS using v1
+to the /boot/grub directory of the newly installed OS, and edit the
+menu.lst to load the correct kernel and initrd.
+
+When you're done installing distros to the various partitions, boot into
+an OS that has v2 installed and issue the following command...
+
+# grub2-mkconfig -o /boot/grub2/grub.cfg
+
+... to update the grub v2 menu selections to include the newly
+installed OS.
+
+If you install v1 grub in the boot sector, then you will have to
+chain load the OS having grub v2 from the grub v1 command line, or
+edit the corresponding /boot/grub/menu.lst file to chainload it.
+
+When the OS having grub v2 is booted, then you must issue the
+commands ...
+ 
+# grub-install --boot-directory=/boot /dev/sda
+# grub2-mkconfig -o /boot/grub2/grub.cfg
+
+... to re-install grub v2 to the boot sector and update your grub v2
+menu to include the new OS.
+
+Custom Grub v2 Boot Menu
+
+If you want to customize your boot environment using grub v2, here is
+a method for doing so. There are other approaches that can be taken
+as well, but I think this one is simplest.
+
+For the purposes of this little discussion, I created the following
+multi-boot system.
+
+Physical partition    Used as            Space    fs
+/dev/sda1        /menu                  0.5 G    ext3
+/dev/sda2        / for RHEL6 64-bit       50 G    ext4
+/dev/sda3        / for RHEL5 32-bit       50 G    ext4
+/dev/sda4        extended partition
+/dev/sda5        / for Fedora 17 64-bit      50 G     ext4
+/dev/sda6        swap                       8 G    swap
+/dev/sda7        / for Fedora 17 32-bit     50 G    ext4
+/dev/sdb1        /home                  500 G    ext4
+ 
+What I did was to install all the distros using  grub v1 first, then
+install the grub v2 distro. You can add as many distros as you want
+later, but you will need to do some housekeeping
+
+After installing the last grub v2 dependent OS, in this example
+Fedora 17, boot it and do the following.
+
+Edit /etc/default/grub and add the following line.
+
+GRUB_DISABLE_OS_PROBER=true
+
+Then, from the command line...
+
+# mount /dev/sda1 /menu
+# grub2-install --boot-directory=/menu /dev/sda
+
+This will cause the next boot to look for grub.cfg in /dev/sda1, so
+you must now create one there. I have attached the grub.cfg created
+for our example.
+
+There is a difference in the hd naming between grub v1 and grub v2.
+In v1, partition numbering was zero-based, but in v2, it's one-based.
+
+In grub v1, /dev/sda1 is (hd0,0).
+In grub v2, /dev/sda1 is (hd0,1).
+
+However, this does not mean that you need to change the numbering
+in your v1 menu.lst files on your other distro partitions. V2
+understands this difference and compensates when you point to a v1
+menu.lst using the v2 "legacy_configfile" directive.
+
+In the attached grub.cfg file, you'll see that I've commented-out
+the serial terminal stuff. If you want to connect a serial terminal,
+you will need to un-comment those lines.
+
+Default boot has been set to an item in a submenu. Legacy grub did
+not have submenus, and only a zero-based number was required here
+to set the default boot. You can still use a zero-based number in
+grub v2, but only for menuentry items, not for submenu items, which
+are identified by the syntax shown.
+
+To boot the OS's using legacy grub, all that's needed is to use the
+"legacy_configfile" directive to point grub v2 to the directory
+containing the legacy grub second stage files and the menu.lst file
+for that boot. The v1 menu.lst file serves as a submenu for the v2
+grub.
+
+While separate menu.lst for each grub v1 OS is necessary, we can use
+the v2 submenu to create menu entries for the OS's that install v2.
+Submenus can be nested, and to return to the previous menu, simply
+type ESC.
+
+Well, that's the abridged version of multi-boot with grub2. If you
+have any problems, I'll be glad to help, or you can query your
+favorite search engine.
+
+---------------------------------------
+/menu/grub2/grub.cfg
+
+serial --speed=115200
+terminal_input serial console
+terminal_output serial console
+
+set timeout=20
+set default='RHEL7 Workstation Menu'
+# set default='RHEL6.5 Workstation Menu'
+
+menuentry "RHEL6.5 Workstation Menu" {
+	legacy_configfile (hd0,1)/boot/grub/menu.lst
+}
+
+menuentry "RHEL7 Workstation Menu" {
+	configfile (hd0,2)/boot/grub2/grub.cfg
+}
+
+-------------------------------------------------------------
+grub.cfg with submenus
+
+# grub.cfg for multiple distro boot
+#
+# Install the grub v1 distros first. Install the grub v2 distros last.
+#
+# Each partiton will have its own menuentry. Submenus for grub v1 distros
+# will be handled by the /boot/grub/menu.lst file on their respective
+# partitions. Submenus for grub v2 distros will be created and managed
+# from this grub.cfg file.
+
+
+# serial --speed=115200
+# terminal_input serial console
+# terminal_output serial console
+
+set timeout=20
+set default='Fedora 17 x86_64>kernel 3.6.6-1.fc17.x86_64'
+
+menuentry "RHEL6 x86_64" {
+	legacy_configfile (hd0,2)/boot/grub/menu.lst
+}
+
+menuentry "RHEL6 i386" {
+	legacy_configfile (hd0,3)/boot/grub/menu.lst
+}
+
+submenu "Fedora 17 x86_64" {
+	menuentry "kernel 3.6.6-1.fc17.x86_64" {
+		set root=(hd0,5)
+		linux /boot/vmlinuz-3.6.6-1.fc17.x86_64 root=/dev/sda5 ro
+		initrd  /boot/initramfs-3.6.6-1.fc17.x86_64.img
+	}
+	menuentry "kernel 3.5.5-2.fc17.x86_64" {
+		set root=(hd0,5)
+		linux /boot/vmlinuz-3.5.5-2.fc17.x86_64 root=/dev/sda5 ro
+		initrd	/boot/initramfs-3.5.5-2.fc17.x86_64.img
+	}
+}
+
+submenu "Fedora 17 i686 PAE" {
+	menuentry "kernel 3.6.6-1.fc17.i686.PAE" {
+		set root=(hd0,7)
+		linux /boot/vmlinuz-3.6.6-1.fc17.i686.PAE root=/dev/sda7 ro
+		initrd  /boot/initramfs-3.6.6-1.fc17.i686.PAE.img
+	}
+}
+
+
+menu.lst
+
+# grub.conf generated by anaconda
+#
+# Note that you do not have to rerun grub after making changes to this file
+# NOTICE:  You do not have a /boot partition.  This means that
+#          all kernel and initrd paths are relative to /, eg.
+#          root (hd0,2)
+#          kernel /boot/vmlinuz-version ro root=/dev/sda3
+#          initrd /boot/initrd-[generic-]version.img
+#boot=/dev/sda
+default=0
+timeout=10
+# splashimage=(hd0,2)/boot/grub/splash.xpm.gz
+# hiddenmenu
+title Red Hat Enterprise Linux (2.6.32-279.el6.i686)
+	root (hd0,2)
+	kernel /boot/vmlinuz-2.6.32-279.el6.i686 ro root=UUID=abf94f85-734d-4711-8c49-075a72bfcfe5 rd_NO_LUKS rd_NO_LVM LANG=en_US.UTF-8 rd_NO_MD SYSFONT=latarcyrheb-sun16 crashkernel=auto  KEYBOARDTYPE=pc KEYTABLE=us rd_NO_DM rhgb
+	initrd /boot/initramfs-2.6.32-279.el6.i686.img
+

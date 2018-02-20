@@ -1,0 +1,16 @@
+# Blacklist the radeon driver
+# Edit the grub kernel command line.
+# Append the following to the currentline.
+   rdblacklist=radeon vga=791
+
+# Then
+   echo "blacklist radeon" >> /etc/modprobe.d/blacklist.conf
+
+# Then
+# Save the old initrd image:
+   mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-radeon.img
+# Create a new initrd image:
+   dracut /boot/initramfs-$(uname -r).img $(uname -r)
+
+#Then
+   reboot

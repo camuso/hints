@@ -1,0 +1,9 @@
+rngd -r /dev/urandom
+
+Dealing with entropy on virtual machines ...
+
+mknod /dev/newrandom c 1 9
+chmod --reference=/dev/random /dev/newrandom
+mv -f /dev/newrandom /dev/random
+rngd -r /dev/urandom
+

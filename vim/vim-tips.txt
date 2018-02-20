@@ -1,0 +1,41 @@
+To find all non-printable characters.
+
+: set hlsearch
+/\(\p\|$\)\@!.		# <- This is a search string 
+
+ihttp://www.math.iitb.ac.in/~srg/LaTeX/howto.html
+
+A tip related to the VI editor
+
+Often when we receive files by e-mail, we find an unwanted character "^M"
+(CTRL-M) at several places. This is the control character roughly equivalent
+of a carriage return. If you use vi, like I do, a natural thing is to try
+and get rid of this using "global substitution", which is done using:
+
+:g/A/s//B/g
+
+The above command replaces string "A" by the string "B". So we can use "^M"
+for "A" and " " (empty space) for "B". But then as soon as we try to type
+"^M" in place of "A", it is treated as carriage return, and we are back in
+the file. A way to avoid this is to type "^V" (CTRL-V) before "^M".
+
+Thus, to simply remove all the occurances of "^M", use:
+
+:g/^V^M/s// /g
+
+Sometimes, this "^M" appears inadvertantly and makes the entire file as a
+single line. A solution to that is to replace "^M" by itself! Thus you
+use:
+
+:g/^V^M/s//^V^M/g
+
+By the way, all the "V" and "M" when keyed with "CTRL" are actually in
+lowercase and one doesn't have to use the "SHIFT" or "CAPS LOCK" keys
+while entering them.
+
+To open a file with split windows
+
+vim -o file1 file2	# split horizontally
+vim -O file1 file2	# split vertically
+
+vim -y			# "easy" mode

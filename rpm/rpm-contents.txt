@@ -1,0 +1,15 @@
+rpm -qlp <foo.rpm>
+rpm -qp --changelog kernel-2.6.33.6-147.fc13.src.rpm
+
+Prarit used the following technique to find initrd utilities related to
+mkinitrd.
+
+[tcamuso@tcamuso ~]$ rpm -qf `which mkinitrd`
+dracut-004-335.el6.noarch
+[tcamuso@tcamuso ~]$ rpm -ql dracut | grep initrd
+(standard input):   5  :/sbin/lsinitrd
+(standard input):   6  :/sbin/mkinitrd
+(standard input):  35  :/usr/share/dracut/modules.d/50plymouth/plymouth-populate-initrd
+(standard input): 182  :/usr/share/man/man1/lsinitrd.1.gz
+(standard input): 185  :/usr/share/man/man8/mkinitrd.8.gz
+

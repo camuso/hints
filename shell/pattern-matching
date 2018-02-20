@@ -1,0 +1,30 @@
+
+# Delete everything up to the last space-separated token in argstr.
+# e.g "-iwe --option searchstring this/is/a/path/name" returns
+# "this/is/a/path/name"
+#
+pathspec="${argstr##* }"
+
+# Delete everything up to the last '/' separated token in patspec.
+# e.g "this/is/a/path/name" will return "name"
+#
+filespec="${pathspec##*/}"
+
+# Delete everything back from the last '/' separated token in pathspec.
+# e.g. "this/is/a/path/name" will return "this/is/a/path"
+#
+dirspec="${pathspec%/*}/"
+
+# Delete everything back from the last space-separated token in argstr.
+# e.g "-abc --option --another-option this/is/a/path/name" returns
+# "-abc --option searchstring"
+#
+grepspec="${argstr% *}"
+
+# Delete everything back from the last space-separated token in grepspec.
+# e.g "-abc --option searchstring this/is/a/path/name" returns
+# "searchstring"
+#
+# string="${argstr% *}"
+
+

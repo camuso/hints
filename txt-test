@@ -1,0 +1,36 @@
+ystem with TPM on it.
+
+2. boot up and try
+# find /sys/ -name pcrs
+/sys/devices/pnp0/00:0d/pcrs
+# cd /sys/devices/pnp0/00:0d/ppi
+
+3. try read every files
+# cat version
+1.0 (or 1.2)
+# cat request
+0
+# cat response
+1 0:success
+# cat transition_action
+2:reboot
+# cat tcg_operations
+1 1:BIOS only
+2 1:BIOS only
+...
+(PPI spec 1.0 implemented operations 1-14;1.2 1-22, but neither implement 13)
+# cat vs_operations
+128 3: User required
+129 3: User required
+...
+
+4. read written value
+# echo 6 > request
+# cat request
+6
+
+5. reboot system and verify the request was done by BIOS
+# reboot
+...
+# cat response
+6 0:success

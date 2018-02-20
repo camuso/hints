@@ -1,0 +1,36 @@
+Set up this repo
+[prarit@prarit ~]$ cat /etc/yum.repos.d/rhpkg.repo
+[rhpkg]
+name=rhpkg for Red Hat Enterprise Linux $releasever
+baseurl=http://download.lab.bos.redhat.com/rel-eng/dist-git/rhel/$releasever/
+exclude=python-bugzilla*
+enabled=1
+gpgcheck=0
+
+...
+then yum install rhpkg
+
+...
+rhpkg for RHEL and Fedora: https://home.corp.redhat.com/wiki/using-dist-git
+
+1. Do rhpkg clone -B <package_name>
+ex) rhpkg clone -B mcelog
+
+2. Do usual commit changes.
+ex) git commit -a; git push
+The commit message must include "Resolves: bz######".
+
+3. rhpkg build
+REMINDER: The referenced bz must have all three flags (devel_ack, pm_ack,
+and qa_ack) before committing.  The packages being changed must also be
+on the approved components list which can be looked up on the product pages
+at http://engineering.redhat.com/pp#producttable-rhel .
+
+--------------------------------------------------------------------------------
+Scratch builds are done in three steps.
+1.  Commit your changes *locally*
+2.  Build an srpm
+rhpkg srpm
+3.  Pass that srpm into scratch-build
+ex)
+rhpkg scratch-build --srpm /home/prarit/rhpkg/mcelog/rhel-6.5/mcelog-1.0pre3_20120814_2-0.6.el6_UNSUPPORTED.src.rpm

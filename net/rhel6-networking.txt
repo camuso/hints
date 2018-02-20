@@ -1,0 +1,54 @@
+http://www.convirture.com/wiki/index.php?title=RedHat_6_Networking
+
+Redhat 6 Networking
+
+Redhat 6 does not configure network interfaces on default installation.
+Also, it is configured to use NetworkManager. To enable networking interface
+and disable NetworkManager please follow instructions below.
+
+The /etc/sysconfig/network-scripts/ifcfg-eth0 content looks as follows
+on default installation.
+
+DEVICE="eth0"
+HWADDR=specifc mac address
+NM_CONTROLLED="yes"
+ONBOOT="no"
+
+
+For DHCP, configure the interface as follows.
+
+DEVICE="eth0"
+HWADDR=specifc mac address
+NM_CONTROLLED="no"
+ONBOOT="yes"
+BOOTPROTO="dhcp"
+
+
+ Restart the network after configuration.
+/etc/init.d/network restart
+
+For Static ip, configure it as follows
+
+DEVICE="eth0"
+HWADDR=specifc mac address
+NM_CONTROLLED="no"
+ONBOOT="yes"
+BOOTPROTO="static"
+IPADDR=ip address here.
+NETMASK=netmask here.
+
+Change the /etc/sysconfig/network to have the GATEWAY.
+
+NETWORKING=yes
+HOSTNAME=www1.nixcraft.in
+GATEWAY=gateway address here.
+
+Change /etc/resolve.conf
+nameserver Specify ip address of dns server/usually same as gateway.
+
+For example configuration, see  Method #3
+http://www.cyberciti.biz/faq/rhel-centos-fedoracore-linux-network-card-configuration/
+
+Restart the network after configuration.
+/etc/init.d/network restart
+

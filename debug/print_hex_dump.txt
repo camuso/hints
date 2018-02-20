@@ -1,0 +1,38 @@
+Sometimes I have to create memory dumps. You can use a simple for loop to do that, but Linux kernel provides a better way - print_hex_dump.
+
+For example:
+Function prototype:
+
+static inline void print_hex_dump(const char *level, const char *prefix_str,
+                                  int prefix_type, int rowsize, int groupsize,
+                                  const void *buf, size_t len, bool ascii)
+
+print_hex_dump(KERN_ALERT, "mem: ", DUMP_PREFIX_ADDRESS,
+                16, 1, p, 512, 1);
+output:
+
+mem: ddc86680: 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12  ................
+mem: ddc86690: 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12  ................
+mem: ddc866a0: 12 12 12 12 60 6b c8 dd 16 80 99 e0 fa 8e 2a c1  ....`k........*.
+mem: ddc866b0: 16 80 99 e0 ce 92 2a c1 16 80 99 e0 f2 c1 1b c1  ......*.........
+mem: ddc866c0: 16 80 99 e0 4c 8b 0a c1 4c 8b 0a c1 61 80 99 e0  ....L...L...a...
+mem: ddc866d0: 16 80 99 e0 61 80 99 e0 16 80 99 e0 61 80 99 e0  ....a.......a...
+mem: ddc866e0: 75 80 99 e0 48 01 00 c1 2b 36 05 c1 00 00 00 00  u...H...+6......
+mem: ddc866f0: 4a 0c 00 00 99 ad 06 00 6d 35 05 c1 9e 8b 2a c1  J.......m5....*.
+mem: ddc86700: 6d 35 05 c1 48 8c 2a c1 6d 35 05 c1 ee 89 0a c1  m5..H.*.m5......
+mem: ddc86710: ee 89 0a c1 e4 0a 14 c1 e4 0a 14 c1 ee 89 0a c1  ................
+mem: ddc86720: ee 89 0a c1 6d 35 05 c1 6d 35 05 c1 6d 35 05 c1  ....m5..m5..m5..
+mem: ddc86730: a7 39 05 c1 ef b8 2a c1 00 00 00 00 00 00 00 00  .9....*.........
+mem: ddc86740: 4a 0c 00 00 97 ad 06 00 5a 5a 5a 5a 5a 5a 5a 5a  J.......ZZZZZZZZ
+mem: ddc86750: 14 dc 46 dd 14 dc 46 dd 00 00 00 00 6b 6b 6b 6b  ..F...F.....kkkk
+mem: ddc86760: 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5  kkkkkkkkkkkkkkk.
+mem: ddc86770: cc cc cc cc c0 69 c8 dd a0 83 20 c1 fa 8e 2a c1  .....i.... ...*.
+
+from include/linux/kernel.h
+
+enum {
+        DUMP_PREFIX_NONE,
+        DUMP_PREFIX_ADDRESS,
+        DUMP_PREFIX_OFFSET
+};
+

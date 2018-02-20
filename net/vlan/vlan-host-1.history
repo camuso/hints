@@ -1,0 +1,207 @@
+    1  cd /work
+    2  mkdir us
+    3  cd us
+    4  gitinit
+    5  cd linux/
+    6  mv .git/config .git/config-old
+    7  cp ~/hints/git/linux.git.config .git/config
+    8  git fetch rh6
+    9  git branch -r
+   10  git checkout -b rh6 rh6/master
+   11  git pull
+   12  gitlog1 
+   13  git am ../0001-net-init-perm_addr-in-register_netdevice.patch 
+   14  git log
+   15  git status
+   16  entropy
+   17  make rh-configs-prep
+   18  cp configs/kernel-2.6.32-x86_64.config .config
+   19  kmake
+   20  grub-bootonce 
+   21  yum install netperf -y
+   22  cat ~/hints/net/netperf 
+   23  yum install ftp://ftp.netperf.org/netperf/netperf-2.6.0.tar.bz2
+   24  yum install netserver
+   25  cd /usr/src
+   26  wget ftp://ftp.netperf.org/netperf/netperf-2.6.0.tar.bz2
+   27  tar -xvf netperf-2.6.0.tar.bz2 
+   28  cd netperf-2.6.0
+   29  alf
+   30  ./configure 
+   31  make
+   32  make install
+   33  netperf
+   34  netserver
+   35  grub-bootonce 
+   36  reboot
+   37  netserver
+   38  ./hints/net/netperf localhost
+   39  chmod +x ./hints/net/netperf
+   40  ./hints/net/netperf localhost
+   41  vim /boot/grub/grub.conf
+   42  echo .1213689 > localversion
+   43  cat localversion
+   44  yum install http://download.eng.rdu2.redhat.com/rel-eng/brew/rhel/6/koji-1.9.0-15.el6.noarch.rpm
+   45  brew
+   46  kinit tcamuso
+   47  make rh-brew
+   48  cd /work/us/linux/
+   49  make rh-brew
+   50  alf ../
+   51  vim ../0001-net-init-perm_addr-in-register_netdevice.patch 
+   52  git send-email ../0001-net-init-perm_addr-in-register_netdevice.patch --to tcamuso@redhat.com
+   53  vim ../0001-net-init-perm_addr-in-register_netdevice.patch 
+   54  git send-email ../0001-net-init-perm_addr-in-register_netdevice.patch --to tcamuso@redhat.com
+   55  vim ../0001-net-init-perm_addr-in-register_netdevice.patch 
+   56  git send-email ../0001-net-init-perm_addr-in-register_netdevice.patch --to tcamuso@redhat.com
+   57  vim ../0001-net-init-perm_addr-in-register_netdevice.patch 
+   58  git send-email ../0001-net-init-perm_addr-in-register_netdevice.patch --to tcamuso@redhat.com
+   59  vim ../0001-net-init-perm_addr-in-register_netdevice.patch 
+   60  git send-email ../0001-net-init-perm_addr-in-register_netdevice.patch --to tcamuso@redhat.com
+   61  git send-email ../0001-net-init-perm_addr-in-register_netdevice.patch --bcc tcamuso@redhat.com --to rhkernel-list@redhat.com --cc ivecera@redhat.com --cc sassmann@redhat.com --cc nhorman@redhat.com
+   62  vim ../0001-net-init-perm_addr-in-register_netdevice.patch 
+   63  cd /work/us/linux/
+   64  git branch
+   65  git log
+   66  grep nhorman MAINTAINERS 
+   67  grep sassmann MAINTAINERS 
+   68  grep stefan
+   69  grep stefan MAINTAINERS 
+   70  grep ivec MAINTAINERS 
+   71  uname -r
+   72  cd /work/us/linux/
+   73  git branch
+   74  git checkout rh6
+   75  git clean -df
+   76  git pull
+   77  git branch
+   78  git clean -df
+   79  git status
+   80  git checkout rh6
+   81  gitlog1 
+   82  git log
+   83  git reset --hard 93ab1730d11fc0bd2c95029e7885f7b8fabeb960
+   84  git pull
+   85  git log
+   86  ifconfig
+   87  ethtool -i eth0
+   88  lspci -vx
+   89  uname -r
+   90  vim /menu/grub2/grub.cfg 
+   91  ifconfig | grep inet
+   92  ls
+   93  ifconfig
+   94  ping www.google.com
+   95  ifconfig
+   96  ethtool eth0
+   97  ethtool -i eth0
+   98  ip link add link eth0 dev eth0.200 type vlan id 200
+   99  ifconfig
+  100  ifconfig -a
+  101  ip addr help
+  102  ip addr add 192.168.1.1 dev eth0.200
+  103  ip link set dev eth0.200 up
+  104  ifconfig
+  105  ping 192.168.1.2
+  106  ip route show
+  107  ip route add 192.168.1.0/24 dev eth0.200
+  108  ip route show
+  109  ifconfig
+  110  ethtool -i eth1
+  111  ip route del 192.168.1.0/24 dev eth0.200
+  112  man ethtool
+  113  ifconfig
+  114  ethtool -f eth1
+  115  ethtool -p eth1
+  116  ip link del dev eth0.200
+  117  ifconfig
+  118  uname -a
+  119  ifconfig
+  120  ip addr add 192.168.1.2 dev eth1
+  121  ip rotue how]
+  122  ip route show
+  123  ip route add 192.168.1.0/24 dev eth1
+  124  ping 192.168.1.1
+  125  ethtool eth1
+  126  ip addr del 192.168.1.2 dev eth1
+  127  ifconfig
+  128  ip route show
+  129  ip addr add 192.168.1.1 dev eth3
+  130  ip route show
+  131  ip addr add 192.168.1.0/24 dev eth3
+  132  ping 192.168.1.2
+  133  ip addr del 192.168.1.1/32 dev eth3
+  134  ip route show
+  135  ip route del 192.168.1.0/24 dev eth3
+  136  ip route show
+  137  ip addr add 192.168.1.1 dev eth1
+  138  ip route show
+  139  ip route add 192.168.1.0/24 dev eth1
+  140  ip addr del 192.168.1.1/32 dev eth1
+  141  tail -f /var/log/messages
+  142  ip addr add 192.168.1.1 dev eth2
+  143  ip route add 192.168.1.0/24 dev eth2
+  144  ping 192.168.1.2
+  145  ifconfig
+  146  cd /etc/sysconfig/
+  147  ls
+  148  cd network-scripts/
+  149  vi ifcfg-eth2 
+  150  vi ifcfg-eth2.200
+  151  service network restart
+  152  ifconfig
+  153  ifconfig -a
+  154  ip addr del 192.168.1.1/32 dev eth2
+  155  service NetworkManager resart
+  156  service NetworkManager restart
+  157  ifconfig
+  158  ls
+  159  vi ifcfg-eth0 
+  160  service network restart
+  161  ifconfig
+  162  ifdown eth0
+  163  ifup eth0
+  164  ifconfig
+  165  ifconfig eth0
+  166  vi ifcfg-eth0
+  167  ifconfig eth0
+  168  ifdown eth0
+  169  rm /var/lib/dhclient/dhclient-eth0.leases 
+  170  ifup eth0
+  171  ifconfig eth0
+  172  vi ifcfg-eth0 
+  173  ifdown eth0
+  174  rm /var/lib/dhclient/dhclient-eth0.leases 
+  175  rm /var/lib/dhclient/dhclient-adae1ecc-9640-465a-86a4-7608cc5608bc-eth0.lease 
+  176  ifup eth0
+  177  ifconfig eth0
+  178  service network restart
+  179  ifconfig -a
+  180  vi ifcfg-eth2.200 
+  181  service network restart
+  182  ifconfig
+  183  vi ifcfg-eth2.200 
+  184  ifconfig
+  185  ping 192.168.1.2
+  186  reboot
+  187  ping 192.168.1.2
+  188  exit
+  189  ping 192.168.1.2
+  190  cd /etc/netconfig 
+  191  cd /etc
+  192  lsd
+  193  cd /etc/networks 
+  194  cd /etc/sysconfig/networking/
+  195  alf
+  196  cd ../network-scripts/
+  197  alf
+  198  less ifcfg-eth0
+  199  less ifcfg-eth2.200 
+  200  less ifcfg-eth2
+  201  less ifcfg-eth2.200 
+  202  less ifcfg-eth2
+  203  cat ifcfg-eth0
+  204  cat ifcfg-eth2
+  205  ethtool -i eth2
+  206  man ethtool
+  207  history > ~/vlan-host-1.history

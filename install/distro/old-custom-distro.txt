@@ -1,0 +1,85 @@
+Customizing a RHEL distro DVD iso
+
+Most of the following was taken from instructions found on ...
+http://greghaygood.com/2007/12/11/build-a-custom-centos-5-install-cd
+... and from lines I examined in Bryan Gartner's history when he
+successfully built a custom distro.
+
+Provision a system, virtual or real, with the distro of RHEL to be customized.
+
+Login as root.
+
+Create working directories.
+
+# mkdir -p /work/iso/distro
+
+Copy the distro files into a the work directory, for example ...
+
+# rsync -av \
+  blofly.usa.hp.com::LinuxISO/mrepo/RHEL5.7-Snapshot-2-Server-x86_64/disc1/ \
+  /work/iso/distro
+
+Make your changes. For example, new kernel files for a RHEL5 Server distro
+would go into /work/iso/distro/Server
+
+Add new boot drivers to the initrd, as required. (See customize-inird.txt)
+
+Create a yum repo that points to the repo on the distribution disk being
+customized, and create the file, "blofly.repo"
+
+# cd /etc/yum.repos.d
+# vi blofly.repo
+
+Enter the following lines in the blofly.repo file.
+
+[blofly]
+baseurl=http://172.16.3.1/mrepo/RHEL5.7-Snapshot-2-Server-x86_64/RPMS.os
+enabled=1
+gpgcheck=0
+
+Now install the anaconda anaconda-runtime and createrepo ustilities.
+
+# yum install anaconda anaconda-runtime createrepo
+
+Extract the discinfo that you need for the createrepo command.
+
+# head -1 dvd/.discinfo
+1306347199.171996
+
+Now use the above disc info header to identify the local url of the repo.
+Move into the directory just above the repodata directory.
+
+# cd /work/iso/distro/Server
+# createrepo -u "media://1306347199.171996#1" \
+  -g repodata/comps-rhel5-server-core.xml  ./
+
+Note that "#1" was appended to the media url to identify this as disc one
+of the set.
+
+Now create the dvd iso
+
+# cd /work/iso
+# mkisofs -r -R -J -T -v \
+  -no-emul-boot \
+  -boot-load-size 4 \
+  -boot-info-table \
+  -V "RHEL5.7-Server-20110609.JW" \
+  -p "bryang" -A "RHEL5.7-Server-20110609.JW" \
+  -b isolinux/isolinux.bin -c isolinux/boot.cat \
+  -x "lost+found" \
+  -o RHEL5.7-Server-20110609.JW-x86_64-DVD.iso \
+  distro/
+
+-o identifies the output file
+"distro/" is the directory whose contents will be made into an iso dvd image.
+
+See "man mkisofs" for details of the other options.
+
+When the mkisofs is complete, you should see the output iso file in the
+/work/iso directory.
+
+Insert the MD5 signature.
+
+# implantisomd5 RHEL5.7-Server-20110609.JW-x86_64-DVD.iso
+
+

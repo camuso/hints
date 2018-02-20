@@ -1,0 +1,19 @@
+To createa git archive from an existing kernel tree ...
+
+# git archive --format=tar --prefix=rhel6/ HEAD | gzip -9 > ../rhel6.tar.gz
+
+To unwrap the git archive and create a new git tree.
+
+# gunzip rhel6.tar.gz
+# tar -xf rhel6.tar
+# cd rhel6
+# git init
+# git add --all
+# git commit -a
+
+To prepare for building the new kernel.
+
+# make rh-configs-prep
+# make rh-configs
+# cp configs/kernel-2.6.32-x86_64.config .config
+

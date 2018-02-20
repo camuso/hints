@@ -1,0 +1,13 @@
+[rhel6.4-released]
+name=RHEL6.4 - $basearch - Source
+baseurl=http://qafiler.bos.redhat.com/redhat/released/RHEL-6/6.4/Workstation/$basearch/os/
+enabled=1
+gpgcheck=0
+
+[rhel6.3-released]
+name=RHEL6.3 - $basearch - Source
+baseurl=http://qafiler.bos.redhat.com/redhat/released/RHEL-6/6.3/Workstation/$basearch/os/
+enabled=0
+gpgcheck=0
+
+

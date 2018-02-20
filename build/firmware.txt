@@ -1,0 +1,42 @@
+netxen-fw-phan.patch.zip
+VERSION 1
+Created on: Jul 23, 2011 3:23 PM by Tony Camuso
+- Last Modified:  Jul 23, 2011 3:25 PM by Tony Camuso
+- Visibility: Open to anyone
+
+This is a patch to insert the NetXen 4.0.550 firmware into the
+firmware/ directory of the RHEL6 git tree.
+
+
+
+Assuming you download the zip file to a directory immediately above
+the RHEL6 git tree ...
+
+
+# unzip netxen-fw-phan.patch.zip
+
+# cd rhel6
+
+# patch -p1 < ../netxen-fw-phan.patch
+
+# git add firmware/phanfw.bin.ihex
+
+This patch was created using the following steps.
+
+    * The phanfw.bin file was copied out of the upstream linux-firmware git
+      repo cloned from the following location.
+      git://git.kernel.org/pub/scm/linux/kernel/git/dwmw2/linux-firmware.git
+
+    * The file was converted to ihex format with the following command
+      # objcopy -I binary -O ihex phanfw.bin phanfw.bin.ihex
+
+    * The file was copied into the firmware/directory of the RHEL6 git tree
+      # cp phanfw.bin.ihex firmware/
+
+    * The file was conditionally added in order to generate a diff.
+      # git add -N firmware/phanfw.bin.ihex
+
+    * The patch was created with the following command.
+      # git diff > ../netxen-fw-phan.patch
+
+

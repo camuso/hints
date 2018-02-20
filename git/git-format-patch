@@ -1,0 +1,1 @@
+git format-patch 839ec5452ebfd5905b9c69b20ceb640903a8ea1a..c189f4ec955e1fe4a2a2742d028aeecc52a5848a -o /mnt/data1/rhel5/hpilo-54.3.x.patch

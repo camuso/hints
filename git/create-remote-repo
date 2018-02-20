@@ -1,0 +1,36 @@
+If you already have a git tree that you're working from, and you want to make
+it availale to copy from other locations ...
+
+To create a git repo named "foo" on the remote machine ...
+
+mkdir -p /path/to/repo/foo.git
+cd /path/to/repo/foo.git
+git --bare init
+git config core.sharedrepository 1
+git config receive.denyNonFastforwards true
+find objects -type d -exec chmod 02770 '{}' \;
+
+The core.sharedrepository flag tells git to keep everything group readable
+and writeable.
+
+The receive.denyNonFastforwards flag assures that merges can't happen when
+you push to the repo. You have to do the merges on your local machine, and
+then push the result.
+
+Return to the local project git tree and ...
+
+# git remote add origin ssh://user@ip:2227/path/to/repo/foo.git
+git remote add origin ssh://user@ip/path/to/repo/foo.git
+
+... or if the remote is on a local partition ...
+
+git remote add origin /path/to/repo/foo.git
+
+Then simply ...
+
+git push -u origin master
+
+To clone from that repo from a remote client ...
+
+git clone ssh://user@ip/path/to/repo/foo.git
+

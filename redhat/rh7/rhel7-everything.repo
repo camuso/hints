@@ -1,0 +1,55 @@
+[rhel7-Workstation]
+name=Workstation $releasever - $basearch
+# baseurl=http://lab-02.rhts.eng.bos.redhat.com/net/bigpapi.bos.redhat.com/vol/engarchive2/redhat/released/RHEL-7/7.0/Workstation/x86_64/os/
+baseurl=http://download.lab.bos.redhat.com/released/RHEL-7/7.0/Workstation/x86_64/os/
+gpgcheck=0
+enabled=1
+[rhel7-Workstation-Optional]
+name=Workstation-Optional $releasever - $basearch
+#baseurl=http://lab-02.rhts.eng.bos.redhat.com/net/bigpapi.bos.redhat.com/vol/engarchive2/redhat/released/RHEL-7/7.0/Workstation-optional/x86_64/os/
+baseurl=http://download.lab.bos.redhat.com/released/RHEL-7/7.0/Workstation-optional/x86_64/os/
+gpgcheck=0
+enabled=1
+[rhel7-Server]
+name=Server $releasever - $basearch
+baseurl=http://download.lab.bos.redhat.com/released/RHEL-7/7.0/Server/x86_64/os/
+gpgcheck=0
+enabled=1
+[rhel-Server-Optional]
+name=Server-Optional $releasever - $basearch
+baseurl=http://download.lab.bos.redhat.com/released/RHEL-7/7.0/Server-optional/x86_64/os/
+gpgcheck=0
+enabled=1
+[rhel-Server-SAP]
+name=Server-SAP $releasever - $basearch
+baseurl=http://download.lab.bos.redhat.com/released/RHEL-7/7.0/Server-SAP/x86_64/os/
+gpgcheck=0
+enabled=1
+[rhel-Compute-Node]
+name=Compute-Node $releasever - $basearch
+baseurl=http://download.lab.bos.redhat.com/released/RHEL-7/7.0/ComputeNode/x86_64/os/
+gpgcheck=0
+enabled=1
+[rhel-Compute-Node-Optional]
+name=Compute-Node-Optional $releasever - $basearch
+baseurl=http://download.lab.bos.redhat.com/released/RHEL-7/7.0/ComputeNode-optional/x86_64/os/
+gpgcheck=0
+enabled=1
+[rhel-Client]
+name=Client $releasever - $basearch
+baseurl=http://download.lab.bos.redhat.com/released/RHEL-7/7.0/Client/x86_64/os/
+gpgcheck=0
+enabled=1
+[rhel-Client-Optional]
+name=Client-Optonal $releasever - $basearch
+baseurl=http://download.lab.bos.redhat.com/released/RHEL-7/7.0/Client-optional/x86_64/os/
+gpgcheck=0
+enabled=1
+
+
+
+[f19-everything]
+name=f19 $releasever - $basearch
+baseurl=http://lab-02.rhts.eng.bos.redhat.com/net/bigpapi.bos.redhat.com/vol/engarchive2/redhat/released/F-19/GOLD/Everything/x86_64/os/
+gpgcheck=0
+enabled=0

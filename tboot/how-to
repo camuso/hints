@@ -1,0 +1,154 @@
+# yum install tpm-tools tpm-tools-devel
+
+
+REBASE PROCESS
+==============
+
+0. install rhpkg repo:
+
+   a. RHEL7:
+      $ sudo curl -o /etc/yum.repos.d/rhpkg.repo \
+	      http://download.eng.bos.redhat.com/rel-eng/dist-git/rhel/rhpkg.repo
+
+   b. Fedora:
+      $ sudo curl -o /etc/yum.repos.d/rhpkg.repo \
+	      http://download.devel.redhat.com/rel-eng/dist-git/fedora/rhpkg.repo
+
+   $ sudo yum install -y rhpkg trousers-devel
+
+1. Gets the current rhel package
+
+   a. Download all branches.
+      $ rhpkg clone -B tboot 	# downloads all branches
+      $ ls tboot/		# subdirs will have branch names
+      $ rm -rf tboot		# delete the whole smash
+
+   b. Clone the specific branch
+
+      $ rhpkg clone -b rhel-7.4 tboot rhel-7.4
+
+      The above command line clones the rhel-7.4 branch of tboot into
+      a subdirectory named rhel-7.4
+
+2. Download latest tar from http://sourceforge.net/projects/tboot/files
+
+   curl -L -o tboot-1.9.5.tar.gz \
+      https://sourceforge.net/projects/tboot/files/latest/download?source=files
+
+3. Edit the tboot.spec file to update the version number
+
+   $ cd tboot
+   $ vim tboot.spec
+
+4. $rhpkg local
+
+   Attempt a local build of the new package.
+
+5. Resolve any errors from the attempted local build. For example, add
+   new files or delete files that no longer exist from the tboot.spec
+   file.  If there were any errors, Go back to step 4.
+
+6. Upload the new tar file that you downloaded from the sourceforge
+   website. This will update the sources and .gitignore files.
+
+   $ rhpkg upload tboot-1.8.2.tar.gz
+
+7. Edit the sources file to remove the reference to the old tar file.
+
+8. git add and commit the changes.
+
+   $ git add tboot.spec
+   $ git commit
+
+9. Run rhpkg local once more to be sure all is well, then
+
+   $ rhpkg push
+
+10. After the push, do a brew build.
+
+  $ rhpkg scratch-build
+  $ rhpkg build
+
+
+PATCH PROCESS
+=============
+
+1. Download the latest tboot hg repo
+   $ mkdir hg
+   $ cd hg
+   $ hg clone http://hg.code.sf.net/p/tboot/code/
+
+2. Migrate the hg repo to git
+   If you don't already have fast-export, go get it.
+
+   In the directory of your choice ...
+	$ mkdir ~/fast-export
+	$ cd ~/fast-export
+   	$ git clone git://repo.or.cz/fast-export.git
+
+   Create the git repo
+	$ mkdir git-repo
+	$ git init git-repo
+	$ cd git_repo
+	$ ~/fast-export/hg-fast-export.sh -r /path/to/old/mercurial_repo
+	$ git checkout HEAD
+
+3. Use git format-patch to extract the patches you need to apply and save them
+   into a directory somewhere. Set the config no prefix and no numbered.
+
+   $ git config format.numbered false
+   $ git config format.subjectprefix ""
+   $ git format-patch f62afe832 -o ../../backports
+
+4. Get the package.
+
+   $ rhpkg clone tboot
+
+   This will create a directory tboot/
+
+5. Get the package tar and source files.
+
+   $ cd tboot
+   $ rhpkg prep
+
+   $ ls -alch
+   drwxrwxr-x.  4 tcamuso tcamuso 4.0K Oct  6 10:17 ./
+   drwxrwxr-x.  3 tcamuso tcamuso 4.0K Oct  6 10:11 ../
+   drwxrwxr-x.  8 tcamuso tcamuso 4.0K Oct  6 10:13 .git/
+   -rw-rw-r--.  1 tcamuso tcamuso  126 Oct  6 10:13 .gitignore
+   -rw-rw-r--.  1 tcamuso tcamuso   53 Oct  6 10:13 sources
+   drwxr-xr-x. 10 tcamuso tcamuso 4.0K Oct  6 10:14 tboot-1.7.4/
+   -rw-rw-r--.  1 tcamuso tcamuso 464K Oct  6 10:14 tboot-1.7.4.tar.gz
+   -rw-rw-r--.  1 tcamuso tcamuso 3.4K Oct  6 10:13 tboot.spec
+
+6. Create a git repo out of the sources and apply the patches you extracted with
+   git format-patch from the git repo exported from the hg repo.
+
+   $ git init
+   $ git add .
+   $ git commit -a
+
+   # Use git am in a loop, because the tag commits will fail as patches. Using
+   # git am in a loop will allow the sequential patches to be applied, even
+   # though the tag commit failed to apply.
+   #
+   $ patches=$(ls -1 ../../backports/*.patch)
+   $ for patch in $patches; do git am backports/$patch; done
+
+Some handy routines ...
+
+for f in $(ls -1 *.patch); do t1=$(echo $f | cut -d'-' -f-3);t2=$(echo $f | cut -d'-' -f4-); mv $f $t1".el7"-$t2; done
+
+for f in $(ls -1 *.patch); do fname=$(printf "tboot-1.8.3-2-%s" $f); mv $f $fname; done
+
+for f in $(ls -1 *.patch); do t1=$(echo $f | cut -d'-' -f-3);t2=$(echo $f | cut -d'-' -f4-); mv $f $t1".el7"-$t2; done
+
+for f in $(ls -1 *.patch); do fname=$(printf "tboot-1.8.3-2-%s" $f); mv $f $fname; done
+
+ERRATA
+======
+
+errata.devel.redhat.com
+
+brew latest-pkg rhel-7.3-candidate tboot
+

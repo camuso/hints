@@ -1,0 +1,118 @@
+I followed the directions in:
+
+http://docs.fedoraproject.org/en-US/Fedora/17/html/Security_Guide/Security_Guide-Encryption-Data_in_Motion.html#sect-Security_Guide-Virtual_Private_Networks_VPNs
+
+I have openswan installed: openswan-2.6.37-3.fc17.x86_64. The docs say
+to also install ipsec-tools. The IPSEC wizard is a tab in
+system-config-network.
+
+I checked the F18 docs. Same as F17.
+
+So I think I am running the prefered infrastructure. Or is there some
+other guide I'm missing?
+
+In any event, has anybody using any vpn package been able to set it up
+for a roaming client?
+
+-----------------------------------------
+
+And since Openswan has been forked into Libreswan you may want to look
+into that. The Libreswan team has just released a new version with lots
+of fixes and enhancements.
+
+See http://libreswan.org
+And https://download.libreswan.org/binaries/fedora/
+
+------------------------------------------
+
+> In any event, has anybody using any vpn package been able to set it up
+> for a roaming client?
+
+I use ssh tunnels to forward Android imap (port 143), smtp (port 25), and
+http proxying (port 3128) to my Fedora server, using this app:
+
+http://play.google.com/store/apps/details?id=org.ayal.SPT
+
+The main gotcha is that each tablet needs its own dedicated ssh port, so
+that the office NAT/firewall/router can keep track of ssh sessions
+correctly. But that is easy to implement, for a handful of devices.
+
+It works quite well for my needs.
+
+- - - - - - - - - - - - - - - - -
+
+Interesting. This look like a very "light weight" solution.
+
+What do you use as a proxy on the Fedora server? glype? squid?
+
+On the android you configure a proxy for each browser? Or does SPT
+just send all port 80 requests to the server?
+
+Any details on the config would be very helpful.
+
+- - - - - - - - - - - - - - - - - -
+
+Install the SPT app & forward local ports 1043, 1125, and 3128 to remote
+143 (imap), 25 (smtp), 3128 (squid proxy).
+
+In my case, SPT Forwards = "L1043=192.168.0.2:143,L1125=192.168.0.2:25,L3128=192.168.0.2:3128"
+
+Here, 192.168.0.2 is the internal address of my server (not its external IP).
+
+The forwarded local ports need to be > 1024, IIRC.
+
+You point the email client at localhost for the SMTP/IMAP, using the special
+local forwarding ports 1043 and 1125.
+
+For web use, I use Firefox, and in about:config set:
+
+network.proxy.type = 2
+network.proxy.autoconfig_url = http://www.avtechpulse.com/proxy/avtech.pac
+
+That *.pac file says:
+
+function FindProxyForURL(url, host) {
+    if (shExpMatch(host, "*.domain.avtechpulse.com"))
+        {
+        return "PROXY 127.0.0.1:3128";
+        }
+
+     return "DIRECT";
+}
+
+That means squid serves the private intranet pages from the private squid
+server, and firefox accesses all other pages in the normal manner (not
+through squid).
+
+Firefox is the only browser that handles this proxy trickery well.
+
+Sounds complicated, but works like a charm.
+
+----------------------------------
+
+We use a Cisco VPN, so I just use my 'Droid as a mobile hotspot (or a
+tethered modem), then use vpnc to open a VPN off our VPN gateway and it
+works fine. I prefer the tethered mechanism for security reasons.
+
+Note that it also works using my Verizon 4G hotspot doo-dad in wifi
+mode. I haven't tried it in bluetooth or tethered mode yet because
+every time I dig it out, it's because others in my group need access
+as well so I have to share--usually preceeded with my grumbling.
+
+Here's my expurgated /etc/vpnc/default.conf file:
+
+    # VPN Setup...
+    # Don't timeout...keep going
+    DPD idle timeout (our side) 0
+    # Force Cisco UDP NAT mode (for idiot routers that use MTUs
+    # <1500 bytes...may not be necessary at all times)...
+    #NAT Traversal Mode cisco-udp
+    IPSec gateway <MY-VPN-GATEWAY>
+    IPSec ID <MY-GROUP-ID-ON-VPN-GATEWAY>
+    IPSec secret <GROUP-PASSWORD-ON-VPN-GATEWAY>
+    Xauth username <MY-USERNAME-ON-VPN-GATEWAY>
+    Xauth password <MY-PASSWORD-ON-VPN-GATEWAY>
+
+I normally connect to the wifi hotspot off the 'Droid or 4G access
+point, then run "vpnc" and off we go.
+

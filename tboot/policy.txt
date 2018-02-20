@@ -1,0 +1,41 @@
+# Create a platform owner LCP as follows
+
+tpmnv_defindex -i 0x40000001 -s 54 -pv 2 -p $OWNER_PASSWORD
+
+lcp_mlehash -c "logging=serial,memory" /boot/tboot.gz >mle.txt
+lcp_crtpolelt --create --type mle --out mle.elt mle.txt
+lcp_crtpollist --create --out mle.lst mle.elt
+lcp_crtpol2 --create --type list --minver 0x30 --ctrl 0 --pol mle.pol --data mle.dat mle.lst
+
+# txt-stat | grep -i secret
+---------------------------
+	    secrets: TRUE
+	 secrets flag set: TRUE
+TBOOT: set TXT.CMD.SECRETS flag
+
+# txt-stat | grep -i sinit
+--------------------------
+
+SINIT.BASE: 0xbf700000
+	SINIT.SIZE: 131072B (0x20000)
+TBOOT: checking if module  is an SINIT for this platform...
+TBOOT: no SINIT AC module found
+TBOOT: TXT.SINIT.BASE: 0xbf700000
+TBOOT: TXT.SINIT.SIZE: 0x20000 (131072)
+TBOOT: BIOS has already loaded an SINIT module
+TBOOT: no SINIT provided by bootloader; using BIOS SINIT
+TBOOT: AC module header dump for SINIT:
+TBOOT: 		 chipset_acm_type: 0x1 (SINIT)
+TBOOT: 		 os_sinit_data_ver: 0x5
+TBOOT: 	 bios_sinit_size: 0xd000 (53248)
+TBOOT: 	 bios_sinit_size: 0xd000 (53248)
+TBOOT: os_sinit_data (@0xbf735154, 0x64):
+TBOOT: SINIT ACM successfully returned...
+TBOOT: 	 bios_sinit_size: 0xd000 (53248)
+TBOOT: 	 bios_sinit_size: 0xd000 (53248)
+TBOOT: os_sinit_data (@0xbf735154, 0x64):
+TBOOT: sinit_mle_data (@0xbf7351b8, 0x24c):
+TBOOT: 	 sinit_hash:
+TBOOT: 	 sinit_mdrs:
+TBOOT: protecting SINIT (bf700000 - bf71ffff) in e820 table
+TBOOT: verifying e820 table against SINIT MDRs: verification succeeded.

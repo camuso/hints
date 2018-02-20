@@ -1,0 +1,62 @@
+
+Enable ipmi_msghandler reports
+=============================================
+boot time: ipmi_si.ipmi_msg_debug=1
+load time: # echo "options ipmi_si ipmi_msg_debug=1" >> /etc/modprobe.d/modprobe.conf
+run time:  # echo 1 > /sys/module/ipmi_msghandler/parameters/ipmi_msg_debug
+
+Throttle ipmi_msghandler reports after a burst of 20 (default is 10)
+====================================================================
+boot time: ipmi_si.ipmi_msg_dbg_throt_thold=20
+load time: # echo "options ipmi_si ipmi_msg_dbg_throt_thold=20" >> /etc/modprobe.d/modprobe.conf
+run time:  # echo 20 > /sys/module/ipmi_msghandler/parameters/ipmi_msg_dbg_throt_thold
+
+Set Burst Interval to 5 minutes (default is 2)
+==============================================
+boot time: ipmi_si.ipmi_msg_dbg_throt_wait=5
+load time: # echo "options ipmi_si ipmi_msg_dbg_throt_wait=5" >> /etc/modprobe.d/modprobe.conf
+echo 5 > /sys/module/ipmi_msghandler/parameters/ipmi_msg_dbg_throt_wait
+
+
+Enable kcs reports
+================================================
+boot time: ipmi_si.kcs_debug=1
+load time: # echo "options ipmi_si kcs_debug=1" >> /etc/modprobe.d/modprobe.conf
+run time:  # echo 1 > /sys/module/ipmi_si/parameters/kcs_debug
+
+Send kcs debug messages
+================================================
+boot time: ipmi_si.kcs_debug=2
+load time: # echo "options ipmi_si kcs_debug=2" >> /etc/modprobe.d/modprobe.conf
+run time:  # echo 2 > /sys/module/ipmi_si/parameters/kcs_debug
+
+Send kcs state information
+=================================================
+boot time: ipmi_si.kcs_debug=4
+load time: # echo "options ipmi_si kcs_debug=4" >> /etc/modprobe.d/modprobe.conf
+run time:  # echo 4 > /sys/module/ipmi_si/parameters/kcs_debug
+
+Sen kcs state/status counts
+================================================
+boot time: ipmi_si.kcs_debug=8
+load time: # echo "options ipmi_si kcs_debug=8" >> /etc/modprobe.d/modprobe.conf
+run time:  # echo 8 > /sys/module/ipmi_si/parameters/kcs_debug
+
+Enable state messages and counts
+================================================
+boot time: ipmi_si.kcs_debug=12
+load time: # echo "options ipmi_si kcs_debug=12" >> /etc/modprobe.d/modprobe.conf
+run time:  # echo 12 > /sys/module/ipmi_si/parameters/kcs_debug
+
+Throttle after a burst of 20 messages (default is 10)
+=====================================================
+boot time: ipmi_si.kcs_dbg_throt_thold=20
+load time: # echo "options ipmi_si kcs_dbg_throt_thold=20" >> /etc/modprobe.d/modprobe.conf
+run time:  # echo 20 > /sys/module/ipmi_si/parameters/kcs_dbg_throt_thold
+
+Set burst interval to 60 secs (default is 30)
+=====================================================
+boot time: ipmi_si.kcs_dbg_throt_wait=30
+load time: # echo "options ipmi_si kcs_dbg_throt_wait=30" >> /etc/modprobe.d/modprobe.conf
+run time:  # echo 60 > /sys/module/ipmi_si/parameters/kcs_dbg_throt_wait
+

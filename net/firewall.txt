@@ -1,0 +1,5 @@
+sudo yum install gnome-nettool
+sudo system-config-firewall &
+sudo yum install openssh-server
+service sshd start
+

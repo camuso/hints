@@ -1,0 +1,31 @@
+Sometimes, due to hubris or stupidity, you may end up with a bad fstab
+entry for your root partition. Linux will detect errors and conveniently
+mount it as read-only, but then you can't edit /etc/fstab to fix the
+problem. You could break out a live-CD to fix the problem -- assuming you
+have one handy -- or you could remount the read-only partition without
+rebooting. The trick is to remember the -n option.
+
+-n     Mount without writing in /etc/mtab.
+       This is necessary for example when /etc is on a read-only file system.
+
+The following examples show how to remount / with the options defined in
+defaults, which usually contains rw for most filesystems. With the ext
+family of filesystems this is rw, suid, dev, exec, auto, nouser, async,
+but the defaults per disk may be changed with `tune2fs`.
+
+mount -n -o remount,defaults /dev/sda1 /
+mount -n -o remount,defaults /dev/VolGroup00/LogVol00 /
+
+I found that the most common reason for me screwing up my root partition is
+because I forgot run tune2fs before rebooting when I tune an ext3 filesystem
+for performance. This is harmless and easy to fix, but can be alarming.
+
+Interestingly, I found the only way I could check the current mount option
+status was by looking at /proc/mounts. Using the `mount` command will show
+you if the partition is mounted and it will show the mount options
+requested, but it won't show the mount options actually in effect.
+The following example tests for ro options status on the / mount.
+This will return 0 if / is mounted read-only or 1 if not:
+
+cut /proc/mounts -f 2,3,4 -d " " | grep -q ^/\\W.*\\Wro
+

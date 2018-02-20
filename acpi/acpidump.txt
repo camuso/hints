@@ -1,0 +1,32 @@
+# The easiest way to do this is to access the acpi tables in sysfs
+# using acpitools.
+#
+yum install -i acpica-tools
+rpm -ql acpica-tools		# lists the contents of the package
+
+# To find all the HID and CID names ...
+#
+acpinames /sys/firmware/acpi/tables/DSDT | grep -e HID -e CID
+
+# Another way to do it is to create the ACPI tables using acpidump.
+#
+acpidump -o ../acpidump.dat		# creates a raw ACPI dump
+acpinames ../acpidump.dat		# creates dsdt.dat and ssdt.dat
+acpinames dsdt.dat | grep -e HID -e CID # searches dsdt for HIDs and CIDs
+
+# First install acpidump and iasl
+#
+yum localinstall -y pmtools-20071116-3.fc12.x86_64.rpm
+yum install iasl
+
+# Then create a binary file of the DSDT
+#
+acpidump -b -t DSDT > acpi.bin
+
+# Now create a text file with the DSDT in asl sourc code.
+#
+iasl -d acpi.bin
+
+# This will create acpi.dsl, which is a text file containing
+# source code for the DSDT.
+

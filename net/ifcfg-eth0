@@ -1,0 +1,12 @@
+# Broadcom Corporation NetXtreme II BCM5708 Gigabit Ethernet
+DEVICE=eth0
+BOOTPROTO=dhcp
+HWADDR=00:1F:29:C4:AA:62
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+ONBOOT=yes
+OPTIONS=layer2=1
+TYPE=Ethernet
+BRIDGE=br0	# may need to comment this out in some environemnts
+USERCTL=no
+NM_CONTROLED=no

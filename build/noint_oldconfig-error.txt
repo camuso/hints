@@ -1,0 +1,144 @@
+
+Everytime you add a Kconfig entry, you have to define its value in
+redhat/configs.  rh-configs-prep runs across all arches.  Otherwise the
+kernel has no idea what you want to do with it.
+
+Just stick CONFIG_LPC_SCH=m in redhat/configs/config-x86-generic-rhel.
+That should cover it.
+
+Cheers,
+Don
+
+----------------------------------------------------------------------
+
+When you change a Kconfig, IIRC you also have to set value in
+redhat/configs/
+for the other arches.
+
+P.
+
+-----------------------------------------------------------------------
+
+OK, that seems to work for the other archs, but it craters on
+x86_64, even though it does not crater on x86_64-debug.
+
+# echo "CONFIG_LPC_SCH=m" >> redhat/configs/config-x86_64
+
+# make rh-configs-prep
+  :
+  :
+Configuring /home/work/6/rhel6/configs/kernel-2.6.32-i686-debug.config
+Configuring /home/work/6/rhel6/configs/kernel-2.6.32-i686.config
+Configuring /home/work/6/rhel6/configs/kernel-2.6.32-ppc64-debug.config
+.config:4639:warning: override: HZ_100 changes choice state
+Configuring /home/work/6/rhel6/configs/kernel-2.6.32-ppc64-kdump.config
+.config:4636:warning: override: HZ_100 changes choice state
+Configuring /home/work/6/rhel6/configs/kernel-2.6.32-ppc64.config
+.config:4635:warning: override: HZ_100 changes choice state
+Configuring /home/work/6/rhel6/configs/kernel-2.6.32-s390x-debug.config
+Configuring /home/work/6/rhel6/configs/kernel-2.6.32-s390x-kdump.config
+Configuring /home/work/6/rhel6/configs/kernel-2.6.32-s390x.config
+Configuring /home/work/6/rhel6/configs/kernel-2.6.32-x86_64-debug.config
+Configuring /home/work/6/rhel6/configs/kernel-2.6.32-x86_64.config
+CONFIG_LPC_SCH
+make[4]: *** [nonint_oldconfig] Error 1
+make[3]: *** [nonint_oldconfig] Error 2
+make[2]: *** [configs-prep] Error 1
+
+
+
+
+----- Original Message -----
+> From: "Tony Camuso" <tcamuso@redhat.com>
+> To: "Prarit Bhargava" <prarit@redhat.com>
+> Cc: "Don Zickus" <dzickus@redhat.com>, "Don Dutile" <ddutile@redhat.com>
+> Sent: Thursday, September 20, 2012 9:37:31 PM
+> Subject: Re: nonint_oldconfig Error
+>
+>
+> Given the contents of the config-i686 file in redhat/configs ...
+>
+> # cat config-i686
+> # CONFIG_HIGHMEM4G is not set
+> CONFIG_HIGHMEM64G=y
+>
+> CONFIG_XEN_DEV_EVTCHN=m
+> CONFIG_XEN_SYS_HYPERVISOR=y
+>
+> ... you mean that all I have to do is add something like this ...
+>
+> CONFIG_LPC_SCH=m
+>
+> ... to all the config files for all the arches?
+>
+> If so, then why don't we have to do it for all the other config
+> values?
+>
+>
+>
+>
+> ----- Original Message -----
+>> From: "Prarit Bhargava" <prarit@redhat.com>
+>> To: "Tony Camuso" <tcamuso@redhat.com>
+>> Cc: "Don Zickus" <dzickus@redhat.com>, "Don Dutile"
+>> <ddutile@redhat.com>
+>> Sent: Thursday, September 20, 2012 6:59:57 PM
+>> Subject: Re: nonint_oldconfig Error
+>>
+>>
+>>
+>> On 09/20/2012 06:34 PM, Tony Camuso wrote:
+>>>
+>>> I applied this small Kconfig patch to latest clone of RHEL6
+>>> kernel
+>>> ...
+>>>
+>>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+>>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+>>> index 4cf327b..36b0674 100644
+>>> --- a/drivers/mfd/Kconfig
+>>> +++ b/drivers/mfd/Kconfig
+>>> @@ -317,6 +317,14 @@ config EZX_PCAP
+>>>           This enables the PCAP ASIC present on EZX Phones. This
+>>>           is
+>>>           needed for MMC, TouchScreen, Sound, USB, etc..
+>>>  
+>>> +config LPC_SCH
+>>> +        tristate "Intel SCH LPC"
+>>> +        depends on PCI
+>>> +        select MFD_CORE
+>>> +        help
+>>> +          LPC bridge function of the Intel SCH provides support
+>>> for
+>>> +          System Management Bus and General Purpose I/O.
+>>>
+>>> When I ran "make rh-configs-prep", I got the following error.
+>>>
+>>> Configuring
+>>> /home/work/6/rhel6/configs/kernel-2.6.32-i686-debug.config
+>>> CONFIG_LPC_SCH
+>>> make[4]: *** [nonint_oldconfig] Error 1
+>>> make[3]: *** [nonint_oldconfig] Error 2
+>>> make[2]: *** [configs-prep] Error 1
+>>> make[2]: Leaving directory `/home/work/6/rhel6/redhat/configs'
+>>> make[1]: *** [rh-configs-prep] Error 2
+>>> make[1]: Leaving directory `/home/work/6/rhel6/redhat'
+>>> make: *** [rh-configs-prep] Error 2
+>>
+>> When you change a Kconfig, IIRC you also have to set value in
+>> redhat/configs/
+>> for the other arches.
+>>
+>> P.
+>>
+>>>
+>>> I've never seen this before.
+>>>
+>>> My host is x86_64, but this is cratering during the i686 phase of
+>>> the
+>>> rh-configs-prep.
+>>>
+>>> What am I missing?
+>>
+>
+

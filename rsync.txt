@@ -1,0 +1,1 @@
+rsync -avz root@hp-dl585g2-01.rhts.boston.redhat.com:/usr/src/redhat/BUILD/ ./

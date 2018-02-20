@@ -1,0 +1,2 @@
+git archive --remote=git://git.engineering.redhat.com/users/tcamuso/scripts/scripts.git/.git HEAD kabitools | tar -x
+wget https://raw.github.com/camuso/scripts/master/kabitools

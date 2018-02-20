@@ -1,0 +1,248 @@
+ Creating a new partition from unused disk space
+# ====================================================================
+# start fdisk, enter "n" for new partition, and take the defaults
+# to consume the rest of the disk.
+#
+fdisk /dev/sda
+Command (m for help): n
+
+# Write the new partition information back to the partition table.
+#
+Command (m for help): w
+
+# Reboot to activate the new partition table
+# After rebooting, initialize the file system
+#
+mkfs -t ext4 /dev/sda3
+
+
+
+Here is the process I used to allocate and test the space on the
+3TB disk that was not allocated during the install.
+
+# Consume the rest of the 3TB disk
+# =======================================================
+# Add the new partition.
+#
+[root@hp-dl380g7-01 ~]# parted /dev/sda
+GNU Parted 2.1
+Using /dev/sda
+Welcome to GNU Parted! Type 'help' to view a list of commands.
+(parted)
+
+# Examine all the space on the disk, including the free space.
+#
+(parted) print free
+Model: HP LOGICAL VOLUME (scsi)
+Disk /dev/sda: 3000GB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+
+Number  Start   End     Size    Type     File system  Flags
+        32.3kB  1049kB  1016kB           Free Space
+ 1      1049kB  525MB   524MB   primary  ext4         boot
+ 2      525MB   2199GB  2198GB  primary
+        2199GB  3000GB  801GB            Free Space
+
+# Change unit of measurement to MB for more granularity in selecting
+# the new partition size.
+#
+(parted) unit MB
+(parted) print free
+Model: HP LOGICAL VOLUME (scsi)
+Disk /dev/sda: 3000467MB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+
+Number  Start      End        Size       Type     File system  Flags
+        0.03MB     1.05MB     1.02MB              Free Space
+ 1      1.05MB     525MB      524MB      primary  ext4         boot
+ 2      525MB      2199020MB  2198495MB  primary
+        2199020MB  3000467MB  801446MB            Free Space
+
+# Create a new primary partition. Will need to reboot to sync the new
+# entry in the partition table.
+#
+(parted) mkpart primary 2199020M 3000467M
+Warning: The resulting partition is not properly aligned for best performance.
+Ignore/Cancel? ignore
+Warning: WARNING: the kernel failed to re-read the partition table on /dev/sda (Device or resource
+busy).  As a result, it may not reflect all of your changes until after reboot.
+
+# Align the new partition
+#
+(parted) align-check
+alignment type(min/opt)  optimal/[minimal]?
+Partition number? 3
+
+# Have a look at the new partition scheme.
+#
+(parted) print
+Model: HP LOGICAL VOLUME (scsi)
+Disk /dev/sda: 3000467MB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+
+Number  Start      End        Size       Type     File system  Flags
+ 1      1.05MB     525MB      524MB      primary  ext4         boot
+ 2      525MB      2199020MB  2198495MB  primary
+ 3      2199020MB  3000467MB  801446MB   primary
+
+# Quit parted and reboot.
+#
+(parted) quit
+[root@hp-dl380g7-01 ~]# reboot
+
+# After Rebooting, let's have a look at the Physical Volumes.
+#
+[root@hp-dl380g7-01 ~]# pvdisplay
+  --- Physical volume ---
+  PV Name               /dev/sda2
+  VG Name               vg_hpdl380g701
+  PV Size               2.00 TiB / not usable 3.00 MiB
+  Allocatable           yes (but full)
+  PE Size               4.00 MiB
+  Total PE              524162
+  Free PE               0
+  Allocated PE          524162
+  PV UUID               zY5j3Z-3u3A-pY2u-B3me-mX7g-C046-NLiYpY
+
+# Create a new Physical Volume from the new partition
+#
+[root@hp-dl380g7-01 ~]# pvcreate /dev/sda3
+  Physical volume "/dev/sda3" successfully created
+
+# Now look at the physical volumes and see that our new partition
+# is now a new physical volume.
+#
+ [root@hp-dl380g7-01 ~]# pvdisplay
+  --- Physical volume ---
+  PV Name               /dev/sda2
+  VG Name               vg_hpdl380g701
+  PV Size               2.00 TiB / not usable 3.00 MiB
+  Allocatable           yes (but full)
+  PE Size               4.00 MiB
+  Total PE              524162
+  Free PE               0
+  Allocated PE          524162
+  PV UUID               zY5j3Z-3u3A-pY2u-B3me-mX7g-C046-NLiYpY
+
+  "/dev/sda3" is a new physical volume of "746.40 GiB"
+  --- NEW Physical volume ---
+  PV Name               /dev/sda3
+  VG Name
+  PV Size               746.40 GiB
+  Allocatable           NO
+  PE Size               0
+  Total PE              0
+  Free PE               0
+  Allocated PE          0
+  PV UUID               WgewXg-h4om-iuvy-kPsU-X7j9-hg4C-Y3hxVA
+
+# Extend the existing Volume Group to include our new Physical Volume.
+#
+[root@hp-dl380g7-01 ~]# vgextend  vg_hpdl380g701 /dev/sda3
+  Volume group "vg_hpdl380g701" successfully extended
+
+# Now look at the Volume Group to see that it now includes the size
+# of the new partition. This is visible in the "Free PE / Size" field,
+# second to last field at the bottom of the list.
+#
+[root@hp-dl380g7-01 ~]# vgdisplay
+  --- Volume group ---
+  VG Name               vg_hpdl380g701
+  System ID
+  Format                lvm2
+  Metadata Areas        2
+  Metadata Sequence No  5
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                3
+  Open LV               3
+  Max PV                0
+  Cur PV                2
+  Act PV                2
+  VG Size               2.73 TiB
+  PE Size               4.00 MiB
+  Total PE              715239
+  Alloc PE / Size       524162 / 2.00 TiB
+  Free  PE / Size       191077 / 746.39 GiB
+  VG UUID               k4DrVN-MMhj-zFHl-DV6C-ZDla-SqQu-KApCxa
+
+# Use the "Size" of the "Free" field to create a new Logical Volume from
+# the Free space created when we extended the Volume Group to encompass
+# the new Physical Volume, which had been created from the new partition,
+# /dev/sda3
+#
+[root@hp-dl380g7-01 ~]# lvcreate --name lv_01 --size 746.39GiB vg_hpdl380g701
+  Rounding up size to full physical extent 746.39 GiB
+  Logical volume "lv_01" created
+
+# Format the new Logical Volume as ext4.
+#
+[root@hp-dl380g7-01 ~]# mkfs -t ext4 /dev/vg_hpdl380g701/lv_01
+mke2fs 1.41.12 (17-May-2010)
+Filesystem label=
+OS type: Linux
+Block size=4096 (log=2)
+Fragment size=4096 (log=2)
+Stride=0 blocks, Stripe width=0 blocks
+48922624 inodes, 195661824 blocks
+9783091 blocks (5.00%) reserved for the super user
+First data block=0
+Maximum filesystem blocks=4294967296
+5972 block groups
+32768 blocks per group, 32768 fragments per group
+8192 inodes per group
+Superblock backups stored on blocks:
+      32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
+      4096000, 7962624, 11239424, 20480000, 23887872, 71663616, 78675968,
+      102400000
+
+Writing inode tables: don
+Creating journal (32768 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+This filesystem will be automatically checked every 20 mounts or
+180 days, whichever comes first.  Use tune2fs -c or -i to override.
+
+# Mount the new partition
+#
+[root@hp-dl380g7-01 ~]# mkdir -p /mnt/work
+[root@hp-dl380g7-01 ~]# mount -t ext4 /dev/vg_hpdl380g701/lv_01 /mnt/work
+
+
+# Write a 1MB file to the end of the partion.
+# ===========================================
+# determine amount of space on partition
+#
+[root@hp-dl380g7-01 ~]# df -h /mnt/work
+Filesystem            Size  Used Avail Use% Mounted on
+/dev/mapper/vg_hpdl380g701-lv_01
+                      735G  197M  698G   1% /mnt/work  # avail space on partition
+
+# Write a sparse 1MB file (1024 blocks of size 1024 bytes per block)
+# by seeking to the last available block on the partition
+#
+[root@hp-dl380g7-01 ~]# dd \
+if=/dev/zero \
+of=/mnt/work/test \
+bs=1024 \
+count=1024 \
+seek=$(( ( 698 * 1024 * 1024 ) - 1024 ))
+
+1024+0 records in
+1024+0 records out
+1048576 bytes (1.0 MB) copied, 0.00426724 s, 246 MB/s
+
+# Display actual size of the sparse file in leftmost column and
+# the amount of space it consumes in the middle column.
+#
+[root@hp-dl380g7-01 ~]# ls -lsh /mnt/work
+total 1.1M
+ 16K drwx------. 2 root root  16K May 15 13:38 lost+found
+1.0M -rw-r--r--. 1 root root 698G May 15 14:02 test       # 1MB file at end of partition
+
+
+

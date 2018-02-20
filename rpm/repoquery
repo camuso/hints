@@ -1,0 +1,49 @@
+ubject:
+Re: No package 'gtk+-2.0' found --- No package 'gtkmm-2.4' found
+From:
+Michael Schwendt <mschwendt@gmail.com>
+Date:
+06/22/2013 05:01 AM
+To:
+users@lists.fedoraproject.org
+
+On Sat, 22 Jun 2013 17:36:57 +0900, Thomas Tobian wrote:
+
+> Hi Guys,
+>
+> Could you please to help me, I installed a "libview" library on my linux
+> fedora 14.
+> and it produced:
+>
+> No package 'gtk+-2.0' found
+> No package 'gtkmm-2.4' found
+
+That looks like a reference to pkgconfig files (gtk+-2.0.pc and
+gtkmm-2.4.pc) not RPM packages.
+ 
+> Thus I tried to download them:
+>
+>
+> [root@localhost libview]# yum install libgtk2.0-dev
+
+Fedora's packages have never been named like that. GTK+ v2 has never been
+named "libgtk2.0", but gtk2. And the packages for software development end
+with -devel not -dev. In case of doubt, run queries using Yum or the
+repoquery tool to find out which packages you need. A bit of experience is
+needed, of course:
+
+$ repoquery --whatprovides \*gtk+-2.0.pc
+gtk2-devel-0:2.24.19-1.fc19.i686
+gtk2-devel-0:2.24.19-1.fc19.x86_64
+mingw32-gtk2-0:2.24.19-1.fc19.noarch
+mingw64-gtk2-0:2.24.19-1.fc19.noarch
+mingw32-gtk2-0:2.24.18-1.fc19.noarch
+gtk2-devel-0:2.24.19-1.fc19.i686
+gtk2-devel-0:2.24.19-1.fc19.x86_64
+mingw64-gtk2-0:2.24.18-1.fc19.noarch
+
+$ repoquery --whatprovides \*gtkmm-2.4.pc
+gtkmm24-devel-0:2.24.2-5.fc19.x86_64
+mingw64-gtkmm24-0:2.24.2-8.fc19.noarch
+gtkmm24-devel-0:2.24.2-5.fc19.i686
+mingw32-gtkmm24-0:2.24.2-8.fc19.noarch

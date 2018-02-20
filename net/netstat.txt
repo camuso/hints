@@ -1,0 +1,1 @@
+netstat -putna |grep LISTEN |grep vnc

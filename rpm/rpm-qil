@@ -1,0 +1,33 @@
+Subject:
+Re: Fedora 18 cannot mount any USB device
+From:
+Marek Miller <fenixx3000@interia.eu>
+Date:
+04/22/2013 09:37 AM
+To:
+Community support for Fedora users <users@lists.fedoraproject.org>
+
+yes! this is the cure!
+
+Od: "poma" <pomidorabelisima@gmail.com>
+Do: users@lists.fedoraproject.org;
+Wysłane: 14:50 Niedziela 2013-04-21
+Temat: Re: Fedora 18 cannot mount any USB device
+
+> On 04/18/2013 08:43 PM, Marek Miller wrote:
+>
+> […]
+>> Apr 18 20:04:32 stargate kernel: [ 5908.669086] sd 4:0:0:0: [sdd] Attached SCSI removable disk
+>> Apr 18 20:04:33 stargate multipathd: sdd: add path (uevent)
+>> Apr 18 20:04:33 stargate systemd-udevd[3573]: inotify_add_watch(7, /dev/sdd1, 10) failed: No such file or directory
+>> Apr 18 20:04:33 stargate multipathd: sdd: rport id not found
+>> Apr 18 20:04:33 stargate multipathd: sdd path added to devmap mpathc
+>> Apr 18 20:04:34 stargate multipathd: sdd: holder already correct
+>>
+>> Any help appreciated,
+>
+> rpm -qil $(rpm -qf $(which multipathd))
+>
+>
+> poma
+

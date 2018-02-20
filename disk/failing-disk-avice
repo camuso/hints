@@ -1,0 +1,50 @@
+Subject:
+Re: OT: Hard drive warning at boot time
+From:
+David G. Miller <dave@davenjudy.org>
+Date:
+06/22/2013 01:48 AM
+To:
+users@lists.fedoraproject.org
+
+Chiming in with some additional information that only *partially*
+contradicts certain things that have been said in this thread.  First off
+though, the advice that drives are cheap and data is expensive is absolutely
+correct.  Do NOT let anything I say talk you out of making sure any critical
+data on this drive is backed up.
+
+Given that tee-up, smartctl/smartd reports that the disk has an
+"uncorrectable bad sector" when there is a read error from the drive for a
+sector.  The error is "uncorrectable" because the sector cannot be read. 
+Note that the detection of a bad read (or write) takes place at the physical
+and drive firmware level when the CRC is checked.  The only thing that the
+drive has to work with is that there was an attempt to read a sector and
+that read resulted in a CRC error.  
+
+The bad sector is part of a file and only you, the user, can make a
+determination as to whether the rest of the file is still good or if the bad
+sector is throwing a CRC error but the file is still usable.  That's also
+why the error is "uncorrctable".  The drive doesn't have enough information
+to fix it and it can't silently remap the sector since it can't read the
+data.  If it did, you would end up with a file with a null sector somewhere
+in it at the location that corresponds to the bad sector's data.
+
+Write errors the drive takes care of through the reallocation process
+mentioned earlier in the thread (since data is being written, any existing
+data is being replaced so the data can be written to a remapped sector). 
+Read errors the drive can only report the problem since the read error
+implies that data cannot be retrieved.
+
+My advice: buy a new drive but run badblocks -w on the old drive once you
+have your data safely off of it.  You will probably find that the badbloocks
+write test (-w) lets the drive see the bad sector being written to and then
+remaps the bad sector and you end up with a drive that is now completely
+usable again.  Be absolutely sure you have your data off of the drive before
+running badblocks -w.  It will overwrite any data on the drive.
+
+I have "recovered" several drives by doing this.  I've also had some that
+threw errors all over the place.  Those became targets.
+
+Cheers,
+Dave
+

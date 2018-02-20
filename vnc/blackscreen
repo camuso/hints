@@ -1,0 +1,9 @@
+Heh. Sometimes it comes up with screensaver on. You get a black screen with no
+nothing.  Do the following in the machine you want to be server.
+
+xset s off
+
+That's it. Worked on F20 running MATE.
+
+tigervnc-server and realvnc-vnc-viewer on the RHEL6 client side.
+

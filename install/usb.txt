@@ -1,0 +1,20 @@
+Subject:
+Re: Bootable distro on Flash - Howto?
+From:
+Heinz Diehl <htd@fritha.org>
+Date:
+05/19/2013 03:23 AM
+To:
+users@lists.fedoraproject.org
+
+On 18.05.2013, j.halifax2@seznam.cz wrote:
+
+> Please advise, how to create a USB Flash memory to
+> be bootable and contain a full FC18 distribution (~4GB
+> like on DVD)?
+
+1. isohybrid fedora18.iso
+2. cat fedora18.iso > /dev/sdX (your USB-stick)
+
+Isohybrid is in the Fedora syslinux package.
+

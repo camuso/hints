@@ -1,0 +1,49 @@
+Customizing initrd with an updated driver module. 
+
+The initrd to be customized must be copied from the distrubution being 
+customized.
+
+Provision a system, virtual or real, with the distro of RHEL that has 
+the initrd to be customized.
+
+Login as root. 
+
+Create working directories. 
+
+# mkdir -p /work/iso/distro
+# mkdir -p /work/initrd
+# mkdir -p /work/modules
+
+Copy the distro files into a the work directory, for example ...
+
+# rsync -av \
+  blofly.usa.hp.com::LinuxISO/mrepo/RHEL5.7-Snapshot-2-Server-x86_64/disc1/ \
+  /work/iso/distro
+
+Unzip and copy the contents of init rd to the local directory.
+
+# cd /work/initrd
+# zcat /work/iso/distro/isolinux/initrd.img | cpio -ivmd
+
+Unzip the modules file. 
+
+# cd /work/modules
+# zcat ../initrd/modules/modules.cgz | cpio -ivmd
+
+Make the modules changes.
+For exapmle, you will copy an updated module to the following directory
+/work/modules/2.6.18-265.el5/x86_64
+
+Note: adding new modules requires modifying the "init" program. Some 
+distrubutions provide this file in script language. However, if it is
+binary, you must obtain the source file in order to modify it. 
+
+Now rezip it all back together.
+# find . | cpio -H newc --quiet -o | gzip -v > ../modules.cgz
+# cd ..
+# cp modules.cgz initrd/modules
+# cd initrd
+# find  . | cpio -H newc --quiet -o | gzip -v > ../initrd.img
+# cp initrd.img <sourc-path>/initrd.img
+
+

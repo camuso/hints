@@ -1,0 +1,40 @@
+yum install conserver-client
+
+console -M console.eng.bos.redhat.com intel-canoepass-05.lab.bos.redhat.com
+
+[ddutile@dddsys0 ~]$ more .consolerc
+config * {
+     master console.lab.bos.redhat.com;
+     playback 1000;
+}
+terminal xterm {
+    attach "^[]0;conserver: U@C^G";
+    attachsubst U=us,C=cs;
+}
+
+
+
+Tony, this is in my .bashrc
+
+function console()
+{
+        local OPT=$(shopt -p -o nounset)
+        set -o nounset
+        # Treat unset variables as an error
+        local HOST=$1
+        local CONSERVER
+        case ${HOST} in
+                *bne*) CONSERVER="conserver-01.app.eng.bne.redhat.com";;
+                *rdu*) CONSERVER="conserver-01.app.eng.rdu.redhat.com";;
+                *bos*) CONSERVER="conserver-02.eng.bos.redhat.com";;
+                *brq*) CONSERVER="conserver.englab.brq.redhat.com";;
+                *nay*) CONSERVER="console.lab.eng.nay.redhat.com";;
+                *)     CONSERVER="conserver-01.eng.bos.redhat.com";;
+                esac
+                /usr/bin/console -M ${CONSERVER} ${HOST}
+        eval ${OPT}
+}
+
+Unless the console server name changes I can always just type "console
+redsoxchamps2013....redhat.com" and everything works by magic.
+

@@ -1,0 +1,51 @@
+Subject:
+Re: Chron curiosity
+From:
+Reindl Harald <h.reindl@thelounge.net>
+Date:
+06/28/2013 03:45 PM
+To:
+Community support for Fedora users <users@lists.fedoraproject.org>
+CC:
+Tom Horsley <horsley1953@gmail.com>
+
+
+
+Am 28.06.2013 21:41, schrieb Tom Horsley:
+> On Fri, 28 Jun 2013 12:25:02 -0700
+> Wolfgang S. Rupprecht wrote:
+>
+>> Look at the top of /etc/cron.hourly/0anacron
+>
+> Speaking of anacron, you may want to eradicate all the
+> anacron junk if you actually want jobs to run at the
+> times you specified rather than at random times
+> anacron picks to be as inconvenient as possible
+
+*no* you can configure it to *not* use random times
+and then you can be sure that the system is aware
+that a job did run
+
+the random-default is perfectly for most environments
+especially if you are in the world of virtualization
+__________________________________________________________
+
+# /etc/anacrontab: configuration file for anacron
+# See anacron(8) and anacrontab(5) for details.
+
+SHELL=/usr/bin/bash
+PATH=/usr/sbin:/usr/bin
+MAILTO=root
+
+# the maximal random delay added to the base delay of the jobs
+RANDOM_DELAY=5
+
+# the jobs will be started during the following hours only
+START_HOURS_RANGE=0-12
+
+#period in days   delay in minutes   job-identifier   command
+1                 5                  cron.daily       nice -n 19 run-parts /etc/cron.daily
+7                 25                 cron.weekly      nice -n 19 run-parts /etc/cron.weekly
+@monthly          45                 cron.monthly     nice -n 19 run-parts /etc/cron.monthly
+
+

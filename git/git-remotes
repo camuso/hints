@@ -1,0 +1,30 @@
+# list the current remotes in .git/config
+git remote
+
+# add a remote git repo
+# <name> is a name you pick
+git remote add <name> git://<url-of-repo>
+
+# populate the new git repo
+git fetch <name>
+
+# list all the branches of all the remote repos
+git branch -r
+
+# list only the branches of a selected repo using the repo name
+# that you gave it.
+git branch -r | grep <repo-name>
+
+# create a branch from one of the branches in a repo
+git checkout -b <branch-name> <repo-name>/<repo-branch>
+
+# push to a remote and include tags
+
+git push --tags ssh://tcamuso@192.168.1.15/home/work/local/repos/bits.git
+
+# To push an existing git project into an empty upstream repo.
+#
+fatal: The current branch master has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream https://github.com/camuso/kabiparser.git master

@@ -1,0 +1,123 @@
+# fdisk /dev/sda
+Command (m for help): p		# print current partitions
+Command (m for help): d		# delete partition
+Command (m for help): n		# create a new partition
+Command (m for help): w		# write new partition table and exit
+
+# reboot
+
+# vgdisplay	
+  --- Volume group ---
+  VG Name               vg_rebekah
+  System ID             
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  3
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               2
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               18.45 GB
+  PE Size               4.00 MB
+  Total PE              4722
+  Alloc PE / Size       4722 / 18.45 GB
+  Free  PE / Size       0 / 0   
+  VG UUID               UJ1Y5g-z1Se-2aNP-da3A-LAuY-fZC9-ZhDhwD
+   
+# pvresize /dev/sda2
+  Physical volume "/dev/sda2" changed
+  1 physical volume(s) resized / 0 physical volume(s) not resized
+
+# vgdisplay
+  --- Volume group ---
+  VG Name               vg_rebekah
+  System ID             
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  4
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               2
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               55.33 GB
+  PE Size               4.00 MB
+  Total PE              14164
+  Alloc PE / Size       4722 / 18.45 GB
+  Free  PE / Size       9442 / 36.88 GB
+  VG UUID               UJ1Y5g-z1Se-2aNP-da3A-LAuY-fZC9-ZhDhwD
+   
+# lvextend -L+36.88G /dev/vg_rebekah/lv_root 
+  Rounding up size to full physical extent 36.88 GB
+  Extending logical volume lv_root to 53.36 GB
+  Logical volume lv_root successfully resized
+
+# vgdisplay
+  --- Volume group ---
+  VG Name               vg_rebekah
+  System ID             
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  5
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               2
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               55.33 GB
+  PE Size               4.00 MB
+  Total PE              14164
+  Alloc PE / Size       14164 / 55.33 GB
+  Free  PE / Size       0 / 0   
+  VG UUID               UJ1Y5g-z1Se-2aNP-da3A-LAuY-fZC9-ZhDhwD
+   
+# resize2fs /dev/vg_rebekah//lv_root 
+resize2fs 1.41.9 (22-Aug-2009)
+Filesystem at /dev/vg_rebekah//lv_root is mounted on /; on-line resizing required
+old desc_blocks = 2, new_desc_blocks = 4
+Performing an on-line resize of /dev/vg_rebekah//lv_root to 13987840 (4k) blocks.
+The filesystem on /dev/vg_rebekah//lv_root is now 13987840 blocks long.
+
+# lvdisplay
+  --- Logical volume ---
+  LV Name                /dev/vg_rebekah/lv_root
+  VG Name                vg_rebekah
+  LV UUID                GbIA5j-Y60v-22vz-s7FN-Pw2b-Bn4u-H8TZwD
+  LV Write Access        read/write
+  LV Status              available
+  # open                 1
+  LV Size                53.36 GB
+  Current LE             13660
+  Segments               2
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:0
+   
+  --- Logical volume ---
+  LV Name                /dev/vg_rebekah/lv_swap
+  VG Name                vg_rebekah
+  LV UUID                sz7bpm-mP2s-fEb4-0dUQ-mPYJ-hAJj-r3BRx2
+  LV Write Access        read/write
+  LV Status              available
+  # open                 1
+  LV Size                1.97 GB
+  Current LE             504
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:1
+   
+
+

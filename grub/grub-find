@@ -1,0 +1,70 @@
+Having Grub Do Your Research For You
+Often you know the partition containing the kernel, the kernel directory and name, and which partition mounts to root after boot. In that case booting Linux from grub is trivial.
+
+Other times you're not so lucky. Like when you accidentally messed up LILO, or when you or someone else installed Windows, inadvertently overwriting the boot loader on the MBR. That's when you need grub the most, but that's also when you're least likely to know the partition containing the kernel, the partition that will ultimately be root, and the name of the kernel. Luckily,  grub can help.
+
+Your first step is to find the partition containing the kernel and the partition containing /sbin/init. Now type the following at the grub> prompt:
+
+find /sbin/init
+
+On a machine with three different Linux OS's installed, the answer would come back something like this:
+
+grub> find /sbin/init
+ (hd0,8)
+ (hd0,11)
+ (hd1,11)
+
+grub>
+
+
+In the preceding example, you've found three different partitions containing /sbin/init:
+
+Grub partition specification
+	Linux partition specification
+(hd0,8)
+	/dev/hda9
+(hd0,11)
+	/dev/hda12
+(hd1,11)
+	/dev/hde12
+Note: I infer that hd1 maps to hde because on this particular machine there are two hard disks, one at hda and one at hde.
+
+Next, find all partitions containing the kernel. Our first attempt assumes that at least one kernel will have filename vmlinuz.:
+
+grub> find /vmlinuz
+ (hd0,0)
+ (hd0,11)
+ (hd1,11)
+
+grub>
+
+
+Then perform the same search for vmlinuz in a directory called /boot:
+
+grub> find /boot/vmlinuz
+ (hd0,11)
+ (hd1,11)
+
+grub>
+
+
+Here we find only two of the three we found in the first attempt, because on this machine, (hd0,0) is mounted as /boot on one of the OS's.
+
+Grub's find command is limited. It can find only regular files, not directories. Usually the entire directory path must be specified, although for some reason it finds a couple /boot/vmlinuz when you use find on /vmlinuz. Don't count on that behavior.
+
+Another technique for finding info in grub is to use its file completion feature. Let's say you know the kernel is on (hd0,0) and the kernel file begins with vml. Press the tab key after issuing this partial command:
+
+null (hd0,0)/vmlinuz
+
+Grub performs file completion much like you see at a Linux command prompt.
+
+grub> null (hd0,0)/vmlinuz
+ Possible files are: vmlinuz vmlinuz-2.6.3-7mdk vmlinuz-2.6.3-7mdk-i686-up-4GB
+vmlinuz-i686-up-4GB
+
+grub>
+
+
+In the preceding, the word null is not a keyword, but instead a word chosen because it is not a keyword. Instead of "null", you could have used "whatever" or "bogus" or any other non-keyword. Once you get the list, you can complete a little more and then press tab again, just like at a bash prompt. By doing so you minimize the likelihood of transcription errors.
+
+Occasionally grub won't easily give you all the necessary information. If you need more information than grub can conveniently provide, boot Knoppix. See Troubleshooters.Com's Knoppix Knowhow site for details.

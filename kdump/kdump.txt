@@ -1,0 +1,66 @@
+# Force a crash
+#
+echo “c” > /proc/sysrq-trigger
+
+If you do not have kexec tools, and system-config-kdump installed, you must
+install them.
+
+You can tell if kexec-tools is installed by
+# man kexec
+
+You can tell if system-config-kdump is installed by invoking it from
+the command line.
+# system-config-kdump &
+
+If you are dealing with a remote system, login with the -X option so you can
+get a remote gui.
+
+# ssh -X host.ip.num.ber
+
+# yum install kexec-tools
+# yum install system-config-kdump
+
+# chkconfig kdump on
+
+You can use a graphical interface to configure kdump
+
+$ sudo system-config-kdump &
+
+ or you can do it on the command line
+
+Edit /boot/grub/grub.conf and add the following kernel boot param
+
+crashkernel=128M
+
+# reboot
+
+# service kdump start
+
+To initiate a crash
+
+Enable crash
+
+# echo 1 > /proc/sys/kernel/sysrq
+
+Sync disks
+
+# echo s > /proc/sysrq-trigger
+
+Make it crash
+
+# echo  c > /proc/sysrq-trigger
+
+Set the dump level
+------------------
+This determines how much of the core to dump.
+
+# man makedumpfile
+
+Scroll down to dump_level and the info is there.
+
+Then edit this line in /etc/kdump.conf ...
+
+	core_collector makedumpfile -c --message-level 1 -d 1
+
+The dump_level is the number following the -d
+

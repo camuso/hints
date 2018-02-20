@@ -1,0 +1,26 @@
+1. Host running latest RHEL6.4 snapshot 
+   Guest VM running RHEL6.3 connected NAT to host eth2 
+   through guest virtual eth0.
+  
+   Host  eth2 - 10.16.46.186 NAT to vibr0 192.168.122.1
+   Guest eth0 - 192.168.122.162
+
+2. To create traffic, I used netcat as follows.
+
+   On the host, issued the following command.
+     # yes AAAAAAAA | nc -v -l 2222 > /dev/null
+
+   On the guest VM, issued the following command.
+     # yes BBBBBBBB | nc 10.16.46.186 2222 > /dev/null
+
+   Using gnome-system-monitor gui on both systems, I was able to see 
+   network traffic increase dramatically. 
+
+3. To shape traffic, I used the tc script I attached in comment #5 above
+   on both the host and the guest, as follows. 
+
+   # tctest start
+
+4. To monitor, I did the following on both systems. 
+   # while [ 1 ]; do tctest show eth<x>; sleep 5; done;
+

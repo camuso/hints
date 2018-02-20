@@ -1,0 +1,17 @@
+You need a .mailrc file in your home directory.
+
+$ cat ~/.mailrc
+set smtp=smtp.corp.redhat.com
+set ssl-verify=ignore
+set from="Tony Camuso <tcamuso@redhat.com>"
+
+After that, simply type ...
+
+$ mail -s "A subject line" anybody@anyip.com
+
+Then type ctrl-D to send.
+
+You can actually type in a message body, and then type ctrl-D if
+you like, but I usually just send short messages in the subject
+line.
+

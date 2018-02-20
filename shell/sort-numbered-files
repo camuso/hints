@@ -1,0 +1,22 @@
+ls | sort -t'_' -k2 -h
+
+If you have files numbered thus:
+
+1370514827.3155_12.tcamuso
+1370514827.3155_16.tcamuso
+1370514827.3155_20.tcamuso
+1370514827.3155_4.tcamuso
+1370514827.3155_8.tcamuso
+1370514828.3155_24.tcamuso
+1370514828.3155_28.tcamuso
+
+The above sort command will number them thus:
+
+1370514827.3155_4.tcamuso
+1370514827.3155_8.tcamuso
+1370514827.3155_12.tcamuso
+1370514827.3155_16.tcamuso
+1370514827.3155_20.tcamuso
+1370514828.3155_24.tcamuso
+1370514828.3155_28.tcamuso
+

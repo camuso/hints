@@ -1,0 +1,20 @@
+
+tar -cv [other options] -f - <directory> | ssh <login@host> "cat </path/to/file.tar>
+
+-c 	- create a tar archive
+-v	- verbose - print the name of each file to the screen
+-f	- name the file to create
+ - 	- hyphen with space before and after it, folllowing the -f option,
+	  names stdout as the file, in this case being "created"
+
+<directory>	- is the directory to be tar'ed.
+| ssh		- pipe the tar activity to ssh
+<login@host>	- self explanatory
+
+"cat </path/to/file.tar>"
+		- Must be enclosed in quotes and will cat the stuff being squirted
+		  over the network into the named tar file.
+
+The following line creates a tcamuso.tgz file on the remote /mnt/sdb1/ directory.
+
+tar -cvz --exclude=ahv2bs* --exclude=.Virt* --exclude=Virt* -f - ./ | ssh root@desktop "cat > /mnt/sdb1/tcamuso.tgz"

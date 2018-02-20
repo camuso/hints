@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+# cgrep
+
+argstr="$@"
+echo $argstr
+
+# Delete everything up to the last space-separated token.
+# e.g "-abc --option --another-option this/is/a/path/name"
+# will return "this/is/a/path/name"
+#
+pathspec="${argstr##* }"
+echo $pathspec
+
+# Delete everything up to the last '/' separated token.
+# e.g "this/is/a/path/name" will return "name"
+#
+filespec="${pathspec##*/}"
+echo $filespec
+
+# Delete everything back from the last '/' separated token.
+# e.g. "this/is/a/path/name" will return "this/is/a/path"
+#
+dirspec="${pathspec%/*}"
+echo $dirspec
+
+# Delete everything back from the last space-separated token.
+# e.g "-abc --option --another-option this/is/a/path/name"
+# will return "-abc --option --another-option"
+#
+optspec="${argstr% *}"
+echo $optspec
+
+grep $optspec find $dirspec -iname $filespec
+

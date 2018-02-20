@@ -1,0 +1,82 @@
+bl460cG6 DMA Request errors on device 00:1e.0
+
+3 primary partitions that are 200 Meg
+one /boot, others are unmounted
+
+
+An extended partition with 10 more partitions sda5 - sda15
+
+sda5 swap 2G
+
+sda6 - sda8 200 M unmonted, (future boots)
+
+sda9 20G - first root partition
+
+sda10-14 20G unmounted
+
+To see list of disks
+
+grub> root (<TAB>
+
+To see list of partitions
+
+grub> root (hd0,<TAB>
+
+ vmlinuz-2.6.32-131.0.15.el6.i686
+
+initramfs-2.6.32-131.0.15.el6.i686.img
+kernel root partition for boot partition sda2 is sda5
+
+ML350 G8 device map
+
+RH Partition Utility sees the number in parenthesis, since
+it does not count the extended partition, but rather looks
+at the logical partitions under it. For example, the extended
+partition is sda4, and the first logical partition under that
+is sda5. However, the RH partition utility may not recognize
+the extended partition (sda4) and number the first logical
+partition, sda5, as sda4 instead.
+
+sda1		(hd0,0)		/boot 	ext4	RHEL6.1 x86_64
+sda2		(hd0,1)		/boot 	ext4	RHEL6.1 i386
+sda3	c0d0p3	(hd0,2)		/boot 	ext3	RHEL5.7 x86_64
+sda12	c0d0p12	(hd0,11)	/boot	ext3	RHEL5.7 i386
+
+sda5(4)		(hd0,4)		/ 	ext4	RHEL6.1 i386
+sda6(5) c0d0p6	(hd0,5)		/ 	ext3	RHEL5.7 x86_64
+sda10		(hd0,9)		/ 	ext4	RHEL6.2 x86_64
+sda9	c0d0p9	(hd0,8)		/	ext3	RHEL5.7 i386
+
+Legacy MBR can only access four partitions. However, grub 1.97- can access
+more than four partitions up to 2.2TB. Grub 2.0+ can access beyond 2.2TB.
+
+The grub "chainloader" command allows us to access more than four partitions
+and boot four or more diffeent operating systems on the same disk.
+
+In order to create a disk with more than four boot partitions, the fourth
+and higher partitions must be located in an extended partition.
+
+The chainloader presents the other Operating Systems in a grub menu on the
+primary installed OS.
+
+The primary linux OS will consume two partitions, one for "/boot" and one
+for "/". The MBR will not need to directly access any more than these two
+partitions, since the grub utility on the "/boot" partition of the primay
+OS will "chain" to the grub facility of the "/boot" partitions of the other
+Operating Systems.
+
+A disk can be prepartitioned using a bootable utility like Parted Magic.
+http://partedmagic.com/
+
+Live (bootable) CDs and USB drives can be created with this utility on
+them to prepartition the disk for later installation.
+
+We can also use the parted tool that comes with Fedora and Red Hat install
+images.
+
+
+the other OS's
+
+All the partitions will share "/swap", since only one OS will be booted at
+any given time.
+

@@ -1,0 +1,50 @@
+#!/bin/bash
+# ethtool -K eth0 rx off tx off sg off tso off gso off gso off
+# ethtool -K eth0 rx on tx on sg on tso on gso on gro on
+# ethtool -k
+
+if [ -z "$1" ]
+then
+	HOST="testhost"
+else
+	HOST="$1"
+fi
+
+# netperf check
+if ! which netperf &>/dev/null
+then
+	echo -n "netperf is missing! Install it? (N/y) "
+	read command
+	case "${command}" in
+	y)
+		curl ftp://ftp.netperf.org/netperf/netperf-2.6.0.tar.bz2 | tar xj
+		cd netperf-2.6.0 || exit 1
+		./configure --enable-demo
+		make install
+	;;
+	*)
+	;;
+	esac
+fi
+
+if [ -z "$HOST" ]
+then
+	echo "no host running netserver specified"
+	exit 1
+fi
+
+if [ -z "$2" ]
+then
+	DURATION=10
+else
+	DURATION="$2"
+fi
+
+
+#netperf -c -C -D 1 -f M -l $DURATION -t TCP_STREAM -H "$HOST"
+netperf -c -C -f M -l $DURATION -t TCP_STREAM -H "$HOST"
+netperf -c -C -f M -l $DURATION -t TCP_MAERTS -H "$HOST"
+netperf -c -C -f M -l $DURATION -t TCP_RR     -H "$HOST"
+netperf -c -C -f M -l $DURATION -t UDP_STREAM -H "$HOST" -- -m 1024
+netperf -c -C -f M -l $DURATION -t UDP_RR     -H "$HOST"
+

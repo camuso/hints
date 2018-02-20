@@ -1,0 +1,933 @@
+    1  ssh tcamuso@build.boston.redhat.com
+    2  ssh tcamuso@curly.devel.redhat.com
+    3  ssh tcamuso@porkchop.devel.redhat.com
+    4  ssh tcamuso@lacrosse.redhat.com
+    5  xchat
+    6  su
+    7  xchat
+    8  vncviewer
+    9  vncviewer dhcp83-188:1
+   10  ssh tcamuso@dchapman
+   11  ssh camuso@dchapman
+   12  yum install vnc
+   13  su
+   14  vncserver&
+   15  vncserver
+   16  ssh tcamuso@lacrosse.redhat.com
+   17  ssh dchapman@dchapman
+   18  ssh dchapman@dchapman
+   19  su 
+   20  conmux --list
+   21  conmux bludger.lab.boston.redhat.com/dl585-01.rhts.boston.redhat.com
+   22  ssh-keygen
+   23  cd .ssh
+   24  ls
+   25  cat id_rsa.pub
+   26  ls -l
+   27  ls -ld
+   28  chmod go-r *
+   29  ls 
+   30  ls -l
+   31  ls -l .
+   32  ls -ld .
+   33  vi .config
+   34  cd
+   35  ssh-kegyen -help
+   36  ssh-kegyen -h
+   37  man ssh-keygen
+   38  ssh-keygen -t dsa
+   39  cd .ssh/
+   40  ls
+   41  cat id_dsa.pub 
+   42  ls
+   43  ls
+   44  vi config
+   45  ls
+   46  vi authorized_keys
+   47  ssh dchapman
+   48  ls
+   49  cp id*.pub ~
+   50  cp id*. ~
+   51  cp id* ~
+   52  ls
+   53  cd .ssh/
+   54  ls
+   55  cd
+   56  tar cvf tony_keys.tar id_*
+   57  scp tony_keys.tar dchapman@dchapman:
+   58  rm tony_keys.tar 
+   59  ls /etc/fstab
+   60  ls /etc/fstab/
+   61  vi /etc/fstab
+   62  mount -t ntfs-3g /dev/sdc1/media/disk -o force
+   63  su
+   64  ls
+   65  ls -ld .
+   66  cd .ssh
+   67  ls -l
+   68  chmod go-rw authorized_keys 
+   69  cd
+   70  ssh dchapman
+   71  ps
+   72  ssh camuso@dchapman
+   73  ssh camuso@dchapman
+   74  ls /lib/modules/
+   75  cd /lib/modules/`uanme -r`
+   76  cd /lib/modules/`uname -r`
+   77  ls
+   78  ls -l build
+   79  cd build
+   80  vi .config
+   81  ls
+   82  pwd
+   83  vi Makefile 
+   84  su
+   85  ssh hpdl585
+   86  ssh root@hpdl585
+   87  ssh dchapman
+   88  ssh root@hpdl585
+   89  ssh root2hptestsvr.lab.boston.redhat.com
+   90  ssh root@hptestsvr.lab.boston.redhat.com
+   91  ssh camuso@hptestsvr.lab.boston.redhat.com
+   92  ssh -X camuso@dchapman
+   93  ssh hptestsvr.lab.boston.redhat.com
+   94  ssh dchapman
+   95  ssh dchapman
+   96  ssh dchapman
+   97  ssh -v dchapman
+   98  ssh -v dchapman
+   99  ssh -v dchapman
+  100  cd .ssh
+  101  ls
+  102  cd
+  103  cd .ssh
+  104  ls
+  105  cd
+  106  ssh dchapman
+  107  ssh dchapman
+  108  ssh -v dchapman
+  109  ssh -v dchapman
+  110  cd .ssh/
+  111  ls -l config
+  112  chmod go-rw config 
+  113  cd
+  114  ssh -v dchapman
+  115  ssh -vvv dchapman
+  116  ssh -vvv dchapman
+  117  ssh -vvv dchapman
+  118  ssh dchapman
+  119  ssh dchapman
+  120  ssh -vvv dchapman
+  121  ssh -vvv dchapman
+  122  umount /nt_disk
+  123  su
+  124  ssh root@hpdl585-ilo
+  125  ssh root@hptestsvr
+  126  ssh hp-dl585g2-01-ilo.rhts.boston.redhat.com
+  127  ssh Administrator@hp-dl585g2-01-ilo.rhts.boston.redhat.com
+  128  ssh root@hptestsvr
+  129  su
+  130  conmux
+  131  ssh root@hptestsvr
+  132  ssh camuso@dchapman
+  133  ssh camuso@dchapman
+  134  man service
+  135  service --help
+  136  man service
+  137  ps aux | grep vpn
+  138  ps aux | grep vpn
+  139  ps aux
+  140  ifconfig
+  141  sudo ifconfig
+  142  ipconfig
+  143  man net
+  144  service
+  145  man ipconfig
+  146  man ifconfig
+  147  ifconfig
+  148  ucx
+  149  whois
+  150  whois -h tcamuso.usersys.redhat.com
+  151  whois -h tcamuso.usersys.redhat.com
+  152  whois -h tcamuso.usersys.redhat.com
+  153  whois -h tcamuso.usersys.redhat.com
+  154  whois tcamuso.usersys.redhat.com
+  155  whois tcamuso.usersys.redhat.com | less
+  156  su
+  157  ssh root@hp-dl585g2-01-ilo.rhts.boston.redhat.com
+  158  ssh Administrator@hp-dl585g2-01-ilo.rhts.boston.redhat.com
+  159  screen
+  160  cd /sbin
+  161  ifconfig
+  162  ipconfig
+  163  ls
+  164  ifconfig
+  165  ./ifconfig
+  166  ./service -h
+  167  ./service --status-all
+  168  ./service --status-all | less
+  169  vim static.key
+  170  cd ~
+  171  vim static.key
+  172  cat static.key
+  173  su
+  174  su -
+  175  su -
+  176  su -
+  177  ssh root@rhts.lab.boston.redhat.com
+  178  ssh root@hp-dl585g2-01.rhts.boston.redhat.com
+  179  yum install screen
+  180  sudo yum install screen
+  181  screen
+  182  ssh root@hp-dl585g2-01.rhts.boston.redhat.com
+  183  ssh root@hp-dl585g2-01.rhts.boston.redhat.com
+  184  ssh root@hp-dl585g2-01.rhts.boston.redhat.com
+  185  yum install conmux-client
+  186  sudo yum install conmux-client
+  187  conmux --help
+  188  conmux --list
+  189  ssh root@hp-dl585g2-01.rhts.boston.redhat.com
+  190  ssh 
+  191  ssh root@hp-dl585g2-01
+  192  ssh root@hp-dl585g2-01.rhts.boston.redhat.com
+  193  ssh root@
+  194  ssh root@
+  195  ssh root@hp-dl585g2-01.rhts.boston.redhat.com
+  196  ssh hp-dl585g2-01-ilo.rhts.boston.redhat.com
+  197  ssh hp-dl585g2-01-ilo.rhts.boston.redhat.com
+  198  ssh hp-dl585g2-01-ilo.rhts.boston.redhat.com
+  199  ssh hp-dl585g2-01-ilo.rhts.boston.redhat.com
+  200  ssh hp-dl585g2-01-ilo.rhts.boston.redhat.com
+  201  scp 
+  202  ping camuso.homeip.net
+  203  man ping
+  204  ping -Rv camuso.homeip.net
+  205  ping -Rv camuso.homeip.net
+  206  ping -Rv camuso.homeip.net
+  207  ping -Rv camuso.homeip.net
+  208  ping tcamuso.usersys.redhat.com
+  209  ping camuso.homeip.net
+  210  ping camuso.homeip.net
+  211  ping camuso.homeip.net
+  212  ping camuso.homeip.net
+  213  ping camuso.homeip.net
+  214  ping camuso.homeip.net
+  215  ping camuso.homeip.net
+  216  ping camuso.homeip.net
+  217  ls
+  218  ls -al
+  219  ls -al
+  220  ls -al
+  221  ls
+  222  man scp
+  223  scp mmconfig.dl585.patch root@hpdl585
+  224  man scp
+  225  scp mmconfig.dl585.patch root@hpdl585:mmconfig.dl585.patch
+  226  scp mmconfig.dl585.patch root@hpdl585.boston.redhat.com:mmconfig.dl585.patch
+  227  scp mmconfig.dl585.patch camuso@hptestsvr.lab.boston.redhat.com:mmconfig.dl585.patch
+  228  ssh root@hpdl585-ilo
+  229  ssh root@hpdl585-ilo.boston.redhat.com
+  230  ssh root@hptestsvr
+  231  ssh camuso@dchapman
+  232  ps aux
+  233  ps aux | grep vnc
+  234  kill -9 4732
+  235  kill -9 1636
+  236  kill -9 21519
+  237  ps aux | grep openvpn
+  238  ps aux | grep openvpn
+  239  kill -9 21571
+  240  ps aux | grep openvpn
+  241  kill -9 21574
+  242  ps aux | grep openvpn
+  243  ps aux | grep openvpn
+  244  ps aux | grep openvpn
+  245  ps aux | grep openvpn
+  246  ps aux | grep openvpn
+  247  ps aux | grep openvpn
+  248  ps aux | grep openvpn
+  249  ps aux | grep openvpn
+  250  ps aux | grep openvpn
+  251  ps aux | grep openvpn
+  252  ps aux | grep openvpn
+  253  ssh dchapman
+  254  ssh dchapman
+  255  ssh dchapman
+  256  yum install conmux-client
+  257  sudo yum install conmux-client
+  258  su
+  259  su
+  260  su
+  261  su
+  262  ssh camuso@hptestsvr
+  263  ssh root@hp-dl585g2-01.rhts.boston.redhat.com
+  264  ssh root@hp-dl585g2-01.rhts.boston.redhat.com
+  265  ls /usr/src/redhat/BUILD/
+  266  ls
+  267  cd /usr/src/redhat/BUILD/
+  268  ls
+  269  ls -al
+  270  cd ~/Desktop
+  271  ls
+  272  cd ..
+  273  cat .rpmmacros
+  274  vim .rpmmacros
+  275  cat .rpmmacros 
+  276  mkdir RPM
+  277  cd Desktop
+  278  ls
+  279  rpm -ivh kernel-2.6.18-34.el5.src.rpm 
+  280  cd ../RPM
+  281  ls
+  282  cd SPECS/
+  283  rpmbuild -bp kernel-2.6.spec 
+  284  sudo yum install unifdef
+  285  rpmbuild -bp kernel-2.6.spec 
+  286  cd ..
+  287  mkdir BUILD
+  288  ls
+  289  cd SPECS/
+  290  rpmbuild -bp kernel-2.6.spec 
+  291  cd ../BUILD/kernel-2.6.18/linux-2.6.18.i386/arch/i386/pci
+  292  cop mmconfig.c mmconfig.save
+  293  cop mmconfig.c mmconfig.c.save
+  294  cp mmconfig.c mmconfig.c.save
+  295  ls
+  296  mv mmconfig.c.save mconfig.c.broke
+  297  ls
+  298  vim mmconfig.c
+  299  cd ../../
+  300  ../
+  301  cd ../
+  302  cd ..
+  303  gendiff linux-2.6.18.i386 .broke
+  304  cd linux-2.6.18.i386/arch/i386/pci
+  305  pushd $(powd)
+  306  mv mconfig.c.brok mmconfig.c.broke
+  307  mv mconfig.c.broke mmconfig.c.broke
+  308  cd -
+  309  gendiff linux-2.6.18.i386 .broke
+  310  gendiff linux-2.6.18.i386 .broke > ~/mmconfig.dl585.patch
+  311  ls ~/ 
+  312  cd ../../
+  313  cd SPECS/
+  314  rpmbuild -bp
+  315  rpmbuild -bp kernel-2.6.spec 
+  316  cd ../BUILD/
+  317  cd kernel-2.6.18/linux-2.6.18.i386/
+  318  patch -p1 < ~/mmconfig.dl585.patch 
+  319  less  arch/i386/pci/mmconfig.c
+  320  ssh tcamuso@dchapman
+  321  !
+  322  history
+  323  history | less
+  324  scp
+  325  ssh 
+  326  ssh root@hp-dl585-02.rhts.boston.redhat.com
+  327  ssh hptestsvr
+  328  cd 
+  329  ls
+  330  scp mmconfig.dl585.patch root@hp-dl585g2-01.rhts.boston.redhat.com:mmconfig.dl585.patch
+  331  vim /home/camuso/.ssh/known_hosts 
+  332  scp mmconfig.dl585.patch dchapman:mmconfig.dl585.patch
+  333  ssh dchapman
+  334  gvim
+  335  su
+  336  gvim
+  337  gvim
+  338  gvim
+  339  mkdir sbin/ddclient-stuff
+  340  yum install redhat-ddns
+  341  su
+  342  ssh camuso@hptestsvr
+  343  yum install yum-utils
+  344  sudo yum install yum-utils
+  345  yum install sparse
+  346  sudo yum install sparse
+  347  ps aux | grep openvpn
+  348  ps aux | grep openvpn
+  349  ps aux | grep openvpn
+  350  ps aux | grep openvpn
+  351  ps aux | grep openvpn
+  352  ps aux | grep openvpn
+  353  ps aux 
+  354  ps aux 
+  355  ps aux | grep openvpn
+  356  ps aux | grep openvpn
+  357  ps aux | grep openvpn
+  358  ssh hp-dl585g2-01.rhts.boston.redhat.com
+  359  ssh root@hp-dl585g2-01.rhts.boston.redhat.com
+  360  cd RPM/BUILD/kernel-2.6.18/linux-2.6.18.i386/arch/x86_64/pci
+  361  less mmconfig.c
+  362  cd ..
+  363  cd ..
+  364  cd 
+  365  less mmconfig.dl585.patch 
+  366  cat .rpmmacros
+  367  ]$ cat .rpmmacros
+  368  %_topdir /home/camuso/RPM
+  369  man vpn
+  370  man openvpn
+  371  ps aux | grep open
+  372  ps aux | grep vpn
+  373  ps aux | grep openvpn
+  374  man service
+  375  service --status-all
+  376  /sbin/service --status-all
+  377  man service
+  378  ping camuso.homeip.net
+  379  '/usr/share/applications/openoffice.org-1.9-impress.desktop' 
+  380  ssh dchapman
+  381  ssh dchapman
+  382  su
+  383  ssh dchapman
+  384  ssh camuso@dchapman
+  385  /sbin/ifconfig
+  386  ssh camuso@hptestsvr.lab.bostong.redhat.com
+  387  ssh camuso@hptestsvr.lab.boston.redhat.com
+  388  vncserver -geometry camuso.homeip.net
+  389  killall gnome -session
+  390  killall gnome-session
+  391  ps aux
+  392  ps aux | grep camuso
+  393  history
+  394  vncserver -geometry camuso.homeip.net
+  395  vncserver -geometry 1200x1024
+  396  vncpasswd
+  397  history
+  398  su
+  399  ssh -L camuso@tcamuso.usersys.redhat.com
+  400  ssh -L 5901:localhost:5901 tcamuso
+  401  ssh -L 5901 localhost:5901 tcamuso
+  402  ping tcamuso.usersys.redhat.com
+  403  ssh -L tcamuso.usersys.redhat.com
+  404  ssh -L 5901 localhost:5901 tcamuso.usersys.redhat.com
+  405  ssh -L 5901:localhost:5901 tcamuso.usersys.redhat.com
+  406  camuso@tcamuso.usersys.redhat.com
+  407  ps aux | grep camuso
+  408  tcpdump port 5901
+  409  /sbin/tcpdump port 5901
+  410  yum install tcpdump
+  411  su yum install tcpdump
+  412  su - 
+  413  su - 
+  414  su - 
+  415  su -
+  416  su -
+  417  pwd
+  418  find / -name *.pem
+  419  sudo find / -name *.pem
+  420  less /etc/pki/cert.pem
+  421  less /etc/pki/tls/cert.pem
+  422  less /usr/share/doc/openvpn-2.1/sample-keys/dh1024.pem 
+  423  ls *.patch
+  424  cat mmconfig.dl585.patch 
+  425  ps aux | grep evo
+  426  cd utililties
+  427  ls
+  428  cd Utilities
+  429  ls
+  430  cat sendpatchset script
+  431  less sendpatchset script
+  432  vi sendpatchset script
+  433  ;s
+  434  ls
+  435  vi sendpatchset
+  436  cat script
+  437  ls
+  438  cat script
+  439  ls
+  440  ;s
+  441  ls
+  442  cat script
+  443  cat '
+  444  cat 'sendpatchset script'
+  445  vi 'sendpatchset script'
+  446  vi 'sendpatchset script'
+  447  vi sendpatch
+  448  vi sendpatchset
+  449  vi sendpatchset
+  450  cp sendpatchset sendmmconfig
+  451  gedit sendmmconfig
+  452  ls 
+  453  ls -al
+  454  ls -al
+  455  ls
+  456  ls
+  457  ls -al
+  458  cd Utilities
+  459  ls
+  460  gedit sendmmconfig&
+  461  cat ../mmconfig.patch
+  462  ls ../*.patch
+  463  cat ../mmconfig.dl585.patch
+  464  cd ..
+  465  cp mmconfig.dl585.patch mmconfig.dl585.patch.orig
+  466  gedit mmconfig.dl595.patch
+  467  gedit mmconfig.dl585.patch
+  468  gedit mmconfig.dl585.patch&
+  469  cd Utilities
+  470  ls
+  471  less sendmmconfig
+  472  sendmmconfig
+  473  ./sendmmconfig
+  474  sudo ./sendmmconfig
+  475  less sendmmconfig
+  476  /usr/bin/python sendmmconfig
+  477  less sendmmconfig
+  478  ls
+  479  less 'sendmmconfig script'
+  480  less 'sendpatchset script'
+  481  ls
+  482  less l3cntrolfile
+  483  cat l3cntrolfile
+  484  man rpm
+  485  ls
+  486  cp l3cntrolfile mailpatch
+  487  gedit mailpatch
+  488  gedit mailpatch&
+  489  cat senmmconfig
+  490  cat sendmmconfig
+  491  gedit sendmmconfig
+  492  cat ../mmconfig.dl585.patch
+  493  ls
+  494  sendmmconfig mailpatch
+  495  /usr/bin/python sendmmconfig mailpatch
+  496  ls ~/
+  497  mv sendmmconfig ../
+  498  mv mailpatch ..
+  499  cd ..
+  500  cd -
+  501  mv mailpatch ../
+  502  cd ..
+  503  ls
+  504  mv mailpatch mailscript
+  505  mv sendmmconfig sendpatch
+  506  /usr/bin/python sendpatch mailscript
+  507  /usr/bin/python sendpatch mailscript
+  508  /usr/bin/python sendpatch mailscript
+  509  /usr/bin/python sendpatch mailscript
+  510  vi mmconfigpatchtest
+  511  gedit mmconfigpatchtest&
+  512  vi mmconfigpatchtest
+  513  ssh dchapman
+  514  man getconfig
+  515  man getcfg
+  516  man config
+  517  config
+  518  /sbin/config
+  519  service
+  520  /sbin/service
+  521  /sbin/service --status-all
+  522  ls
+  523  cat mmconfigpatchtest
+  524  ls
+  525  cat sendpatch
+  526  less sendpatch
+  527  ls
+  528  less mailscript
+  529  less mmconfig.dl585.patch
+  530  less mailscript
+  531  sendpatch mailscript
+  532  ./sendpatch mailscript
+  533  sudo ./sendpatch mailscript
+  534  ls /sbin/python
+  535  find / -name python
+  536  su
+  537  su
+  538  su
+  539  cd RPM/BUILD
+  540  man cscope
+  541  cscope -kR
+  542  cd RPM/BUILD
+  543  cscope -kR
+  544  cd
+  545  ls
+  546  cd Desktop
+  547  ls
+  548  cd 
+  549  ls RPM
+  550  cd RPM/SOURCES
+  551  ls
+  552  cd ..
+  553  ls
+  554  cd BUILD
+  555  ls
+  556  cd kernel-2.6.18/
+  557  ls
+  558  cd linux-2.6.18.i386/
+  559  cd arch/i386/pci
+  560  ls
+  561  less mmconfig.c
+  562  cd RPM/BUILD
+  563  ps aux
+  564  ps aux | grep cscopt
+  565  ps aux | grep cscope
+  566  kill -9 25468
+  567  ps aux | grep cscope
+  568  cscope -kR
+  569  find / -name bookmark
+  570  sudo find / -name bookmark
+  571  sudo find / -name *.html
+  572  less bookmarks.html
+  573  vim bookmarks.html
+  574  goto 1
+  575  go 1
+  576  go vim
+  577  fg vim
+  578  ssh camuso.homeip.net
+  579  ls *.patch
+  580  cat *.patch
+  581  cat *.patch
+  582  ls *.patch
+  583  vim mm
+  584  vim mmconfig.dl585.patch 
+  585  gedit mmconfig.dl585.patch &
+  586  gedit mmconfig.dl585.patch &
+  587  history
+  588  ls
+  589  cat mailscript
+  590  cat mmconfigpatchtest
+  591  less sendpatch
+  592  less sendpatch
+  593  lis
+  594  ls
+  595  vim mailscript
+  596  cat mailscript
+  597  vim mailscript
+  598  cat mailscript
+  599  gedit mailscript &
+  600  cat mailscript
+  601  ls /sbin/python
+  602  ls /bin/python
+  603  find / -name python
+  604  su find / -name python
+  605  sudo find / -name python
+  606  ls
+  607  /usr/bin/python sendpatch mailscript
+  608  gedit mailscript &
+  609  ls
+  610  gedit bookmarks.html &
+  611  gedit bookmarks.html &
+  612  cat rpmmacros
+  613  cat .rpmmacros
+  614  ls
+  615  cd Downloads
+  616  ls
+  617  cd Download
+  618  ls
+  619  ls
+  620  cd ..
+  621  cd Desktop
+  622  ls
+  623  ls -al
+  624  rpm -ivh linux-2.4.19.tar.bz2
+  625  gedit ~/hpwdt.patch &
+  626  gedit ~/hpwdt.patch &
+  627  ifconfig
+  628  /sbin/ifconfig
+  629  ls
+  630  rpm -ivh kernel-2.6.9-22.0.1.EL.audit.3.src.rpm
+  631  cd rpm
+  632  cd RPM
+  633  cd ../RPM
+  634  cd SPECS
+  635  lw
+  636  ls
+  637  ls -al
+  638  rpmbuild -bp kernel-2.6.spec
+  639  gedit ~/hpwdt.patch &
+  640  cd -
+  641  rpm -ivh ~/Desktop/kernel-2.6.9-22.0.1.EL.audit.3.src.rpm
+  642  rpm -ivh ~/Desktop/kernel-2.6.9-56.EL.src.rpm
+  643  cd ../RPM/SPECS/
+  644  ls
+  645  rpmbuild -bp kernel-2.6.spec
+  646  ls
+  647  la -al
+  648  ls -al
+  649  cd ..
+  650  ls
+  651  cd BUILD/
+  652  ls
+  653  cd ../SOURCES/
+  654  ls
+  655  cd ..
+  656  ls
+  657  cd BUILD/
+  658  ls
+  659  rm -R kernel-2.6.18/
+  660  ls
+  661  cd ../SPECS/
+  662  ls
+  663  rm *.*
+  664  ls
+  665  cd ../
+  666  ;s
+  667  ls
+  668  cd ../Desktop
+  669  rpm -ivh kernel-2.6.9-56.EL.src.rpm
+  670  cd ../RPM/SPECS/
+  671  ls
+  672  rpmbuild -bp kernel-2.6.spec 
+  673  ls ../
+  674  ls ../BUILD/
+  675  rpmbuild -bp kernel-2.6.spec --target=i686
+  676  rpmbuild -bp kernel-2.6.spec --target=i686 --nodeps
+  677  vi hpwdt.patch
+  678  cd ~
+  679  ls
+  680  vi hpwdt.patch
+  681  ls
+  682  cat mailscript
+  683  cp mailscript mailhpwdt
+  684  vi mailhpwdt
+  685  cat mailhpwdt
+  686  /sbin/python sendpatch mailhpwdt
+  687  /usr/sbin/python sendpatch mailhpwdt
+  688  /usr/bin/python sendpatch mailhpwdt
+  689  cd RPM/
+  690  ls
+  691  cd BUILD
+  692  ls
+  693  cd kernel-2.6.9/
+  694  ls
+  695  cd linux-2.6.9/
+  696  ls
+  697  cd arch
+  698  ls
+  699  cd i386
+  700  cd pci
+  701  ls
+  702  gedit mmconfig.c&
+  703  cd ../../../
+  704  ls
+  705  cd ..
+  706  ls
+  707  cd linux-2.6.9/
+  708  cscope -kR
+  709  cd
+  710  ls
+  711  vi mailhpwdt
+  712  /usr/bin/python sendpatch mailhpwdt
+  713  cscope -kR
+  714  ps aux
+  715  ssh camuso@hptestsvr
+  716  ssh hpbl685
+  717  ssh hpbl685c
+  718  ssh hp685c
+  719  ssh camuso@hptestsvr
+  720  ssh camuso@hptestsvr
+  721  ls
+  722  cat mmconfig.dl585.patch
+  723  ssh hp-cblade-01.rhts.boston.redhat.com
+  724  ssh Adminsitrator@hp-cblade-01.rhts.boston.redhat.com
+  725  ssh Administrator@hp-cblade-01.rhts.boston.redhat.com
+  726  ssh Administrator@hp-cblade-02.rhts.boston.redhat.com
+  727  ssh Administrator@hp-cblade-02-ilo.rhts.boston.redhat.com
+  728  ssh Administrator@hp-cblade-02.rhts.boston.redhat.com
+  729  ssh Administrator@hp-bl685c-01-ilo.rhts.boston.redhat.com
+  730  mut &
+  731  mutt &
+  732  mutt
+  733  mutt &
+  734  ls
+  735  gedit hpwdt.c
+  736  gedit hpwdt.c &
+  737  cat mailhpwdt
+  738  /usr/sbin/python sendpatch mailhpwdt
+  739  /usr/bin/python sendpatch mailhpwdt
+  740  vi mailhpwdt
+  741  /usr/bin/python sendpatch mailhpwdt
+  742  ls
+  743  cat mmconfig.dl585.patch
+  744  ls
+  745  cd RPM/BUILD/
+  746  ls
+  747  cd /usr/src
+  748  ls
+  749  cd redhat/
+  750  ls
+  751  cd BUILD
+  752  ls
+  753  ls
+  754  cd 
+  755  cd RPM/BUILD/kernel-2.6.9/linux-2.6.9/
+  756  cd
+  757  ps -aux
+  758  ssh root@hp-bl685c-01
+  759  ssh root@hp-bl685c-01.rhts.boston.redhat.com
+  760  finger root@hp-bl685c-01.rhts.boston.redhat.com
+  761  whois root@hp-bl685c-01.rhts.boston.redhat.com
+  762  pwd
+  763  cd RPM/BUILD/kernel-2.6.9/linux-2.6.9/
+  764  find ./ -name pci
+  765  find ./ -name pciutils
+  766  man find
+  767  find ./ -empty pciutils
+  768  find ./ -iname pci*
+  769  find ./ -iname pci* | grep pciutil
+  770  find ./ -iname pci* | grep pciu
+  771  find ./ -iname pci* | grep pci
+  772  cscope -kR
+  773  cd
+  774  gedit hpwdt.patch &
+  775  ls
+  776  vi mailhpwdt
+  777  /usr/bin/python sendpatch malhpwdt
+  778  /usr/bin/python sendpatch malhpwdt
+  779  /usr/bin/python sendpatch mailhpwdt
+  780  vi mailhpwdt
+  781  /usr/bin/python sendpatch mailhpwdt
+  782  cd RPM/BUILD/kernel-2.6.9/linux-2.6.9/
+  783  ls
+  784  cscope -kR
+  785  su -
+  786  su -
+  787  man find
+  788  ssh hptestsvr
+  789  ssh hptestsvr
+  790  vim Kconfig.patch
+  791  cat Kconfig.patch
+  792  pwd
+  793  sudo yum install vnc-server
+  794  su
+  795  vncpasswd
+  796  cat /home/camuso/.vnc/passwd
+  797  su
+  798  su -
+  799  d /home/camuso/.vnc
+  800  ls /home/camuso/.vnc
+  801  ls
+  802  ls -al
+  803  gedit .vnc/xstartup
+  804  gedit .vnc/xstartup &
+  805  sudo /sbin/service/vncserver restart
+  806  sudo /bin/service/vncserver restart
+  807  sudo /sbin/service vncserver restart
+  808  ifconfig
+  809  /sbin/ifconfig
+  810  chkconfig vncserver on
+  811  /sbin/chkconfig vncserver on
+  812  sudo /sbin/service restart vncserver
+  813  sudo /sbin/service vncserver restart
+  814  /sbin/chkconfig vncserver on
+  815  screen -r
+  816  screen 
+  817  ssh root@hp-dl585g2-01.rhts.boston.redhat.com
+  818  screnn -r
+  819  screen -r
+  820  man screen
+  821  screen -r
+  822  screen
+  823  ssh camuso@hptestsvr.redhat.com
+  824  ssh camuso@hptestsvr.lab.boston.redhat.com
+  825  man rpm
+  826  man yum
+  827  man yum
+  828  yum remove firefox
+  829  su -
+  830  su -
+  831  mutt &
+  832  mutt
+  833  ls -al
+  834  /usr/bin/sestatus
+  835  su -
+  836  chckconfig vncserver
+  837  man chkconfig
+  838  /usr/bin/chkconfig
+  839  /usr/sbin/chkconfig
+  840  chkconfig
+  841  man chkconfig
+  842  find -name chkconfig
+  843  su -
+  844  vncserver -test
+  845  vncserver -list
+  846  vncserver
+  847  man chkconfig
+  848  chkconfig vncserver
+  849  find / -name chkconfig
+  850  su -
+  851  vncconfig
+  852  vncserver
+  853  ls .vnc
+  854  vim .vnc/xstartup
+  855  vncserver -depth 16
+  856  vim .vnc/xstartup
+  857  vncserver -kill
+  858  vncserver -kill :2
+  859  vncserver -depth 16
+  860  vncserver -kill :1
+  861  vncserver -depth 16
+  862  vim .vnc/xstartup
+  863  vncserver -kill :1
+  864  vncserver -depth 16 -geometry 1600x1200
+  865  vncserver -kill :1
+  866  vncserver -depth 16 -geometry 1440x900
+  867  vncserver -kill :1
+  868  vncserver -depth 16 -geometry 1360x1024
+  869  ps ux
+  870  ps
+  871  ps aux
+  872  ps aux | grep moz
+  873  ps aux | grep mozilla
+  874  ps aux | grep firefox
+  875  kill -9 29916
+  876  ps aux | grep firefox
+  877  ps aux | grep evolution
+  878  kill -9 3167
+  879  kill -9 3185
+  880  ps aux | grep evolution
+  881  echo "x11-misc/x11vnc jpeg zlib" >> /etc/portage/package.use
+  882  emerge vnc -av
+  883  su -
+  884  ssh root@10.12.7.90
+  885  history | grep scp
+  886  cd Desktop
+  887  ls
+  888  scp -v kernel-xen-2.6.18-42.el5.bz210078.i686.rpm root@10.12.4.179
+  889  scp -v kernel-xen-2.6.18-42.el5.bz210078.i686.rpm root@10.12.4.179 /boot
+  890  scp -v kernel-xen-2.6.18-42.el5.bz210078.i686.rpm root@10.12.4.179 /Desktop
+  891  scp -v kernel-xen-2.6.18-42.el5.bz210078.i686.rpm root@10.12.4.179 Desktop
+  892  scp -v kernel-xen-2.6.18-42.el5.bz210078.i686.rpm root@10.12.4.179 ~/Desktop
+  893  scp -v kernel-xen-2.6.18-42.el5.bz210078.i686.rpm root@10.12.4.179:/root
+  894  yum install irc
+  895  su -
+  896  su -
+  897  ls -al
+  898  find cat .gnome
+  899  cat .zshrc
+  900  cat .conf
+  901  cat .config
+  902  ls .config
+  903  ls -al
+  904  su -
+  905  ssh hptestservr
+  906  ssh hptestsvr
+  907  ssh 10.12.7.90
+  908  ssh root@10.12.7.90
+  909  ssh root@10.12.7.90
+  910  su -
+  911  vncserver -kill :1
+  912  vncserver -kill :2
+  913  ps
+  914  ps aux
+  915  ps aux | grep camuso
+  916  ps aux | grep camuso
+  917  reboot
+  918  sudo reboot
+  919  vncserver -geometry 1600x1200
+  920  vncserver -kill :1
+  921  ps aux | grep camuso
+  922  kill 2837
+  923  ps aux | grep camuso
+  924  kill 2692
+  925  ps aux | grep camuso
+  926  rm -rf .gconf
+  927  cd .gnome2
+  928  ls
+  929  rm -rf panel2.d
+  930  cd 
+  931  vncserver -geometry 1600x1200
+  932  history
+  933  history > history.txt

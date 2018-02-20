@@ -1,0 +1,14 @@
+Device     Start   End     Size    Type      FS       Contents
+------     ------  ------  ------  --------  -------  -------------
+ sda1      1049kB  135MB   134MB   primary   ext3     boot for sda2  
+ sda2      135MB   36.8GB  36.7GB  primary   ext4     RHEL6 x86_64  
+ sda3      36.8GB  39.0GB  2147MB  primary   swap
+ sda4      39.0GB  147GB   108GB   extended
+ sda5      39.0GB  39.3GB  268MB   logical   ext3      boot for sda6
+ sda6      39.3GB  76.0GB  36.7GB  logical   ext4      RHEL6 x86
+ sda7      76.0GB  76.0GB  14.0MB  logical   ext2      main grub menu
+ sda8      76.0GB  76.2GB  271MB   logical   ext3      boot for sda9
+ sda9      76.2GB  113GB   36.7GB  logical   ext3      RHEL5 x86_64
+ sda10     113GB   113GB   271MB   logical   ext3      boot for sda11
+ sda11     113GB   147GB   33.6GB  logical   ext3      RHEL5 x86
+

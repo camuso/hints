@@ -1,0 +1,75 @@
+
+From ...
+http://itsignals.cascadia.com.au/?p=28
+
+DISCLAIMER: Take care in what you do, make sure you have a reliable backup
+of the VM image before you start. You do this at your own risk, I accept
+no responsibility if it all goes wrong.
+
+So let’s dive in…
+
+Step 1: Stop the VM
+
+Step 2: Change to the directory where your VM image files are stored,
+mine is in /kvm/ubuntu-dev/
+
+	cd /kvm/ubuntu-dev
+
+Here is what my 20GB file looks like.
+
+	<http://itsignals.cascadia.com.au/img/original_image_file.png>
+
+Step 3: Backup the image file, my image file is called ubuntu-dev.img.
+I created a sub-directory called bak where I store my image backup file
+
+	sudo cp ubuntu-dev.img bak/ubuntu-dev.img.bak
+
+Step 4: Create a blank qemu file, this is the file we will be adding to
+our VM image. Create it with a size equal to the amount of extra disk
+space you want added to your VM. In my case I want to add an additional
+30GB of space.
+
+	sudo qemu-img create -f raw addon.raw 30G
+
+This is what the addon file looks like on my system after it is created.
+
+	<http://itsignals.cascadia.com.au/img/addon_file.png>
+
+Step 5: Rename the original image file to .save as is shown in the image
+above. We never actually modify the original image file so we end up with
+two backup files, the .save as well as the backup file we created in Step 3,
+just in case something goes wrong. When you are sure everything has worked
+you can always delete these files.
+
+Step 6: We are now ready to combine the image file with the new blank qemu
+file we created earlier. You need to be logged in as the super user to
+perform this step.
+
+	cat ubuntu-dev.img.save addon.raw >> ubuntu-dev.img
+
+Step 7: Once this completes you can check the new file size, my new file
+size is now 50GB which is my original 20GB + 30GB of extra space.
+
+	<http://itsignals.cascadia.com.au/img/expanded_image_file.png>
+
+Step 8: We have successfully increased the size of our image file by 30GB
+to 50GB, now we need to fix our partitions. To do this you need to
+downloaded GParted and create a live CD. Once you have created the CD and
+loaded into your machine run the following command to start GParted using
+the new image file.
+
+	sudo qemu -hda ubuntu-dev.img -cdrom /dev/cdrom -boot d
+
+At this point, the article goes on to boot gParted-Live to resize the
+partitions. However, this does not work with Logical Volumes. From this
+point, what you need to do is read ...
+
+	~/hints/disk/resize-logical-volumes.txt
+
+If you don't have logical volumes, the gParted-Live interface is pretty
+straightforward and resizing can continue as per the article.
+
+
+
+
+

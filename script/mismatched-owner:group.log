@@ -1,0 +1,4 @@
+find . -mount -type f -iname "*" -exec stat -c %n:%U:%G '{}' \; \
+	| egrep -v "(root:root|camuso:camuso)" > mismatched-owners.log
+
+

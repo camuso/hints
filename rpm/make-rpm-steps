@@ -1,0 +1,8 @@
+git clone https://github.com/camuso/kabitools.git
+mv kabitools kabitools-3.4
+tar -czvf kabitools-3.4.tar.gz kabitools-3.4/{*.cpp,*.[ch],*.sh,Makefile,*.patch}
+mv *.gz rpmbuild/SOURCES/
+cp kabitools-3.4/kabitools.spec rpmbuild/SPECS/
+cd rpmbuild/
+rpmbuild --bb --clean SPECS/kabitools.spec
+rsyncp RPMS/x86_64/kabitools-3.4-1.el7.x86_64.rpm tcamuso@people.redhat.com:public_html/kabitools/.

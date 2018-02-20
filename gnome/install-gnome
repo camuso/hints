@@ -1,0 +1,5 @@
+
+yum groupinstall "GNOME Desktop Environment"
+yum groupinstall "Desktop" "Desktop Platform"
+yum groupinstall gnome
+

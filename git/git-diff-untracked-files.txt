@@ -1,0 +1,77 @@
+http://stackoverflow.com/questions/855767/can-i-use-git-diff-on-untracked-files
+
+With recent git versions you can "git add -N" the file (or "--intent-to-add"),
+which adds a zero-length blob to the index at that location. The upshot is that
+your "untracked" file now becomes a modification to add all the content to this
+zero-length file, and that shows up in the "git diff" output.
+
+srh@devo16:/tmp/git-example <master>$ git diff
+srh@devo16:/tmp/git-example <master>$ echo "this is a new file" > new.txt
+srh@devo16:/tmp/git-example <master>$ git diff
+srh@devo16:/tmp/git-example <master>$ git add -N new.txt
+srh@devo16:/tmp/git-example <master>$ git diff
+diff --git a/new.txt b/new.txt
+index e69de29..3b2aed8 100644
+--- a/new.txt
++++ b/new.txt
+@@ -0,0 +1 @@
++this is a new file
+
+Another point about this is that now that the new file is a modification and the
+path is known to git, "git stash" will work to stash the file away too.
+
+1
+You can emulate "git add -N new.txt" with
+	git update-index --add \
+	--cacheinfo 100644 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 \
+	new.txt
+(how did I manage to put this on the wrong answer?)
+araqnid May 19 '09 at 14:58
+
+3
+As a heads-up, git add -N breaks git stash. bit.ly/hLDfHq  Jo Liss Jan 25 at 16:48
+
+-----------------------------------------------------------------------------------
+
+I believe you can diff against files in your index and untracked files by simply
+supplying the path to both files.
+
+git diff --no-index tracked_file untracked_file
+
+-----------------------------------------------------------------------------------
+
+For my interactive day-to-day gitting (where I diff the working tree against the
+HEAD all the time, and would like to have untracked files included in the diff),
+add -N/--intent-to-add is unusable, because it breaks git stash.
+
+So here's my git diff replacement. It's not a particularly clean solution, but since
+I really only use it interactively, I'm OK with a hack:
+
+d() {
+    if test "$#" = 0; then
+        (
+            git diff --color
+            git ls-files --others --exclude-standard |
+                while read -r i; do git diff --color -- /dev/null "$i"; done
+        ) | `git config --get core.pager`
+    else
+        git diff "$@"
+    fi
+}
+
+Typing just d will include untracked files in the diff (which is what I care about
+in my workflow), and d args... will behave like regular git diff.
+
+Notes:
+
+    * We're using the fact here that git diff is really just individual diffs
+      concatenated, so it's not possible to tell the d output from a "real diff" --
+      except for the fact that all untracked files get sorted last.
+    * The only problem with this function is that the output is colored even if
+      redirected; but I can't be bothered to add logic for that.
+    * I couldn't find any way to get untracked files included by just assembling a
+      slick argument list for git diff. If someone figures out how to do this, or if
+      maybe a feature gets added to git at some point in the future, please leave a
+      note here!
+
+

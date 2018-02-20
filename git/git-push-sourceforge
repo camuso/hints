@@ -1,0 +1,5 @@
+cd myproject
+git remote add origin ssh://tonycamuso@git.code.sf.net/p/bitview/code
+git push origin master
+git branch --set-upstream master origin/master  # so 'git pull' will work later
+

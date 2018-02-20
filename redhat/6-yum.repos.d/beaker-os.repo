@@ -1,0 +1,6 @@
+[beaker-os]
+name=beaker-os
+# baseurl=http://lab2.rhts.eng.bos.redhat.com/distros/vol/engineering/devarchive/redhat/rel-eng/RHEL6.0-20100722.0/6/Client/x86_64/os/.
+baseurl=http://download.eng.bos.redhat.com/rel-eng/dist-git/rhel/6Workstation/
+enabled=1
+gpgcheck=0

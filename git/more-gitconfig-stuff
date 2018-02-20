@@ -1,0 +1,11 @@
+Before using git send-email from the Beaker provisioned system
+where you are logged in as root:
+
+Create ~/.gitconfig with the following:
+
+[format]
+subjectprefix = RHEL <version # e.g. 6.5> PATCH
+
+[user]
+name = <your name, spaces ok, no quotes>
+email = <your @redhat email address>

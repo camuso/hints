@@ -1,0 +1,27 @@
+# .bashrc
+
+# User specific aliases and functions
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias vi='/usr/bin/vim -c "set background=dark"'
+alias egrep='egrep -n'
+alias cde='cd'
+alias convert='/home/prarit/bin/convert'
+
+alias largefont='consolechars -f default8x16.psf.gz'
+alias smallfont='consolechars -f default8x9.psf.gz'
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# local CVS stuff
+declare -x CVSROOT=:ext:prarit@cvs.devel.redhat.com:/cvs/dist
+declare -x CVS_RSH=ssh
+# GIT stuff
+declare -x GIT_AUTHOR_EMAIL="prarit@redhat.com"
+declare -x GIT_AUTHOR_NAME="Prarit Bhargava"
+declare -x GIT_COMMITTER_NAME=$GIT_AUTHOR_NAME
+declare -x GIT_COMMITTER_EMAIL=$GIT_AUTHOR_EMAIL

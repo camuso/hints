@@ -1,0 +1,5 @@
+# grep -v to exclude
+# stat %n:%U:%G for name:user:group
+#
+
+find . -type d -iname "*" -exec stat -c %n:%U:%G '{}' \; | grep -v "root:root"

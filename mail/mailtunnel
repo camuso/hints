@@ -1,0 +1,73 @@
+#!/bin/bash
+#
+#	/etc/rc.d/init.d/mailtunnel
+#
+# Starts the SSL tunnel for sendmail
+#
+# chkconfig: 2345 79 31
+# description: SSL tunnel for sendmail
+# processname: stunnel
+# Source function library.
+. /etc/init.d/functions
+
+prog="mailtunnel"
+configfile=/etc/mail/mailtunnel.conf
+pidfile="/var/run/$prog.pid"
+
+test -x /usr/sbin/stunnel -a -f $configfile || exit 0
+
+RETVAL=0
+
+start() {
+        echo -n $"Starting $prog: "
+	params=$(egrep '^[[:space:]]*(accept|connect)[[:space:]]*=' $configfile)
+	daemon --pidfile=$pidfile /usr/sbin/stunnel -fd 0 <<EOF
+client = yes
+pid=$pidfile
+[rev-smtps]
+$params
+EOF
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/$prog
+	echo
+}
+
+stop() {
+	echo -n $"Stopping $prog: "
+	killproc -p $pidfile $prog
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$prog
+	echo
+}
+
+#
+#	See how we were called.
+#
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  reload|restart)
+	stop
+	start
+	RETVAL=$?
+	;;
+  condrestart)
+	if [ -f /var/lock/subsys/$prog ]; then
+	    stop
+	    start
+	fi
+	;;
+  status)
+	status -p $pidfile $prog
+	RETVAL=$?
+	;;
+  *)
+	echo $"Usage: $0 {condrestart|start|stop|restart|reload|status}"
+	exit 1
+esac
+
+exit $RETVAL

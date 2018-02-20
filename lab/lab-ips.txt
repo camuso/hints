@@ -1,0 +1,43 @@
+hp cage ips
+===========
+
+hpcrashdummy.lab.bos.redhat.com 	10.16.44.11
+hpcrashdummy-ilo.lab.bos.radhat.com 	10.16.44.12
+Administrator password
+DL365 G5
+root SlavitGospoda
+camuso 3$Maranatha$7
+
+hptestsvr.lab.bos.redhat.com		10.16.44.2
+d530 DC577AV
+root SlavitGospoda
+camuso iforgot
+
+hp-fips.lab.bos.redhat.com		10.16.44.14
+hp-fips-ilo.lab.bos.redhat.com		10.16.44.15
+Administrator password
+DL585 G1
+root redhat
+
+bl460c g6				10.16.70.227
+iLO					10.16.47.32
+Aministrator password
+root redhat
+
+bl460c g7				10.16.70.127
+iLO					10.16.47.23
+
+C-class enclosure OA
+hp-c3000-01-oa1.lab.bos.redhat.com
+Administrator
+password
+
+Fixed IPs for VMs
+camuso-vm.lab.bos.redhat.com has address 10.16.42.181
+burns-vm.lab.bos.redhat.com has address 10.16.42.182
+hpvm-rhel5-32.lab.bos.redhat.com has address 10.16.42.183
+hpvm-rhel5-64.lab.bos.redhat.com has address 10.16.42.184
+hpvm-rhel6-32.lab.bos.redhat.com has address 10.16.42.185
+hpvm-rhel6-64.lab.bos.redhat.com has address 10.16.42.186
+hpvm-fedora-32.lab.bos.redhat.com has address 10.16.42.187
+hpvm-fedora-64.lab.bos.redhat.com has address 10.16.42.188 

@@ -1,0 +1,147 @@
+kvm web sites
+
+http://www.redhat.com/docs/en-US/Red_Hat_Enterprise_Linux/5.4/html/Virtualization_Guide/
+http://www.techotopia.com/index.php/Managing_and_Monitoring_Fedora_based_KVM_Guest_Systems
+
+Install all the KVM goodies as root.
+
+$ sudo yum install \
+	kvm \
+	virt-manager \
+	libvirt \
+	libvirt-python \
+	python-virtinst\
+	virt-viewer
+
+
+be certain that libvirtd is running:
+
+$ sudo /etc/init.d/libvirtd start
+
+ -- or --
+
+$ sudo service libvirtd start   # (or status or restart)
+
+Here is an example of a virtual machine created
+
+Command for paravirtualized guest (os with native kvm support)
+
+$ sudo virt-install \
+	--vnc \
+	--arch=i686 \
+	--os-type=linux \
+	--os-variant=fedora12 \
+	--virt-type kvm \
+	--location=http://download.fedoraproject.org/pub/fedora/linux/releases/12/Fedora/i386/os/ \
+	--disk path=/var/lib/libvirt/images/f1232,size=8,sparse=false,format=raw,perms=sh \
+	--ram=512 \
+	--name f1232
+
+Command for fully virtualized guest (os having no native kvm support)
+. May also need --noapic and --noacpi
+
+$ sudo virt-install \
+	--hvm \
+	--vnc \
+	--arch=x86_64 \
+	--os-type=linux \
+	--os-variant=rhel5 \
+	--virt-type=kvm \
+	--location nfs:bigpapi.bos.redhat.com:/vol/engineering/redhat/released/RHEL-5-Server/U2/x86_64/os \
+	--disk path=/var/lib/libvirt/images/rhel5.2-x86_64.img,size=8,sparse=false,format=raw,perms=sh \
+	--ram=512 --name=rhel5.2-x86_64 &
+
+After kicking of the virt-install, you want to connect to the machine with virt-viewer,
+but first, see what the ID of the machine is.
+
+# virsh 				### start the virsh
+
+virsh # list				### Get the ID number
+ Id Name                 State
+----------------------------------
+  6 f1232                running
+
+virsh # uri				### Get the URI
+qemu:///system
+
+
+Now we are ready to connect with virt-viewer
+
+# virt-viewer --connect qemu:///system 6 &
+
+The install screen comes into view.
+
+After installing a domain, start it from the virt-manager
+
+virt-manager MUST BE started from the user account that owns
+the display. Root does NOT own the display, but you need root
+privs to run the display
+
+So ....
+
+$ sudo virt-manager &
+
+To start guests without virt-manager, (see https://help.ubuntu.com/community/KVM/Managing)
+
+From a terminal logged in as root:
+
+[root@hpcrashdummy camuso]# virsh --connect qemu:///system
+Welcome to virsh, the virtualization interactive terminal.
+
+Type:  'help' for help with commands
+       'quit' to quit
+
+virsh # define /etc/libvirt/qemu/f1232.xml
+Domain f1232 defined from /etc/libvirt/qemu/f1232.xml
+
+virsh # define /etc/libvirt/qemu/rhel5.2-x86_64.xml
+Domain rhel5.2-x86_64 defined from /etc/libvirt/qemu/rhel5.2-x86_64.xml
+
+virsh # list --all
+ Id Name                 State
+----------------------------------
+ 17 rhel5.2-x86_64       running
+  - f1232                shut off
+
+virsh # help start
+  NAME
+    start - start a (previously defined) inactive domain
+
+  SYNOPSIS
+    start <domain> [--console]
+
+  DESCRIPTION
+    Start a domain.
+
+  OPTIONS
+    <domain>         name of the inactive domain
+    --console        attach to console after creation
+
+
+virsh # start f1232
+Domain f1232 started
+
+virsh # uri
+qemu:///system
+
+virsh # list
+ Id Name                 State
+----------------------------------
+ 17 rhel5.2-x86_64       running
+ 18 f1232                running
+
+virt-viewer and virt-manager
+=========================================
+Must be started as root, but from a terminal window on the host that owns
+the display. For example, if you are connected to the host's X environment
+by way of vnc, this cannot be root, so it must be a terminal logged in as
+the owner of the display, which is the user from which you started the vnc
+server.
+
+The following command starts the virtual machine named f1232 with ID of 18
+listed above in the virsh list.
+
+[camuso@hpcrashdummy ~]$ sudo virt-viewer 18 &
+[camuso@hpcrashdummy ~]$ sudo virt-manager &
+
+

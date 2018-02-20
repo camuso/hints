@@ -1,0 +1,56 @@
+COMMANDS DO NOT WORK IN INSERT MODE!
+====================================
+
+NumLok		opens the VIM manual for perusal
+
+G		goes to bottom of file
+gg		goes to top of file
+<number>G 	goes to line <number>
+ctrl-g		shows where you are
+
+0		(zero) goes to the beginning of the line
+$		goes to the end of the line
+
+ctrl-^  	toggles among open files
+
+:split 		splits the window in the current file
+
+:split 		<filename> splits the edit window and opens <filename>
+		for editing in the top pane.
+
+ctrl-w w	toggles from one pane to the other
+ctrl-w ctrl-w   also toggles from one pane to the other
+
+ctrl-o		jump to previously edited line, even if in another file
+ctrl-i		jump to next edited line, even if in another file
+
+>ap		indents current paragraph
+<ap		un-indents current paragraph
+
+:close		closes the active pane
+
+:only		closes all other panes but the active one.
+
+:mouse=a	enables the mouse
+:mouse=""	disables the mouse
+
+o		Inserts a new line and starts INSERT mode
+a		Starts insert mode at the next character
+A		Starts insert mode at the end of the line
+i		Starts insert mode at the current character
+
+d		deletes highlighted text
+y		yanks the text into a buffer
+p		pastes from the text buffer to AFTER the cursor
+P		pastes text before the cursor
+
+		indents highlighted text
+
+:echo $HOME	tells where vim thinks its home is. This is,
+		where you put the .vimrc file.
+
+INSERT MODE COMMANDS
+====================
+
+ctrl-t		indent line
+ctrl-d		un-indent line

@@ -1,0 +1,492 @@
+
+</Dream.In.Code>: Programming & Web Development Community
+Search:
+Advanced Forum Search
+
+    Forums
+    Programming
+    Web Development
+    Computers
+    Tutorials
+    Snippets
+    Dev Blogs
+    Jobs
+    Lounge
+
+    Login
+    Join!
+    Today's Topics
+
+    Dream.In.Code
+    > Programming Help
+    > C and C++
+
+
+How to use popen()
+Page 1 of 1
+
+    New Topic/Question
+    Reply Reply
+
+5 Replies - 3484 Views - Last Post: 14 October 2012 - 08:05 PM Rate Topic: -----
+#1 n_techo  Icon User is offline
+
+    New D.I.C Head
+
+
+Reputation: 0
+
+    View blog
+
+    Posts: 14
+    Joined: 11-October 12
+
+How to use popen()
+
+Posted 14 October 2012 - 02:47 AM
+Hello again experts,
+
+I would like to use the popen() function to execute a "daemon or shell command" and read the stout and do stuff according to the info in the stout.
+
+for example; if the daemon outputs the word "start" to the stout, I would like it to activate a function in my program.
+
+I have searched google for the usage of popen(), the information is confusing for me, if anyone could provide me with a simple working example of how to use popen()
+
+
+regards
+
+Just to reword some of my previous post:
+
+I would like to use the popen() function to execute a "daemon or shell command" and read the stout and activate a function in my main program. (main).
+
+regards
+
+Is This A Good Question/Topic? 0
+
+    +
+
+    Reply Icon MultiQuote
+    Reply Icon Quote + Reply
+
+Replies To: How to use popen()
+#2 Salem_c  Icon User is offline
+
+    void main'ers are DOOMED
+    member icon
+
+
+Reputation: 1563
+
+    View blog
+
+    Posts: 2,977
+    Joined: 30-May 10
+
+Re: How to use popen()
+
+Posted 14 October 2012 - 02:51 AM
+Why don't you start with something simple like
+1	char buff[BUFSIZ];
+2	FILE *fp = popen("ls","r");
+3	while ( fgets( buff, BUFSIZ, fp ) != NULL ) {
+4	  printf("LS->%s", buff );
+5	}
+6	pclose(fp);
+
+
+Then maybe
+ls -l
+
+Then maybe the command you want to try.
+Was This Post Helpful? 2
+
+    +
+    -
+
+    Reply Icon MultiQuote
+    Reply Icon Quote + Reply
+
+#3 n_techo  Icon User is offline
+
+    New D.I.C Head
+
+
+Reputation: 0
+
+    View blog
+
+    Posts: 14
+    Joined: 11-October 12
+
+Re: How to use popen()
+
+Posted 14 October 2012 - 02:57 AM
+I would like to create an infinte loop within the main program (main), maybe I need to fork() out the process.
+
+The following loop checks if "progname" is running.
+
+
+01	while (1)
+02	{
+03	 
+04	sleep(1);
+05	 
+06	if (system("pstree | grep -q \"progname\"") == 0 ) {
+07	 
+08	// started function here
+09	g_print("started\n");
+10	 
+11	 
+12	} else {
+13	 
+14	// stopped function here
+15	g_print("stopped\n");
+16	}
+17	 
+18	 
+19	}
+
+
+If this loop is fork() "forked, spawned or cloned" as a child, can the child process still activate functions within the parent program.
+
+
+regards
+Was This Post Helpful? 0
+
+    +
+    -
+
+    Reply Icon MultiQuote
+    Reply Icon Quote + Reply
+
+#4 n_techo  Icon User is offline
+
+    New D.I.C Head
+
+
+Reputation: 0
+
+    View blog
+
+    Posts: 14
+    Joined: 11-October 12
+
+Re: How to use popen()
+
+Posted 14 October 2012 - 03:31 AM
+Thankyou very much that makes it easier, to understand.
+
+The trouble now is that the process I wish to run with popen() is an infinite loop, which checks if a program is running every 2 secs, so every other process in my main program get held up with this infinite loop, so I would like to run this process Parallel to my main program.
+
+if I use
+1	system("~/test");
+for example it puts the program in the background, and outputs to stout.
+
+Then I need a checking loop in my main program to check stout.
+
+I just need to update my gui (the program I am writing) with the status of a running program. (if it is running or not)
+
+I have this function for testing if the program is running, but how to use it in a loop without freezing my gui,
+
+01	if (system("pstree | grep -q \"darkice\"") == 0 ) {
+02	 
+03	// Program is running
+04	 
+05	} else {
+06	 
+07	g_print("stopped\n");
+08	 
+09	// Program is not running
+10	 
+11	}
+
+
+
+regards
+Was This Post Helpful? 0
+
+    +
+    -
+
+    Reply Icon MultiQuote
+    Reply Icon Quote + Reply
+
+#5 Salem_c  Icon User is offline
+
+    void main'ers are DOOMED
+    member icon
+
+
+Reputation: 1563
+
+    View blog
+
+    Posts: 2,977
+    Joined: 30-May 10
+
+Re: How to use popen()
+
+Posted 14 October 2012 - 10:26 AM
+I'm not sure if this is a good idea - it might just be opening a whole new can of worms for you.
+
+Personally, I would strongly recommend you look at some of the ideas in your other thread, so you don't have to worry about creating a blocking point in your code.
+
+Thread programming is hard to begin with (and exceedingly hard to debug!). Given that you're still using system() to do stuff for you, I don't think you're quite ready for this. A thread to watch a process is easy enough, but getting that thread to tell the rest of your program in a safe way is going to be that much harder for you.
+
+If you use the underlying API calls (see your other thread), then it should be a relatively simple task to write something within a single threaded program, which doesn't block.
+
+Anyhow, here goes.
+01	#include <stdio.h>
+02	#include <stdlib.h>
+03	#include <pthread.h>
+04	 
+05	void *t1 ( void *p ) {
+06	    int i;
+07	    for ( i = 0 ; i < 10 ; i++ ) {
+08	        printf("This is thread1\n");
+09	        sleep(1);
+10	    }
+11	    pthread_exit(NULL);
+12	}
+13	void *t2 ( void *p ) {
+14	    int i;
+15	    for ( i = 0 ; i < 10 ; i++ ) {
+16	        printf("This is thread2\n");
+17	        sleep(3);
+18	    }
+19	    pthread_exit(NULL);
+20	}
+21	 
+22	int main(void)
+23	{
+24	    pthread_t   p1, p2;
+25	    pthread_create(&p1,NULL,t1,NULL);
+26	    pthread_create(&p2,NULL,t2,NULL);
+27	    printf("Main does some other stuff\n");
+28	    sleep(5);
+29	    pthread_exit(NULL);
+30	    return 0;
+31	}
+32	 
+33	 
+34	$ gcc bar.c -pthread
+35	$ ./a.out
+36	Main does some other stuff
+37	This is thread1
+38	This is thread2
+39	This is thread1
+40	This is thread1
+41	This is thread2
+42	This is thread1
+43	This is thread1
+44	This is thread1
+45	This is thread2
+46	This is thread1
+47	This is thread1
+48	This is thread1
+49	This is thread2
+50	This is thread1
+51	This is thread2
+52	This is thread2
+53	This is thread2
+54	This is thread2
+55	This is thread2
+56	This is thread2
+
+Each of your while(1) loops can go into a separate thread.
+Was This Post Helpful? 1
+
+    +
+    -
+
+    Reply Icon MultiQuote
+    Reply Icon Quote + Reply
+
+#6 n_techo  Icon User is offline
+
+    New D.I.C Head
+
+
+Reputation: 0
+
+    View blog
+
+    Posts: 14
+    Joined: 11-October 12
+
+Re: How to use popen()
+
+Posted 14 October 2012 - 08:05 PM
+:bananaman: Thankyou for your example, thanks to you I know how to do this, I have used your code example in combination with my infinite program checking loop, like this;
+
+
+
+01	#include <stdio.h>
+02	#include <stdlib.h>
+03	#include <pthread.h>
+04	 
+05	 
+06	void *t1 ( void *p ) {
+07	 
+08	while (1)
+09	{
+10	sleep(1);
+11	if (system("pstree | grep -q \"darkice\"") == 0 ) {
+12	 
+13	 
+14	//gtk_label_set_text(GTK_LABEL (label_status), gettext("Streaming Status: Started"));
+15	g_print("started\n");
+16	 
+17	} else {
+18	 
+19	//gtk_label_set_text(GTK_LABEL (label_status), gettext("Streaming Status: Stopped"));
+20	g_print("stopped\n");
+21	}
+22	}
+23	 
+24	    pthread_exit(NULL);
+25	}
+26	 
+27	 
+28	 
+29	int main(void)
+30	{
+31	    pthread_t   p1;
+32	    pthread_create(&p1,NULL,t1,NULL);
+33	    printf("Main does some other stuff\n");
+34	     
+35	   // I put my main program code here
+36	 
+37	    sleep(5);
+38	    pthread_exit(NULL);
+39	    return 0;
+40	}
+
+
+
+I think you example should you in the faq section of this forum, your example is the best and most easy to understand out of all my hours of searching on google.
+Was This Post Helpful? 0
+
+    +
+    -
+
+    Reply Icon MultiQuote
+    Reply Icon Quote + Reply
+
+    ← Previous Topic
+    C and C++
+    Next Topic →
+
+Page 1 of 1
+
+	
+Related C++ Topicsbeta
+
+    Ask About How To Use Startdoc(), Startpage() To Pr - Ask About How To Use Startdoc(), Startpa
+    How To Use Scanf ? - Need To Learn How To Use Scanf Function
+    How To Use File Processing - How To Add, Delete And Modify The File
+    How To Use Bios.h In Visual Studio C++ 2008How To Use Bios.h In Visual Studio C++ 2008
+    How Do I Use This - I Need To Know How To Use This
+    How To Deal With Junior Developers - How To Deal With Sr. Developers
+    Passing Arguments To Your Program - How To Use & Impliment Int Argc Char Argv Functionality Tutorial
+    How To Make Sense Of The .bmp Format - Teaches You How To Write And Read .bmp Files Tutorial
+    How To Use Printer In C Programming - The Method On How To Print The Output Of A C Function Through A Printe
+    How To Use Complex Numbers In C++ In Vs 2008How To Use Complex Numbers In C++ In Vs 2008 
+
+
+General Discussion
+
+    Caffeine Lounge
+    Corner Cubicle
+    Student Campus
+    Software Development
+    Industry News
+    Introduce Yourself
+    Nightmare.In.Code
+
+Programming Help
+
+    C and C++
+    VB.NET
+    Java
+    C#
+    ASP.NET
+    .NET Framework
+    VB6
+    PHP
+    Ruby
+    Python
+    ColdFusion
+    Databases
+    Other Languages
+    Game Development
+    Mobile Development
+    52 Weeks Of Code
+
+Web Development
+
+    Web Development
+    HTML & CSS
+    JavaScript
+    Graphic Design
+    Flash & ActionScript
+    Blogging
+    SEO & Advertising
+    Web Servers & Hosting
+    Site Check
+
+
+Follow & Share
+
+Dream.In.Code RSS Feed Dream.In.Code LinkedIn Group Follow Us On Twitter Fan Us On Facebook
+
+C++ Tutorials
+
+    External Sorting with C
+    C++ Windows Charting Library Part 6
+    Bezier Curves Part 1 [Linear Algebra Series]
+    STL Algorithms ~ Tutorial 1: Using sort()
+    C++ Windows Charting Library Part 5
+    C++ Windows Charting Library Part 4
+    C++ Windows Charting Library Part 3
+    C++ Windows Charting Library Part 2
+    C++ Windows Charting Library Part 1
+    Win32 Image Editing Program Part3.
+    339 More C++ Tutorials...
+
+Reference Sheets
+Code Snippets
+
+    C Snippets
+    C++ Snippets
+    Java Snippets
+    Visual Basic Snippets
+    C# Snippets
+    VB.NET Snippets
+    PHP Snippets
+    Python Snippets
+    Ruby Snippets
+    ColdFusion Snippets
+    SQL Snippets
+    Assembly Snippets
+    Functional Programming Snippets
+    Perl Snippets
+    HTML/CSS Snippets
+    Javascript Snippets
+    Flash/ActionScript Snippets
+    Other Languages Snippets
+
+DIC Chatroom
+
+    Join our IRC Chat
+
+Bye Bye Ads
+
+
+FAQ | Team Blog | Feedback/Support | Advertising | Terms of Use | Privacy Policy | About Us
+
+
+Copyright 2001-2014 MediaGroup1 LLC, All Rights Reserved
+A MediaGroup1 LLC Production - Version 6.0.2.1.36
+Server: secure3
+

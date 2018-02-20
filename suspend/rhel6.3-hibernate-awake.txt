@@ -1,0 +1,359 @@
+********************************************************
+** HIBERNATING ....
+*******************************************************
+PM: Marking nosave pages: 000000000009e000 - 0000000000100000
+PM: Marking nosave pages: 00000000cb733000 - 0000000100000000
+PM: Basic memory bitmaps created
+PM: Syncing filesystems ... done.
+Freezing user space processes ... (elapsed 0.00 seconds) done.
+Freezing remaining freezable tasks ... (elapsed 0.00 seconds) done.
+PM: Preallocating image memory... done (allocated 2895364 pages)
+PM: Allocated 11581456 kbytes in 3.56 seconds (3253.21 MB/s)
+pci 0000:00:00.0: preparing freeze
+pci 0000:00:01.0: preparing freeze
+pci 0000:00:01.1: preparing freeze
+pci 0000:00:02.0: preparing freeze
+pci 0000:00:03.0: preparing freeze
+pci 0000:00:05.0: preparing freeze
+pci 0000:00:05.2: preparing freeze
+pci 0000:00:05.4: preparing freeze
+pci 0000:00:11.0: preparing freeze
+e1000e 0000:00:19.0: preparing freeze
+ehci_hcd 0000:00:1a.0: preparing freeze
+snd_hda_intel 0000:00:1b.0: preparing freeze
+pci 0000:00:1c.0: preparing freeze
+pci 0000:00:1c.5: preparing freeze
+pci 0000:00:1c.6: preparing freeze
+ehci_hcd 0000:00:1d.0: preparing freeze
+pci 0000:00:1e.0: preparing freeze
+pci 0000:00:1f.0: preparing freeze
+ahci 0000:00:1f.2: preparing freeze
+i801_smbus 0000:00:1f.3: preparing freeze
+mpt2sas 0000:02:00.0: preparing freeze
+nouveau 0000:05:00.0: preparing freeze
+snd_hda_intel 0000:05:00.1: preparing freeze
+isci 0000:04:00.0: preparing freeze
+e1000e 0000:01:00.0: preparing freeze
+xhci_hcd 0000:08:00.0: preparing freeze
+firewire_ohci 0000:09:01.0: preparing freeze
+pci 0000:40:02.0: preparing freeze
+pci 0000:40:03.0: preparing freeze
+pci 0000:40:05.0: preparing freeze
+pci 0000:40:05.2: preparing freeze
+pci 0000:40:05.4: preparing freeze
+platform pcspkr: preparing freeze
+platform vesafb.0: preparing freeze
+serial8250 serial8250: preparing freeze
+platform Fixed MDIO bus.0: preparing freeze
+usb usb1: preparing type freeze
+usb usb2: preparing type freeze
+i8042 i8042: preparing freeze
+usb 1-1: preparing type freeze
+usb 2-1: preparing type freeze
+platform iTCO_wdt: preparing freeze
+platform microcode: preparing freeze
+usb usb3: preparing type freeze
+usb usb4: preparing type freeze
+usb usb4: type freeze
+usb usb3: type freeze
+platform microcode: freeze
+i2c i2c-12: legacy freeze
+platform iTCO_wdt: freeze
+input input11: type freeze
+input input10: type freeze
+input input9: type freeze
+input input8: type freeze
+input input7: type freeze
+input input6: type freeze
+input input5: type freeze
+input input4: type freeze
+input input3: type freeze
+sd 6:0:1:0: legacy freeze
+sd 6:0:1:0: [sdb] Synchronizing SCSI cache
+scsi target6:0:1: legacy freeze
+sd 6:0:0:0: legacy freeze
+sd 6:0:0:0: [sda] Synchronizing SCSI cache
+scsi target6:0:0: legacy freeze
+scsi host7: legacy freeze
+scsi host6: legacy freeze
+sr 0:0:0:0: legacy freeze
+scsi target0:0:0: legacy freeze
+scsi host5: legacy freeze
+scsi host4: legacy freeze
+scsi host3: legacy freeze
+scsi host2: legacy freeze
+scsi host1: legacy freeze
+scsi host0: legacy freeze
+drm card0-DP-2: legacy class freeze
+drm card0-DP-1: legacy class freeze
+drm card0-DVI-I-1: legacy class freeze
+usb 2-1: type freeze
+i2c i2c-11: legacy freeze
+i2c i2c-10: legacy freeze
+i2c i2c-9: legacy freeze
+i2c i2c-8: legacy freeze
+i2c i2c-7: legacy freeze
+i2c i2c-6: legacy freeze
+i2c i2c-5: legacy freeze
+i2c i2c-4: legacy freeze
+i2c i2c-3: legacy freeze
+i2c i2c-2: legacy freeze
+i2c i2c-1: legacy freeze
+i2c i2c-0: legacy freeze
+drm card0: legacy class freeze
+drm controlD64: legacy class freeze
+drm ttm: legacy class freeze
+usb 1-1: type freeze
+rtc rtc0: legacy class freeze
+serio serio1: freeze
+serio serio0: freeze
+i8042 i8042: freeze
+usb usb2: type freeze
+usb usb1: type freeze
+platform Fixed MDIO bus.0: freeze
+input input2: type freeze
+serial8250 serial8250: freeze
+input input1: type freeze
+input input0: type freeze
+platform vesafb.0: freeze
+platform pcspkr: freeze
+pnp 00:0e: legacy freeze
+pnp 00:0d: legacy freeze
+system 00:0c: legacy freeze
+system 00:0b: legacy freeze
+serial 00:0a: legacy freeze
+serial 00:0a: activated
+system 00:0b: legacy thaw
+system 00:0c: legacy thaw
+pnp 00:0d: legacy thaw
+pnp 00:0e: legacy thaw
+platform pcspkr: thaw
+platform vesafb.0: thaw
+input input0: type thaw
+input input1: type thaw
+serial8250 serial8250: thaw
+input input2: type thaw
+platform Fixed MDIO bus.0: thaw
+usb usb1: type thaw
+usb usb2: type thaw
+i8042 i8042: thaw
+serio serio0: thaw
+serio serio1: thaw
+rtc rtc0: legacy class thaw
+usb 1-1: type thaw
+drm ttm: legacy class thaw
+drm controlD64: legacy class thaw
+drm card0: legacy class thaw
+i2c i2c-0: legacy thaw
+i2c i2c-1: legacy thaw
+i2c i2c-2: legacy thaw
+i2c i2c-3: legacy thaw
+i2c i2c-4: legacy thaw
+i2c i2c-5: legacy thaw
+i2c i2c-6: legacy thaw
+i2c i2c-7: legacy thaw
+i2c i2c-8: legacy thaw
+i2c i2c-9: legacy thaw
+i2c i2c-10: legacy thaw
+i2c i2c-11: legacy thaw
+usb 2-1: type thaw
+drm card0-DVI-I-1: legacy class thaw
+drm card0-DP-1: legacy class thaw
+drm card0-DP-2: legacy class thaw
+scsi host0: legacy thaw
+scsi host1: legacy thaw
+scsi host2: legacy thaw
+scsi host3: legacy thaw
+scsi host4: legacy thaw
+scsi host5: legacy thaw
+scsi target0:0:0: legacy thaw
+sr 0:0:0:0: legacy thaw
+scsi host6: legacy thaw
+scsi host7: legacy thaw
+scsi target6:0:0: legacy thaw
+sd 6:0:0:0: legacy thaw
+scsi target6:0:1: legacy thaw
+sd 6:0:1:0: legacy thaw
+input input3: type thaw
+input input4: type thaw
+input input5: type thaw
+input input6: type thaw
+input input7: type thaw
+input input8: type thaw
+input input9: type thaw
+input input10: type thaw
+input input11: type thaw
+platform iTCO_wdt: thaw
+i2c i2c-12: legacy thaw
+platform microcode: thaw
+usb usb3: type thaw
+usb usb4: type thaw
+usb usb4: completing type thaw
+usb usb3: completing type thaw
+platform microcode: completing thaw
+platform iTCO_wdt: completing thaw
+usb 2-1: completing type thaw
+usb 1-1: completing type thaw
+i8042 i8042: completing thaw
+usb usb2: completing type thaw
+usb usb1: completing type thaw
+platform Fixed MDIO bus.0: completing thaw
+serial8250 serial8250: completing thaw
+platform vesafb.0: completing thaw
+platform pcspkr: completing thaw
+pci 0000:40:05.4: completing thaw
+pci 0000:40:05.2: completing thaw
+pci 0000:40:05.0: completing thaw
+pci 0000:40:03.0: completing thaw
+pci 0000:40:02.0: completing thaw
+firewire_ohci 0000:09:01.0: completing thaw
+xhci_hcd 0000:08:00.0: completing thaw
+e1000e 0000:01:00.0: completing thaw
+isci 0000:04:00.0: completing thaw
+snd_hda_intel 0000:05:00.1: completing thaw
+nouveau 0000:05:00.0: completing thaw
+mpt2sas 0000:02:00.0: completing thaw
+i801_smbus 0000:00:1f.3: completing thaw
+ahci 0000:00:1f.2: completing thaw
+pci 0000:00:1f.0: completing thaw
+pci 0000:00:1e.0: completing thaw
+ehci_hcd 0000:00:1d.0: completing thaw
+pci 0000:00:1c.6: completing thaw
+pci 0000:00:1c.5: completing thaw
+pci 0000:00:1c.0: completing thaw
+snd_hda_intel 0000:00:1b.0: completing thaw
+ehci_hcd 0000:00:1a.0: completing thaw
+e1000e 0000:00:19.0: completing thaw
+pci 0000:00:11.0: completing thaw
+pci 0000:00:05.4: completing thaw
+pci 0000:00:05.2: completing thaw
+pci 0000:00:05.0: completing thaw
+pci 0000:00:03.0: completing thaw
+pci 0000:00:02.0: completing thaw
+pci 0000:00:01.1: completing thaw
+pci 0000:00:01.0: completing thaw
+pci 0000:00:00.0: completing thaw
+PM: writing image.
+PM: Free swap pages: 2047312
+PM: Saving image data pages (199192 pages) ... done
+PM: Wrote 796768 kbytes in 10.06 seconds (79.20 MB/s)
+PM: S|
+pci 0000:00:00.0: preparing hibernate
+pci 0000:00:01.0: preparing hibernate
+pci 0000:00:01.1: preparing hibernate
+pci 0000:00:02.0: preparing hibernate
+pci 0000:00:03.0: preparing hibernate
+pci 0000:00:05.0: preparing hibernate
+pci 0000:00:05.2: preparing hibernate
+pci 0000:00:05.4: preparing hibernate
+pci 0000:00:11.0: preparing hibernate
+e1000e 0000:00:19.0: preparing hibernate, may wakeup
+ehci_hcd 0000:00:1a.0: preparing hibernate
+snd_hda_intel 0000:00:1b.0: preparing hibernate
+pci 0000:00:1c.0: preparing hibernate
+pci 0000:00:1c.5: preparing hibernate
+pci 0000:00:1c.6: preparing hibernate
+ehci_hcd 0000:00:1d.0: preparing hibernate
+pci 0000:00:1e.0: preparing hibernate
+pci 0000:00:1f.0: preparing hibernate
+ahci 0000:00:1f.2: preparing hibernate
+i801_smbus 0000:00:1f.3: preparing hibernate
+mpt2sas 0000:02:00.0: preparing hibernate
+nouveau 0000:05:00.0: preparing hibernate
+snd_hda_intel 0000:05:00.1: preparing hibernate
+isci 0000:04:00.0: preparing hibernate
+e1000e 0000:01:00.0: preparing hibernate, may wakeup
+xhci_hcd 0000:08:00.0: preparing hibernate
+firewire_ohci 0000:09:01.0: preparing hibernate
+pci 0000:40:02.0: preparing hibernate
+pci 0000:40:03.0: preparing hibernate
+pci 0000:40:05.0: preparing hibernate
+pci 0000:40:05.2: preparing hibernate
+pci 0000:40:05.4: preparing hibernate
+platform pcspkr: preparing hibernate
+platform vesafb.0: preparing hibernate
+serial8250 serial8250: preparing hibernate
+platform Fixed MDIO bus.0: preparing hibernate
+usb usb1: preparing type hibernate, may wakeup
+usb usb2: preparing type hibernate, may wakeup
+i8042 i8042: preparing hibernate
+usb 1-1: preparing type hibernate, may wakeup
+usb 2-1: preparing type hibernate, may wakeup
+platform iTCO_wdt: preparing hibernate
+platform microcode: preparing hibernate
+usb usb3: preparing type hibernate, may wakeup
+usb usb4: preparing type hibernate, may wakeup
+usb usb4: type hibernate, may wakeup
+usb usb3: type hibernate, may wakeup
+platform microcode: hibernate
+i2c i2c-12: legacy hibernate
+platform iTCO_wdt: hibernate
+input input11: type hibernate
+input input10: type hibernate
+input input9: type hibernate
+input input8: type hibernate
+input input7: type hibernate
+input input6: type hibernate
+input input5: type hibernate
+input input4: type hibernate
+input input3: type hibernate
+sd 6:0:1:0: legacy hibernate
+sd 6:0:1:0: [sdb] Synchronizing SCSI cache
+scsi target6:0:1: legacy hibernate
+sd 6:0:0:0: legacy hibernate
+sd 6:0:0:0: [sda] Synchronizing SCSI cache
+scsi target6:0:0: legacy hibernate
+scsi host7: legacy hibernate
+scsi host6: legacy hibernate
+sr 0:0:0:0: legacy hibernate
+scsi target0:0:0: legacy hibernate
+scsi host5: legacy hibernate
+scsi host4: legacy hibernate
+scsi host3: legacy hibernate
+scsi host2: legacy hibernate
+scsi host1: legacy hibernate
+scsi host0: legacy hibernate
+drm card0-DP-2: legacy class hibernate
+drm card0-DP-1: legacy class hibernate
+drm card0-DVI-I-1: legacy class hibernate
+usb 2-1: type hibernate, may wakeup
+i2c i2c-11: legacy hibernate
+i2c i2c-10: legacy hibernate
+i2c i2c-9: legacy hibernate
+i2c i2c-8: legacy hibernate
+i2c i2c-7: legacy hibernate
+i2c i2c-6: legacy hibernate
+i2c i2c-5: legacy hibernate
+i2c i2c-4: legacy hibernate
+i2c i2c-3: legacy hibernate
+i2c i2c-2: legacy hibernate
+i2c i2c-1: legacy hibernate
+i2c i2c-0: legacy hibernate
+drm card0: legacy class hibernate
+drm controlD64: legacy class hibernate
+drm ttm: legacy class hibernate
+usb 1-1: type hibernate, may wakeup
+rtc rtc0: legacy class hibernate
+serio serio1: hibernate
+serio serio0: hibernate
+i8042 i8042: hibernate
+usb usb2: type hibernate, may wakeup
+usb usb1: type hibernate, may wakeup
+platform Fixed MDIO bus.0: hibernate
+input input2: type hibernate
+serial8250 serial8250: hibernate
+input input1: type hibernate
+input input0: type hibernate
+platform vesafb.0: hibernate
+platform pcspkr: hibernate
+pnp 00:0e: legacy hibernate
+pnp 00:0d: legacy hibernate
+system 00:0c: legacy hibernate
+system 00:0b: legacy hibernate
+serial 00:0a: legacy hibernate
+
+********************************************************
+** AWAKENING
+*******************************************************
+
+

@@ -1,0 +1,20 @@
+mount -ouid=nobody -r -t cifs gw.harvesthome.local:Movie2 /mnt/TEMP
+mount -ouid=nobody -r -t cifs gw.harvesthome.local:/Movie2 /mnt/TEMP
+mount -ouid=guest -r -t cifs gw.harvesthome.local:/Movie2 /mnt/TEMP
+mount -w -t ntfs -o umask=0000 /dev/sdb1 /mnt/MediaShare/
+
+# this doesn't work ...
+mount -t cifs //192.168.1.77/Videos -o user=papa-m2n/papa -o pass=3$Maranatha$7 /mnt/temp
+
+# but this does ...
+mount -t cifs //192.168.1.77/videos -o credentials=/root/.config/creds /mnt/papa
+
+# and this will work, but it prompts for a password first.
+#	This is the read-only version ...
+mount -r -t cifs //192.168.1.77/videos /mnt/temp
+Password: 
+#
+#	... and this allows for read/write.
+mount -rw -t cifs //192.168.1.77/videos /mnt/temp
+Password: 
+

@@ -1,0 +1,36 @@
+From https://en.wikipedia.org/wiki/Big_endian
+
+Large integers are usually stored in memory as a sequence of smaller ones
+and obtained by simple concatenation. The simple forms are:
+
+*    increasing numeric significance with increasing memory addresses (or
+     increasing time), known as little-endian, and
+*    decreasing numeric significance with increasing memory addresses (or
+     increasing time), known as big-endian[2]
+
+Decimal 1000, 0x3E8 ...
+       MSB LSB
+BEND -  03 E8
+LEND -  E8 03
+
+Architecture Endianness
+Bi indicates Archs whose endianness can be programmed. Those with a defualt,
+or endianness that preceded their programmable capability, will also have
+an entry in the Big or Little Column.
+
+Big		Little		Bi
+---------	----------	---------
+6800		x86
+68000		x86_64
+System/360	6502
+System/370	65802
+ESA/390		65C816
+		Vax
+		Z80 family
+		8051
+		Arm		Arm
+		Alpha		Alpha
+		ia64		ia64
+PowerPC				PowerPC
+Sparc				Sparc
+				PA-Risc

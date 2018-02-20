@@ -1,0 +1,6 @@
+[beaker-addon-LoadBalance-os]
+name=beaker-addon-LoadBalance-os
+#baseurl=http://lab2.rhts.eng.bos.redhat.com/distros/vol/engineering/devarchive/redhat/nightly/RHEL6.0-20100705.n.0/6/Server/i386/os/LoadBalance
+baseurl=http://porkchop.redhat.com/rel-eng/RHEL6.0-Snapshot-8/6.0/Workstation/optional/x86_64/os
+enabled=1
+gpgcheck=0

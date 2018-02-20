@@ -1,0 +1,8 @@
+How about an intermediate solution:
+
+# yum install rpmdevtools
+
+$ rpmdev-newspec -t <type> <package name>.spec
+
+That will take care of the heavy lifting...
+

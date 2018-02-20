@@ -1,0 +1,5 @@
+# To export directories for nfs access, used the base IP with
+# a /mask or /valid-bits appended to the base address to
+# signify a range of addresses.
+#
+exportfs -i 10.16.0.0/16:/home/camuso/isos/dud

@@ -1,0 +1,59 @@
+
+
+v  ["          *@:<C-U>exe "normal! gv"|call search('\%(^\s*".*\n\)\%(^\s*"\)\@!', "bW")<CR>
+n  ["          *@:call search('\%(^\s*".*\n\)\%(^\s*"\)\@!', "bW")<CR>
+v  []          *@m':<C-U>exe "normal! gv"|call search('^\s*endf*\%[unction]\>', "bW")<CR>
+n  []          *@m':call search('^\s*endf*\%[unction]\>', "bW")<CR>
+v  [[          *@m':<C-U>exe "normal! gv"|call search('^\s*fu\%[nction]\>', "bW")<CR>
+n  [[          *@m':call search('^\s*fu\%[nction]\>', "bW")<CR>
+v  ]"          *@:<C-U>exe "normal! gv"|call search('^\(\s*".*\n\)\@<!\(\s*"\)', "W")<CR>
+n  ]"          *@:call search('^\(\s*".*\n\)\@<!\(\s*"\)', "W")<CR>
+v  ][          *@m':<C-U>exe "normal! gv"|call search('^\s*endf*\%[unction]\>', "W")<CR>
+n  ][          *@m':call search('^\s*endf*\%[unction]\>', "W")<CR>
+v  ]]          *@m':<C-U>exe "normal! gv"|call search('^\s*fu\%[nction]\>', "W")<CR>
+n  ]]          *@m':call search('^\s*fu\%[nction]\>', "W")<CR>
+   <C-S>       * :update<CR>
+   <C-X>       * :quit<CR>
+n  <C-\>d        :cs find d <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <C-\>i        :cs find i <C-R>=expand("<cfile>")<CR><CR><Tab>
+n  <C-\>f        :cs find f <C-R>=expand("<cfile>")<CR><CR><Tab>
+n  <C-\>e        :cs find e <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <C-\>t        :cs find t <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <C-\>c        :cs find c <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <C-\>g        :cs find g <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <C-\>s        :cs find s <C-R>=expand("<cword>")<CR><CR><Tab>
+   <Space>       <C-W><C-W>
+   +             <C-W>+
+   -             <C-W>-
+n  gx            <Plug>NetrwBrowseX
+n  <Plug>NetrwBrowseX * :call netrw#NetrwBrowseX(expand("<cWORD>"),0)<CR>
+n  <F8>        * :setl noai nocin nosi inde=<CR>
+   <F9>a<CR>Series<CR>Acked-by: * Tony Camuso <tcamuso@redhat.com><CR>
+   <F12>a<CR>Acked-by: * Tony Camuso <tcamuso@redhat.com><CR>
+n  <F5>        * :buffers<CR>:buffer<Space>
+   <F6>        * :call HyperWrap()<CR>
+   <F4>        * :call TabsCheck()<CR>
+n  <Nul><Nul>d   :vert scs find d <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <Nul><Nul>i   :vert scs find i <C-R>=expand("<cfile>")<CR><CR><Tab>
+n  <Nul><Nul>f   :vert scs find f <C-R>=expand("<cfile>")<CR><CR><Tab>
+n  <Nul><Nul>e   :vert scs find e <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <Nul><Nul>t   :vert scs find t <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <Nul><Nul>c   :vert scs find c <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <Nul><Nul>g   :vert scs find g <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <Nul><Nul>s   :vert scs find s <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <Nul>d        :scs find d <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <Nul>i        :scs find i <C-R>=expand("<cfile>")<CR><CR><Tab>
+n  <Nul>f        :scs find f <C-R>=expand("<cfile>")<CR><CR><Tab>
+n  <Nul>e        :scs find e <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <Nul>t        :scs find t <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <Nul>c        :scs find c <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <Nul>g        :scs find g <C-R>=expand("<cword>")<CR><CR><Tab>
+n  <Nul>s        :scs find s <C-R>=expand("<cword>")<CR><CR><Tab>
+
+i  <F9>        * <C-O>a<CR>Series<CR>Acked-by: Tony Camuso <tcamuso@redhat.com><CR>
+i  <F12>       * <C-O>a<CR>Acked-by: Tony Camuso <tcamuso@redhat.com><CR>
+i  <F6>        * <C-O>:call HyperWrap()<CR>
+i  <F4>        * <C-O>:call TabsCheck()<CR>
+i  <C-O><F5>   * :buffers<CR>:buffer<Space>
+i  <C-S>       * <C-O>:update<CR>
+i  <C-X>       * <Esc>:quit<CR>

@@ -1,0 +1,104 @@
+Customizing a RHEL distro DVD iso
+=================================
+
+Most of the following was taken from instructions found on ...
+http://greghaygood.com/2007/12/11/build-a-custom-centos-5-install-cd
+... and from lines I examined in Bryan Gartner's history when he
+successfully built a custom distro.
+
+1. Provision a system, virtual or real, with the distro of RHEL to be customized.
+
+   Login as root.
+
+   Create some working directories.
+
+   # mkdir -p /work/iso		# the dvd iso image gets downloaded here
+   # mkdir -p /mnt/iso		# this is for the ro mounted dvd iso image
+   # mkdir -p /work/distro	# this is for the rw distro tree
+
+2. If you do not have access to the Red Hat internal network, then skip
+   to step 3.
+
+   Download the distro's dvd iso image from a source into a work directory.
+
+   # cd /work/iso
+
+   # wget \
+     http://download.lab.bos.redhat.com/released/RHEL-6/6.4/Workstation/x86_64/iso/RHEL6.4-20130130.0-Workstation-x86_64-DVD1.iso
+
+  If not, then 
+
+3. Mount the iso image and copy its contents into a working tree.
+
+   # mount -t iso9660 \
+   /work/distro/RHEL6.4-20130130.0-Workstation-x86_64-DVD1.iso /mnt/iso
+   
+   # rsync -va /mnt/iso/ /work/distro/
+
+   NOTE: The trailing "/" are important in the above rsync command.
+
+4. Add new or modified files to the appropriate places in the distro's file tree.
+
+5. Add new boot drivers to the initrd, as required. (See customize-inird.txt)
+
+6. Now install the anaconda anaconda-runtime and createrepo ustilities.
+
+   # yum install anaconda anaconda-runtime createrepo
+
+   NOTE: hp-octane-01 already has these
+
+7. Extract the discinfo that you need for the createrepo command.
+
+   # cd /work/distro
+   # head -1 .discinfo
+   1359576195.347759
+
+8. The local repo xml file will be in the repodata directory. In the case of the
+   hp-octane-01, you will see it in /work/distro/repodata
+   The file is named ...
+   8d2a5ab0faa8e39a6f19919f9a7293dbf58ff129c08647a205f6b9971acc279b-comps-rhel6-Workstation.xml
+
+   Strip the SHA hash off the filename.
+
+   # cd /work/distro/repodata
+
+   # mv 8d2a5ab0faa8e39a6f19919f9a7293dbf58ff129c08647a205f6b9971acc279b-comps-rhel6-Workstation.xml \
+     comps-rhel6-Workstation.xml
+
+   Past the above disc info header into the following createrepo command.
+
+   # cd /work/distro
+   # createrepo -u "media://1306347199.171996#1" \
+     -g repodata/comps-rhel6-Workstation.xml  ./
+
+   NOTE: "#1" was appended to the media url to identify this as disc one of the set.
+
+9. Create the new dvd iso
+
+   # cd /work
+   # mkisofs -r -R -J -T -v \
+     -no-emul-boot \
+     -boot-load-size 4 \
+     -boot-info-table \
+     -V "RHEL6.4-Workstation-x86_64" \
+     -p "tcamuso" \
+     -A "RHEL6.4-Workstation-20130619-test" \
+     -b isolinux/isolinux.bin -c isolinux/boot.cat \
+     -x "lost+found" \
+     -o RHEL6.4-Workstation-20130619-test-x86_64-DVD.iso \
+     distro/
+
+
+   -o identifies the output file
+   "distro/" is the directory whose contents will be made into an iso dvd image.
+
+   See "man mkisofs" for details of the other options.
+
+   When the mkisofs is complete, you should see the output iso file in the
+   /work directory.
+
+10. Insert the MD5 signature.
+
+    # implantisomd5 RHEL6.4-Workstation-20130619-test-x86_64-DVD.iso
+
+   You now have an installable custom dvd iso image.

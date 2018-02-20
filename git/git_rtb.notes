@@ -1,0 +1,219 @@
+'git': Working with Remotes (Remote Tracking branches)
+
+
+Starting from within an existing local, cloned, repository - i.e.
+  ~/kernels% git clone \
+             git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+  Cloning into linux...
+  remote: Counting objects: 3037607, done.
+  remote: Compressing objects: 100% (466785/466785), done.
+  remote: Total 3037607 (delta 2553864), reused 3026295 (delta 2542634)
+  Receiving objects: 100% (3037607/3037607), 630.92 MiB | 2.60 MiB/s, done.
+  Resolving deltas: 100% (2553864/2553864), done.
+
+  ~/kernels% cd linux
+
+git's config file - ./git/config - contains:
+  ~/kernels/linux% cat .git/config
+  [core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+  [remote "origin"]
+        fetch = +refs/heads/*:refs/remotes/origin/*
+        url = git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+  [branch "master"]
+        remote = origin
+        merge = refs/heads/master
+
+
+Rafael J Wysocki maintains Linux's ACPI and Power Management subsystems.
+Each maintainer has their own unique way of maintaining their subsystem(s)
+but it's typical for them to use multiple branches for work within their
+repository, something like -
+  master	-  Linus' tree used as a basis for other branches of work
+  for-linux	-  Patches targeted for the current release (fixes for rc's)
+  linux-next	-  Patches targeted for the next merge window
+
+To "track" Rafael's remote "Linux Power Management" repository we need to
+'add' it to our local repository.  To obtain the URL corresponding to
+Rafael's tree we can snoop around at https://git.kernel.org/cgit/.  We
+could also look for his "pull" requests he sends to Linus during the merge
+windows on the linux-acpi mail list - https://lkml.org/lkml/2013/4/30/178.
+We find that his tree is at
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git and so we
+can 'add' it to our local repository for tracking purposes:
+  % git remote add pm \
+    git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+
+"pm" is the <short-name> that we have given for Rafael's "Linux Power
+Management tree".
+
+'git remote add ...' does not get any content, it just records within git's
+config file the <short-name> <URL> association.
+
+  % git remote
+  origin
+  pm
+
+  % cat .git/config
+  [core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+  [remote "origin"]
+        fetch = +refs/heads/*:refs/remotes/origin/*
+        url = git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+  [branch "master"]
+        remote = origin
+        merge = refs/heads/master
+  [remote "pm"]
+        url = git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        fetch = +refs/heads/*:refs/remotes/pm/*
+
+Note the addition of the "[remote "pm"]" stanza.
+
+By default, 'git remote add ...' tracks all branches under
+$GIT_DIR/refs/remotes/<name>/ which was setup via git's config file refspec
+for the remote as a "default glob" (i.e. the '*' in ./git/config's "[remote
+"pm"]" stanza).
+
+As indicated earlier, 'git remote add ...' does not get any content.  To get
+Rafael's branches, and the content thereof:
+  % git fetch pm
+  remote: Counting objects: 413, done.
+  remote: Compressing objects: 100% (76/76), done.
+  remote: Total 335 (delta 259), reused 334 (delta 259)
+  Receiving objects: 100% (335/335), 85.80 KiB, done.
+  Resolving deltas: 100% (259/259), completed with 78 local objects.
+  From git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+   * [new branch]      acpi-assorted -> pm/acpi-assorted
+   * [new branch]      acpi-cleanup -> pm/acpi-cleanup
+   * [new branch]      acpi-dev-pm -> pm/acpi-dev-pm
+   * [new branch]      acpi-enumeration -> pm/acpi-enumeration
+   * [new branch]      acpi-fixes -> pm/acpi-fixes
+   * [new branch]      acpi-general -> pm/acpi-general
+   * [new branch]      acpi-hotplug -> pm/acpi-hotplug
+   * [new branch]      acpi-lpss  -> pm/acpi-lpss
+   * [new branch]      acpi-pm    -> pm/acpi-pm
+   * [new branch]      acpi-scan  -> pm/acpi-scan
+   * [new branch]      acpica     -> pm/acpica
+   * [new branch]      archive/3.8/acpi-dev-pm -> pm/archive/3.8/acpi-dev-pm
+   * [new branch]      archive/3.8/acpi-enumeration -> pm/archive/3.8/acpi-...
+   * [new branch]      archive/3.9/acpi-assorted -> pm/archive/3.9/acpi-assorted
+   * [new branch]      archive/3.9/acpi-cleanup -> pm/archive/3.9/acpi-cleanup
+   * [new branch]      archive/3.9/acpi-lpss -> pm/archive/3.9/acpi-lpss
+   * [new branch]      archive/3.9/acpi-pm -> pm/archive/3.9/acpi-pm
+   * [new branch]      archive/3.9/acpi-scan -> pm/archive/3.9/acpi-scan
+   * [new branch]      archive/3.9/acpica -> pm/archive/3.9/acpica
+   * [new branch]      archive/3.9/pm-assorted -> pm/archive/3.9/pm-assorted
+   * [new branch]      archive/3.9/pm-cpufreq -> pm/archive/3.9/pm-cpufreq
+   * [new branch]      archive/3.9/pm-cpuidle -> pm/archive/3.9/pm-cpuidle
+   * [new branch]      archive/3.9/pnp -> pm/archive/3.9/pnp
+   * [new branch]      bleeding-edge -> pm/bleeding-edge
+   * [new branch]      fixes      -> pm/fixes
+   * [new branch]      linux-next -> pm/linux-next
+   * [new branch]      master     -> pm/master
+   * [new branch]      pm-assorted -> pm/pm-assorted
+   * [new branch]      pm-cpufreq -> pm/pm-cpufreq
+   * [new branch]      pm-cpuidle -> pm/pm-cpuidle
+   * [new branch]      pm-devfreq -> pm/pm-devfreq
+   * [new branch]      pm-domains -> pm/pm-domains
+   * [new branch]      pm-fixes   -> pm/pm-fixes
+   * [new branch]      pm-qos     -> pm/pm-qos
+   * [new branch]      pm-runtime -> pm/pm-runtime
+   * [new branch]      pm-sleep   -> pm/pm-sleep
+   * [new branch]      pm-tools   -> pm/pm-tools
+   * [new branch]      pnp        -> pm/pnp
+   * [new tag]         cpufreq-for-3.5-rc7 -> cpufreq-for-3.5-rc7
+   * [new tag]         pm+acpi-3.10-rc1 -> pm+acpi-3.10-rc1
+   * [new tag]         pm+acpi-3.9-rc1 -> pm+acpi-3.9-rc1
+   * [new tag]         pm+acpi-3.9-rc2 -> pm+acpi-3.9-rc2
+   * [new tag]         pm+acpi-3.9-rc5 -> pm+acpi-3.9-rc5
+   * [new tag]         pm+acpi-3.9-rc6 -> pm+acpi-3.9-rc6
+   * [new tag]         pm+acpi-fixes-3.9-rc1 -> pm+acpi-fixes-3.9-rc1
+   * [new tag]         pm+acpi-for-3.7-rc3 -> pm+acpi-for-3.7-rc3
+   * [new tag]         pm+acpi-for-3.8-rc1 -> pm+acpi-for-3.8-rc1
+   * [new tag]         pm+acpi-for-3.8-rc3 -> pm+acpi-for-3.8-rc3
+   * [new tag]         pm+acpi-for-3.8-rc4 -> pm+acpi-for-3.8-rc4
+   * [new tag]         pm+acpi-for-3.8-rc5 -> pm+acpi-for-3.8-rc5
+   * [new tag]         pm-3.9-rc7 -> pm-3.9-rc7
+   * [new tag]         pm-fix-for-3.3-rc2 -> pm-fix-for-3.3-rc2
+   * [new tag]         pm-fixes-for-3.3 -> pm-fixes-for-3.3
+   * [new tag]         pm-fixes-for-3.3-rc3 -> pm-fixes-for-3.3-rc3
+   * [new tag]         pm-for-3.4 -> pm-for-3.4
+   * [new tag]         pm-for-3.4-part-2 -> pm-for-3.4-part-2
+   * [new tag]         pm-for-3.4-rc5 -> pm-for-3.4-rc5
+   * [new tag]         pm-for-3.5 -> pm-for-3.5
+   * [new tag]         pm-for-3.5-rc5 -> pm-for-3.5-rc5
+   * [new tag]         pm-for-3.5-rc7 -> pm-for-3.5-rc7
+   * [new tag]         pm-for-3.6-rc1 -> pm-for-3.6-rc1
+   * [new tag]         pm-for-3.6-rc2 -> pm-for-3.6-rc2
+   * [new tag]         pm-for-3.6-rc3 -> pm-for-3.6-rc3
+   * [new tag]         pm-for-3.6-rc6 -> pm-for-3.6-rc6
+   * [new tag]         pm-for-3.7-rc1 -> pm-for-3.7-rc1
+   * [new tag]         pm-for-3.7-rc4 -> pm-for-3.7-rc4
+   * [new tag]         pm-for-3.7-rc7 -> pm-for-3.7-rc7
+   * [new tag]         pm-post-3.5-rc7 -> pm-post-3.5-rc7
+
+As you can see, Rafael keeps a lot of branches around for maintaining the
+ACPI and Power Management subsystems.  We are probably not interested in
+most of these.
+
+When posting patches to upstream subsystems, the maintainer may ask you to
+'rebase' your work upon one of his specific branches of work.  Let's assume
+we had previously posted some patches to linux-acpi for the 3.10 merge
+window.  As a good citizen we could have pro-actively based our work on his
+"linux-next" branch (or, if we hadn't, he may have asked us to do such).
+
+To target a specific branch, or subset of branches, use git remote's "-t
+<branch>" option (man git-remote).  Let's effectively start over and just
+target Rafael's "linux-next" branch.
+
+First, remove our current existing remote tracking of "pm":
+  % git remote rm pm
+and now specifically target his "linux-next" branch:
+  % git remote add -t linux-next pm \
+    git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+
+  % cat .git/config
+  [core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+  [remote "origin"]
+        fetch = +refs/heads/*:refs/remotes/origin/*
+        url = git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+  [branch "master"]
+        remote = origin
+        merge = refs/heads/master
+  [remote "pm"]
+        url = git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        fetch = +refs/heads/linux-next:refs/remotes/pm/linux-next
+
+Note that this time the "pm" refspec specifically targets 'linux-next'
+(i.e. there are no '*'; a.k.a. "default glob"s).
+
+Next, 'git fetch ...' to retrieve the remote repositories content not yet
+acquired (i.e. any new data).  Afterwards you will have references to all
+the branches from the remote (or a subset thereof if 'git remote add's' "-t"
+option was used):
+  % git fetch pm
+  From git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+   * [new branch]      linux-next -> pm/linux-next
+
+  % git branch -a
+  * master
+    remotes/origin/HEAD -> origin/master
+    remotes/origin/master
+    remotes/pm/linux-next
+
+Now create your own local topic branch, based upon Rafael's 'linux-next'
+remote tracking branch, and use it for the work you intend to post to
+the upstream linux-acpi mail list:
+  % git checkout -b pm/<local-working-branch-name> pm/linux-next
+  Branch pm/test set up to track remote branch linux-next from pm.
+  Switched to a new branch 'pm/test'

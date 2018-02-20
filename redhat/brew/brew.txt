@@ -1,0 +1,8 @@
+brew list-targets | grep RHEL-6
+
+brew build --scratch RHEL-6-test redhat/rpm/SRPMS/kernel-2.6.32-115.el6.test.src.rpm
+
+brew build --scratch RHEL-6-test --arch-override=x86_64,noarch redhat/rpm/SRPMS/kernel-2.6.32-328.el6.6.3+bisect.1.src.rpm
+
+make rh-brew x86_64,noarch
+

@@ -1,0 +1,44 @@
+# To make iso images from files or directory.
+#
+mkisofs -R -J -o output.iso file1 [file2]...
+mkisofs -o /tmp/cd.iso /tmp/directory/
+
+# To copy an iso image off a disk.
+#
+To make an ISO from your CD/DVD, place the media in your drive but do
+not mount it. If it automounts, unmount it.
+
+dd if=/dev/dvd of=dvd.iso # for dvd
+dd if=/dev/cdrom of=cd.iso # for cdrom
+dd if=/dev/scd0 of=cd.iso # if cdrom is scsi
+
+To make an ISO from files on your hard drive, create a directory which
+holds the files you want. Then use the mkisofs command.
+
+mkisofs -o /tmp/cd.iso /tmp/directory/
+
+For long filenames, you'll need something like this.
+
+mkisofs -R -input-charset iso8859-15 -o /tmp/cd.iso /tmp/directory
+
+If you use -input-charset without a parameter, you will be given a
+list of available charsets from which to choose.
+
+This results in a file called cd.iso in folder /tmp which contains all
+the files and directories in /tmp/directory/.
+
+For more info, see the man pages for mkisofs, losetup, and dd, or see
+the CD-Writing-HOWTO at http://www.tldp.org.
+
+If you want to create ISO images from a CD and you're using Windows,
+Cygwin has a dd command that will work. Since dd is not specific to CDs,
+it will also create disk images of floppies, hard drives, zip drives, etc.
+
+For the Windows users, here are some other suggestions:
+
+WinISO ~ http://www.winiso.com
+
+VaporCD ~ http://vaporcd.sourceforge.net ~ "You can create ISOs from CD
+and mount them as 'virtual' CD drives. Works flawlessly with games and
+other CD based software. Unfortunately, it appears to be unmaintained now.
+Good thing it works so well." (P.B., 13 February 2002)

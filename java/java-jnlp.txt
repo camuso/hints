@@ -1,0 +1,15 @@
+http://timewasteblog.com/2008/01/27/how-to-run-jnlp-files-in-linux/
+
+How to run jnlp files in linux
+Posted on January 27, 2008 by linuxunix
+
+How to run jnlp files in linux or while browsing internet sites? Plugin for
+jnlp for firefox or mozilla in linux ? well here is the solution.
+
+1. Install jdk from http://java.sun.com
+
+2. try to open java web start file ( jnlp ) from browser and when browser
+   prompt – open with –
+   direct to always open with <jdk installfolder>/bin/javaws
+
+Bingo – thats it — it worked in fedora with out any problem.

@@ -1,0 +1,20 @@
+
+Point your host at the HP Software Delivery Repository (SDR)
+
+# wget http://downloads.linux.hp.com/SDR/downloads/bootstrap.sh
+# sh ./bootstrap.sh <repository>
+
+Where <repository> is one of:
+	ProliantSupportPack
+	ServicePackforProliant
+
+Extras
+# apt-get update
+
+Install updated drivers
+# apt-get install hp-be2net hp-e10000 hp-netxtreme2 hp-qla4xxx hp-tg3
+
+Install new agent software
+# apt-get install cpqacuxe fibreutils hpacucli hpdiags hponcfg hpsmh
+
+*substitute yum for apt-get for your rpm-based systems

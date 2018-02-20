@@ -1,0 +1,8 @@
+To remount root when you get dropped into dracut:
+
+mount -o remount,rw /
+
+or if you know the device ...
+
+mount -o remount,rw /dev/hda2 /
+

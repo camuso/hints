@@ -1,0 +1,5 @@
+The following sorts a tar list starting at the sixth field, which is the
+name of the directory, and the fourth character, which, in this case is
+the start of the filename after the "bin/" directory name.
+
+tar -tvf bin.tgz | sort -k6.4

@@ -1,0 +1,24 @@
+Add the list of new files to a text file by cutting-and-pasting from the
+RHEL patch that has the list of new or changed files.
+
+vim ../filelist		# <- paste the list into a text file
+
+In this case, the upstream files were in a different directory than the
+RHEL files, so we need to change the directory reference in order to
+find the upstream files in the upstream tree.
+
+replacetext /i40evf/ /ethernet/intel/i40evf/ ../filelist
+
+Next, we create the diff of the new or modified files with the following
+loop command.
+
+[tcamuso@tcamuso linux]$ while read line; do
+	filespec=$(echo $line | cut -d' ' -f1)
+	echo $filespec
+	gitbranchdiff 1a1f9dd7d5480f87ff8b763a4a62fafe7901fae2 net-next ../temp/0001-no.patch $filespec
+done < ../filelist
+
+gitbranchdiff script ...
+#!/bin/bash
+git diff $1 $2 -- $4 >> $3
+

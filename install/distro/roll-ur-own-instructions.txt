@@ -1,0 +1,69 @@
+
+Subject:
+Re: What's the best (recommended) way to modify a Fedora install ISO ?
+From:
+"T.C. Hollingsworth" <tchollingsworth@gmail.com>
+Date:
+04/27/2013 09:46 PM
+To:
+Community support for Fedora users <users@lists.fedoraproject.org>
+
+On Sat, Apr 27, 2013 at 6:19 PM, Fernando Cassia <fcassia@gmail.com> wrote:
+> I'm curious as to what is the best, or official way to modify a Fedora ISO
+> image considering that I only want to change the defaults of a few handful
+> packages, not do any major rebranding or modifications.
+>
+> For instance, I'd like a Fedora ISO that includes cups-pdf pre-installed
+> as the default printer. How would one go about adding such package to the
+> default LiveCD?
+>
+> Let's say also that I want only Firefox and all other packages under
+> "Internet" removed.
+>
+> Just to name two examples... is there a "custom LiveCD creator" ?
+
+You can roll your own custom live media with livemedia-creator, the
+same tool used to build Fedora live images.  You can find it in the
+"lorax" package in Fedora.
+
+See its README here for some usage examples:
+https://git.fedorahosted.org/cgit/lorax.git/tree/README.livemedia-creator
+
+After you've got lorax installed, clone the spin-kickstarts repo:
+git clone git://git.fedorahosted.org/spin-kickstarts.git
+
+Then cd to it, and check out the branch for the Fedora version you
+want to build live media for:
+cd spin-kickstarts
+git checkout f18
+
+Start with the kickstart for the desktop of your choice (e.g.
+fedora-livecd-desktop.ks for GNOME), and then edit the %packages
+section to contain the packages you want.  Note that you can remove
+packages from the default set by adding them to the %packages section
+with a minus sign in front of them.  See this page for a complete
+description of kickstart syntax:
+https://fedoraproject.org/wiki/Anaconda/Kickstart
+
+Once you've got your kickstart like you like it, follow the
+instructions in the README to build your ISO.  There's an example of
+how the author made their own custom XFCE live media in there.
+
+If you run into trouble, you'll have to ask the anaconda folks for
+help.  I doubt anyone on this list is qualified to debug issues with
+this process.  Their list is here:
+https://www.redhat.com/mailman/listinfo/anaconda-devel-list
+
+Keep in mind that they're busy getting anaconda ready for F19, so they
+might not be able to help right away.
+
+There used to be a graphical tool called "revisor" to make this
+process easier, but it's currently unmaintained and the process for
+making live media in Fedora has completely changed in the interim so
+it's useless at the moment.    So going at it manually as described
+above is the only way to go right now.
+
+Good luck!
+
+-T.C.
+

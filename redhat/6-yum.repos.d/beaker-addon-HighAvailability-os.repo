@@ -1,0 +1,5 @@
+[beaker-addon-HighAvailability-os]
+name=beaker-addon-HighAvailability-os
+baseurl=http://lab2.rhts.eng.bos.redhat.com/distros/vol/engineering/devarchive/redhat/nightly/RHEL6.0-20100705.n.0/6/Server/i386/os/HighAvailability
+enabled=0
+gpgcheck=0

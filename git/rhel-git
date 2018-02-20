@@ -1,0 +1,34 @@
+
+i Tony,
+On Mon, Jul 18, 2016 at 02:10:03PM -0400, Tony Camuso wrote:
+> I don't know if you're the right guy to ask, but I need know how
+> to create a repo for some stuff on git.engieneering.redhat.com
+
+I'm not, usually this kind of stuff goes through eng-ops@redhat.com but
+in this case you don't need anybody to help you:
+
+	1) log in a machine with your NFS home mounted like
+	   shell.devel.redhat.com
+	2) create a directory "public_git" inside your home if it's not
+	   already created
+	3) create a directory with a "bare" repository:
+	3.1) empty repository:
+		$ mkdir myproject.git
+		$ cd myproject.git/
+		$ git init --bare
+	3.2) clone existing
+		$ git clone --bare git://git.app.eng.bos.redhat.com/rhel6.git myrhel6.git
+		$ cd myrhel6.git/
+	4) edit "description" and "config" as you wish
+	5) git update-server-info
+
+
+For pushing, the url should be:
+	tcamuso@git.engineering.redhat.com:/srv/git/users/tcamuso/<repo-name>
+For pulling:
+	git://git.engineering.redhat.com/users/tcamuso/<repo-name>
+
+-- 
+Aristeu
+
+

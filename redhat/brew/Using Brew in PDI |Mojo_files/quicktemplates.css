@@ -1,0 +1,9 @@
+#quicktemplates-copyto-menu { display: block; z-index: 5000; position: absolute; background-color: #f2f2f2; padding: 4px; }
+#quicktemplates-copyto-menu div { float: right; text-align: right; margin-left: 12px; }
+#quicktemplates-copyto-menu div:first-of-type { margin-left: 0px; margin-right: 12px; }
+#quicktemplates-copyto-menu div:first-of-type span { font-size: 2.5em; font-weight: bold; }
+#quicktemplates-copyto-menu div span { font-size: 1em; font-weight: bold; }
+#quicktemplates-copyto-menu div a { margin-bottom: 8px; }
+.quicktemplates-copyto-selected { font-weight: bold; background-color: #f2f2f2; line-height: 1.4em; margin-bottom: 4px; }
+.quicktemplates-copyto-selected a { display: block; padding-top: 6px; }
+.quicktemplates-copyto-selected a span.jive-icon-blog-manage-posts { margin-top: 6px; }

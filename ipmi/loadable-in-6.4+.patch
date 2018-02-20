@@ -1,0 +1,59 @@
+From 07885616c508211efc630faf562e87628736b553 Mon Sep 17 00:00:00 2001
+From: Tony Camuso <tcamuso@redhat.com>
+Date: Tue, 22 Jan 2013 08:39:55 -0500
+Subject: [PATCH] ipmi: allow building as loadable modules again
+
+Commits 29768301..d2b0a8e5 added ACPI opregion support to the ipmi
+driver. The implementation required ipmi to be statically linked to the
+kernel. Commit d2b0a8e5 was specifically added in order to avoid kabi
+breakage. However, when attempting to build ipmi as loadable modules
+again, build errors were issued for the new symbols that could not be
+resolved at build time. The fix was to export the offending symbols.
+---
+ drivers/char/ipmi/ipmi_msghandler.c |    3 +++
+ drivers/char/ipmi/ipmi_si_intf.c    |    1 +
+ 2 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/drivers/char/ipmi/ipmi_msghandler.c b/drivers/char/ipmi/ipmi_msghandler.c
+index a676151..2fb3be2 100644
+--- a/drivers/char/ipmi/ipmi_msghandler.c
++++ b/drivers/char/ipmi/ipmi_msghandler.c
+@@ -614,6 +614,7 @@ int ipmi_smi_probe_complete_register(struct ipmi_smi_probe_complete *probe_compl
+ 	mutex_unlock(&smi_probe_complete_mutex);
+ 	return 0;
+ }
++EXPORT_SYMBOL(ipmi_smi_probe_complete_register);
+ 
+ int ipmi_smi_probe_complete_unregister(struct ipmi_smi_probe_complete *probe_complete)
+ {
+@@ -622,6 +623,7 @@ int ipmi_smi_probe_complete_unregister(struct ipmi_smi_probe_complete *probe_com
+ 	mutex_unlock(&smi_probe_complete_mutex);
+ 	return 0;
+ }
++EXPORT_SYMBOL(ipmi_smi_probe_complete_unregister);
+ 
+ /*
+  * Must be called with smi_watchers_mutex held.
+@@ -2812,6 +2814,7 @@ void ipmi_smi_probe_complete(void)
+ 	}
+ 	mutex_unlock(&smi_probe_complete_mutex);
+ }
++EXPORT_SYMBOL(ipmi_smi_probe_complete);
+ 
+ int ipmi_register_smi(struct ipmi_smi_handlers *handlers,
+ 		      void		       *send_info,
+diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/char/ipmi/ipmi_si_intf.c
+index 73bbecb..e8e5f50 100644
+--- a/drivers/char/ipmi/ipmi_si_intf.c
++++ b/drivers/char/ipmi/ipmi_si_intf.c
+@@ -1200,6 +1200,7 @@ int ipmi_si_get_smi_info(void *send_info, struct ipmi_smi_info *data)
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL(ipmi_si_get_smi_info);
+ 
+ static void set_maintenance_mode(void *send_info, int enable)
+ {
+-- 
+1.7.1
+

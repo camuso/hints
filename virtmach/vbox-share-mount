@@ -1,0 +1,47 @@
+
+When you name a share, the name is prefixed by 'sf_' and mounted on
+	/media/sf_<share-name>
+
+If you want to change the default mount point, see
+	http://www.virtualbox.org/manual/ch04.html#sf_mount_manual
+
+The share is mounted by vbox with root.vboxsf owner.group, which
+prevents access by normal users. The share can be remounted with
+the folloiwng command ...
+
+#  mount -t vboxsf -o fmode=775,dmode=665,uid=nobody,gid=nobody node /media/sf_node
+
+... to set the owner.group to nobody.nobody, file access = 775 and
+directory access = 665. This will allow for anonymous read and execution
+access while inhibiting file and directory creation by anyone other
+than root.
+
+You can mount the share at a different mount point this way.
+
+# umount /media/sf_node
+# mount -t vboxsf -o fmode=775,dmode=665,uid=nobody,gid=nobody node \
+	/home/tcamuso/node
+
+# cat /etc/group | grep tcamuso
+(standard input):69:tcamuso:x:1000:
+
+# mount -t vboxsf -o rw,uid=1000,gid=1000 work /home/tcamuso/host
+
+*************************************************************************
+
+All of the above is interesting, but ...
+
+To be sure that you can read and write the shared volume, do the following.
+On the host system, you must open the volume to allow rwx access to everyone
+and anyone. I will be doing this with the "work" directory in my host
+system.
+
+$ sudo chmod -R ugo+rwx work
+
+On the guest system, create a mount point. I will create one off the user's
+home directory and call it "host", then I will mount it with the current
+user as owner.
+
+$ mkdir ~/host
+$ sudo mount -t vboxsf -o uid=$(id -u),gid=$(id -g) work ~/host
+

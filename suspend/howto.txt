@@ -1,0 +1,59 @@
+# cd /sys/power
+# ls
+disk  image_size  pm_test  pm_trace  resume  state
+
+# Change the action on suspend/hibernate. Write "test" to the
+# file named "disk" causes the default action to be "test", as
+# shown by the square brackets.
+#
+# cat disk
+[platform] test testproc shutdown reboot
+# echo test > disk
+# cat disk
+platform [test] testproc shutdown reboot
+
+# Writing the string "disk" to the "state" file causes the system
+# to hibernate and perform the default action.
+#
+#  echo disk > state
+
+# Change the default action to "reboot" and initiate "suspend" mode
+# by writing the string "mem" to the "state" file.
+#
+# echo reboot > disk
+# echo disk > state
+
+# Alternatively, you could issue the pm-tools commands.
+#
+# pm-hibernate
+# pm-suspend
+
+# In order to get messages to the console during suspend, you must
+# rebuild the kernel with ...
+#
+  Power management and ACPI options ...
+	[*] Power Management support
+
+		[*]   Power Management Debug Support
+		[*]     Verbose Power Management debugging
+		[*] Suspend/resume event tracing
+		[*] Suspend to RAM and standby
+		[*]   Test suspend/resume and wakealarm during bootup
+		[*] Hibernation (aka 'suspend to disk')
+		()    Default resume partition
+		[*] Run-time PM core functionality
+		[*] ACPI (Advanced Configuration and Power Interface)
+		[*] SFI (Simple Firmware Interface) Support  --->
+		CPU Frequency scaling  --->
+		-*- CPU idle PM support
+		[*]   Cpuidle Driver for Intel Processors
+		Memory power savings  --->
+
+# On the kernel boot command line, add ...
+
+no_console_suspend ignore_loglevel
+
+# Build kernel with the following =y.
+CONFIG_USB_DEBUG=y
+CONFIG_USB_XHCI_HCD_DEBUGGING=y
+

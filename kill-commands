@@ -1,0 +1,28 @@
+kill -STOP 1721
+	Stops (suspends) process 1721 by sending the STOP signal
+	to the process. This process will still be on the task list.
+	The process can't catch or ignore the STOP signal.
+
+kill -CONT 1721
+	Continue process 1721 causing it to resume. The CONT signal
+	is sent to the process.
+
+kill -TERM 1721
+	Terminates process 1721 by sending the TERM signal to the
+	process. This process will no longer show up on the task
+	list if it is actually terminated. Process terminated cannot
+	be continued. The TERM signal can be caught so TERM is not
+	guaranteed to kill the process.
+
+kill -HUP 1721
+	Stops, then restarts process 1721. This is usually done when
+	a process is not working properly or the configuration files
+	for that process have been changed. This command sends the
+	HUP signal to the process which means hangup. This signal
+	can be caught by the process.
+
+killall -HUP myprint
+	Restarts any process with the name "myprint".
+
+kill -TERM myprint
+	Terminates any process with the name "myprint".

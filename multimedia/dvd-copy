@@ -1,0 +1,130 @@
+Subject:
+Re: copying video dvds
+From:
+Marko Vojinovic <vvmarko@gmail.com>
+Date:
+08/07/2013 05:04 AM
+To:
+users@lists.fedoraproject.org
+
+On Tue, 06 Aug 2013 18:19:28 -0600
+smcg4191@frii.com wrote:
+> I generally mount and then use "cp" to copy my video dvds to
+> hard disk for convenience.  99% of the time this works fine
+> and the resulting directory is playable by vlc, etc.  
+> However occasionally I'll get an "Input/output error" when
+> copying a disc that vlc played fine and, unsurprisingly,
+> there are problems when later trying to play the copy.
+>
+> I suspect that vlc makes use of error correction capabilities
+> on the dvd, whereas "cp" doesn't.
+
+There is also another possibility --- if the content is copyrighted,
+the owners may opt to introduce deliberate errors in order to prevent
+copying the contents of the disc. If that is the case, vlc will
+attempt to read only the files it needs, and would not see the error,
+while cp would try to copy everything, and get stuck.
+
+> Is there some way or tool that will make a copy of the dvd 
+> using (or at last preserving in the copy so that vlc can use)
+> the error correction stuff on the dvd so that the copy is
+> playable even when there are some errors? 
+
+Others have suggested dd and variants, to make an identical copy of the
+data on the disc. However, if your aim is to get a copy of the video
+content of the disc, you can also use mplayer to copy the video to your
+HD. Something like this:
+
+   mplayer dvd:// -dumpstream -dumpfile my/video/file.avi
+
+This will "dump" the actual movie into a file, rather than onto the
+screen (and speakers). You can be more selective by using dvd://2,4-6 to
+play only the tracks you are interested in, or use -dumpvideo or
+-dumpaudio instead of -dumpstream to separately copy video only or
+audio only. You may want to get familiar with "man mplayer". Just don't
+get too scared by the amount of options in the manual. 
+
+The quality of the dump is of course equal to the original, since it's
+just copying, not transcoding. The resulting file size will be the size
+of the video data on the dvd disc itself (most, but not equal to the
+size of the dvd disc). The dumped file can be played by any video
+player (vlc, mplayer, ...) that supports MPEG, by pointing it to the
+file.
+
+In general, as far as mplayer usage goes --- if you can see the video
+on the screen by playing it in mplayer, then you can also dump it in a
+file instead, to make a copy. And generically mplayer will play
+everything you throw at it, including copyrighted dvds with deliberate
+errors etc... 
+
+Oh, and you may also want to install the libdvdcss package from
+the old Livna repository (http://rpm.livna.org/), in order to get
+around the CSS enryption (Content Scramble System) for some
+copyrighted dvds...
+
+HTH, 
+Marko
+
+Subject:
+Re: copying video dvds
+From:
+Marko Vojinovic <vvmarko@gmail.com>
+Date:
+08/07/2013 10:40 AM
+To:
+users@lists.fedoraproject.org
+
+On Wed, 07 Aug 2013 22:34:52 +0930
+Tim <ignored_mailbox@yahoo.com.au> wrote:
+> Allegedly, on or about 07 August 2013, Marko Vojinovic sent:
+>> you can also use mplayer to copy the video to your HD. Something
+>> like this:
+>>
+>>    mplayer dvd:// -dumpstream -dumpfile my/video/file.avi
+>
+> Won't that do everything on the disc?  Don't you need a number 1 after
+> that, to play just the main title?  (Can't try that, myself, at the
+> moment.  I've done individual tracks before, never tried omitting the
+> title number.)
+
+If you omit the track number, mplayer will play the "default" track,
+which is usually track 1. However, I've seen dvds which change this
+default --- apparently in the dvd's table of contents it might be
+indicated what is considered to be the "default tracks to play", and
+mplayer will play that, if found. It does not necessarily mean
+"everything on the whole disc".
+
+Of course, you may specify the track number(s) explicitly, if and when
+you know which one you want to play. 
+
+> Might be worth pointing out that although you've called your sample
+> file a file.avi, above, it's not an AVI file format.  Since you're
+> creating a MPEG filedump, you may as well use a mpeg, mpg, or vob
+> file suffix, just so that your filename gives you an instant clue
+> about what it is, or for automating what program will play it when
+> you double-click on it.  Some media players are better at one thing
+> than another, and you might want to set different default programs to
+> open particular file formats. 
+
+Yes, you're right.  I got used to the fact that Linux doesn't care
+about file extensions, so I use .avi just as a reminder for myself that
+it is a file containing multimedia (i.e. audio and video). But someone
+else might try to play the file in a non-Linux environment, and then a
+file extension might be relevant.
+
+The DVD video format is usually mpeg-2 for video and AAC for audio,
+which are packed up into a mpeg-ps container format. According to
+wikipedia [1], it has the following typical file extensions:
+
+  .mpg, .mpeg, .m2p, .ps
+
+So maybe a better filename would be file.mpeg or similar.
+
+Best, 
+Marko
+
+[1] http://en.wikipedia.org/wiki/MPEG_program_stream
+
+
+
+

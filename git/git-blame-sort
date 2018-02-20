@@ -1,0 +1,1 @@
+git blame -r drivers/misc/hpilo.c | grep 2012 | sort -r -k4 > ../2012-hpilo-changes.txt

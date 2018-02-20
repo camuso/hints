@@ -1,0 +1,14 @@
+/boot/grub/grub.cfg takes the place of Grub-v1 grub.conf (menu.lst).
+
+After building a new kernel, in order to get it into the grub menu, you need to issue the following command as root. 
+
+For example, after downloading the latest kernel from Linus' git tree ...
+
+# make mrproper
+# make oldconfig
+# make 
+# make modules_install
+# make install
+# update-initramfs -c -k 2.6.38-rc4+
+# update-grub
+

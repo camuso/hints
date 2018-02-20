@@ -1,0 +1,37 @@
+
+*	Searches for all matches for the word under the cursor.
+
+gd	jumps to declaration of a variable within the file
+
+%	Finds matching brace or #if/endif
+
+[{	Jumps back to the { at the start of the current code block
+]}	Jumps down to the } at the end of the current code block
+
+gwap	Format the paragraph to "wrapmargin", default 80 but can be set
+	in .vimrc.
+
+CTRL-N	Expand the function or variable name
+
+.	Repeat the last command.
+
+Example:
+
+Very often you will want to change one word into another. If this is to be
+done in the whole file, you can use the :s (substitute) command. 
+
+If only a few locations need changing, a quick method is to use the *
+command to find the next occurrence of the word and use cw to change the
+word. Then type n to find the next word and . (dot) to repeat the cw
+command.
+
+The . command repeats the last change. A change, in this context, is
+inserting, deleting or replacing text. Being able to repeat this is a very
+powerful mechanism. If you organise your editing around it, many changes
+will become a matter of hitting just that . key. Watch out for making other
+changes in between, because it will replace the change that you were
+repeating. Instead you might want to mark the location with the m command,
+continue your repeated change and come back there later.
+
+
+

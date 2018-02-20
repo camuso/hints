@@ -1,0 +1,30 @@
+  262  mutt -f imaps://tcamuso@mail.corp.redhat.com
+  271  mutt -f imaps://tcamuso@mail.corp.redhat.com
+  273  mutt -f imaps://tcamuso@mail.corp.redhat.com
+  547  mkdir .mail
+  609  mutt -f imaps://tcamuso@mail.corp.redhat.com
+  734  mailboxes `echo -n "+ "; find ~/Maildir -maxdepth 1 -type d -name ".*" -printf "+'%f' "`
+  739  cat hints/parse-subject-in-maildir.sh 
+  751  cd .mail
+  769  cd .mail
+  784  mv Mail mail
+  813  vim ~/hints/parse-subject-in-maildir.sh
+  864  echo "mutt -f imaps://tcamuso@mail.corp.redhat.com" > hints/mutt/invoke
+  866  mutt -f imaps://tcamuso@mail.corp.redhat.com
+  877  mutt -f imaps://tcamuso@mail.corp.redhat.com
+  882  mutt -f imaps://tcamuso@mail.corp.redhat.com
+  884  ls /var/spool/mail/tcamuso 
+  885  mutt -f imaps://tcamuso@mail.corp.redhat.com
+  887  mutt -f imaps://tcamuso@mail.corp.redhat.com
+  890  mutt -f imaps://tcamuso@mail.corp.redhat.com
+  892  mutt -f imaps://tcamuso@mail.corp.redhat.com
+  894  mutt -f imaps://tcamuso@mail.corp.redhat.com
+  896  mutt -f imaps://tcamuso@mail.corp.redhat.com
+  962  s://tcamuso@mail.corp.redhat.com
+ 1000  mailx
+ 1001  mailx -q patches/rhmaint.patch tcamuso@redhat.com
+ 1002  mailx -q patches/rhmaint.patch 
+ 1003  mailx -q patches/rhmaint.patch camusos@myfairpoint.net
+ 1004  mailx ac
+ 1007  history | grep mail
+ 1008  history | grep mail > hints/mail/mail.txt

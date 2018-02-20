@@ -1,0 +1,5 @@
+[beaker-harness]
+name=beaker-harness
+baseurl=http://beaker-01.app.eng.bos.redhat.com/harness/RedHatEnterpriseLinux6/x86_64
+enabled=1
+gpgcheck=0

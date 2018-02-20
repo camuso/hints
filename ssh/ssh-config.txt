@@ -1,0 +1,4 @@
+# in file ~/.ssh/config
+#
+StrictHostKeyChecking=no
+UserKnownHostsFile=/dev/null

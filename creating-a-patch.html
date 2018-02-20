@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 TRANSITIONAL//EN">
+<HTML>
+<HEAD>
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; CHARSET=UTF-8">
+  <META NAME="GENERATOR" CONTENT="GtkHTML/3.14.2">
+</HEAD>
+<BODY>
+<FONT SIZE="4"># Create an RPM directory off your home directory</FONT><BR>
+<FONT SIZE="4">#</FONT><BR>
+<FONT SIZE="4"> mkdir RPM</FONT><BR>
+<BR>
+<FONT SIZE="4"># using Doug's handy .rpmmacros file in your home</FONT><BR>
+<FONT SIZE="4"># directory...</FONT><BR>
+<FONT SIZE="4">#</FONT><BR>
+<FONT SIZE="4">[camuso@dhcp83-188 ~]$ cat .rpmmacros</FONT><BR>
+<FONT SIZE="4">%_topdir /home/camuso/RPM</FONT><BR>
+<BR>
+<FONT SIZE="4">#&nbsp; download the latest kernel srpm from </FONT><BR>
+<FONT SIZE="4"># <A HREF="ftp://ftp.kernel.org/pub/linux/kernel/v2.6/">ftp://ftp.kernel.org/pub/linux/kernel/v2.6/</A></FONT><BR>
+<FONT SIZE="4">#</FONT><BR>
+<FONT SIZE="4"># Then extract it.</FONT><BR>
+<FONT SIZE="4">#</FONT><BR>
+<FONT SIZE="4">[camuso@dhcp83-188 ~]$ rpm -ivh kernel-2.6.18-34.el5.src.rpm </FONT><BR>
+<BR>
+<FONT SIZE="4"># go into the RPM directory and create a BUILD directory</FONT><BR>
+<FONT SIZE="4"># below it.</FONT><BR>
+<FONT SIZE="4">#</FONT><BR>
+<FONT SIZE="4">cd RPM</FONT><BR>
+<FONT SIZE="4">[RPM] mkdir BUILD</FONT><BR>
+<BR>
+<FONT SIZE="4"># Now descend into the SPECS directory and build the source tree.</FONT><BR>
+<FONT SIZE="4">#</FONT><BR>
+<FONT SIZE="4">[RPM] cd SPECS</FONT><BR>
+<FONT SIZE="4">[SPECS] rpmbuild -bp kernel-2.6.spec</FONT><BR>
+<BR>
+<FONT SIZE="4"># Descend into the directory where you are going to make the patch.</FONT><BR>
+<FONT SIZE="4"># Copy the file you are going to patch into a different file to </FONT><BR>
+<FONT SIZE="4"># save it for generating the patch later.</FONT><BR>
+<FONT SIZE="4">#</FONT><BR>
+<FONT SIZE="4">[SPECS] cd ../BUILD/kernel-2.6.18/linux-2.6.18.i386/arch/i386/pci</FONT><BR>
+<FONT SIZE="4">[pci] cp mmconfig.c mconfig.[SPECS] c.broke</FONT><BR>
+<BR>
+<FONT SIZE="4"># Edit the file and make the changes. </FONT><BR>
+<FONT SIZE="4"># </FONT><BR>
+<FONT SIZE="4">[pci] vim mmconfig.c</FONT><BR>
+<BR>
+<FONT SIZE="4"># Return to the kernel directory and generate the patch, which will</FONT><BR>
+<FONT SIZE="4"># be created in your ~/ home directory. </FONT><BR>
+<FONT SIZE="4">#</FONT><BR>
+<FONT SIZE="4">cd ../../../../</FONT><BR>
+<FONT SIZE="4">[kernel-2.6.18]&nbsp; gendiff linux-2.6.18.i386 .broke&nbsp; &gt; ~/mmconfig.dl585.patch</FONT><BR>
+<BR>
+<FONT SIZE="4"># Blow away the fixed code by re-installing the source tree.</FONT><BR>
+#<BR>
+<FONT SIZE="4">[kernel-2.6.18]&nbsp;</FONT><FONT SIZE="2"> </FONT><FONT SIZE="4">cd ~/RPM/SPECS</FONT><BR>
+<FONT SIZE="4">[SPECS] rpmbuild -bp kernel-2.6.spec </FONT><BR>
+<BR>
+<FONT SIZE="4"># Now descend to the Linux directory, and patch the file. </FONT><BR>
+<FONT SIZE="4">#</FONT><BR>
+<FONT SIZE="4">[SPECS] cd ../BUILD/kernel-2.6.18/linux-2.6.18.i386/</FONT><BR>
+<FONT SIZE="4">[linux-2.6.18.i386] patch -p1 &lt; ~/mmconfig.dl585.patch</FONT><BR>
+<BR>
+<FONT SIZE="4"># Check to see that the patch was implemented correctly.</FONT><BR>
+<FONT SIZE="4">#</FONT><BR>
+<FONT SIZE="4">[linux-2.6.18.i386] less&nbsp; arch/i386/pci/mmconfig.c</FONT><BR>
+<BR>
+<BR>
+<BR>
+</BODY>
+</HTML>

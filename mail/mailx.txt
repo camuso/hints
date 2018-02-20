@@ -1,0 +1,7 @@
+Send a simple mail message ...
+
+echo "test" | mailx -v -s "test-1" "tcamuso@redhat.com"
+       \                    \
+        \                    \
+         +-- Message          +-- Subject
+

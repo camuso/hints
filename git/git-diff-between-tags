@@ -1,0 +1,18 @@
+$ git diff tag1 tag2
+
+or show log between them:
+
+$ git log tag1..tag2
+
+sometimes it may be convenient to see only the list of files that were changed:
+
+$ git diff tag1 tag2 --stat
+
+and then look at the differences for some particular file:
+
+$ git diff tag1 tag2 -- some/file/name
+
+A tag is only a reference to the latest commit 'on that tag', so that you are doing a diff on the commits between them.
+
+    a good reference : http://learn.github.com/p/diff.html
+

@@ -1,0 +1,25 @@
+#!/usr/bin/perl -w
+use 5.010;
+use strict;
+use warnings;
+
+my $n_args = $#ARGV + 1;
+
+if ($n_args != 1) {
+	print "\nnewperlscript <filename>\n";
+	print "\tfilename is the name of the new script\n\n";
+	exit
+}
+
+my $filespec = $ARGV[0] // 'toost';
+
+open (my $fh, '>', $filespec) or die "Could not open file $filespec.";
+
+print $fh "#!/usr/bin/perl -w\n";
+print $fh "use 5.010;\n";
+print $fh "use strict;\n";
+print $fh "use warnings;\n\n";
+
+print $fh "#\n# $filespec\n#\n\n";
+
+system "chmod +x $filespec";

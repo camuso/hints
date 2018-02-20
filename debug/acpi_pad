@@ -1,0 +1,50 @@
+Patch to enable counter in acpi_pad and to remap the acpi_pad device
+to ACPI000D if there is no ACPI000C.
+
+diff --git a/drivers/acpi/acpi_pad.c b/drivers/acpi/acpi_pad.c
+index 27bb6a9..6ce977f 100644
+--- a/drivers/acpi/acpi_pad.c
++++ b/drivers/acpi/acpi_pad.c
+@@ -152,6 +152,7 @@ static int power_saving_thread(void *data)
+ 	int do_sleep;
+ 	unsigned int tsk_index = (unsigned long)data;
+ 	u64 last_jiffies = 0;
++	unsigned long count = 0;
+ 
+ 	sched_setscheduler(current, SCHED_RR, &param);
+ 
+@@ -159,6 +160,8 @@ static int power_saving_thread(void *data)
+ 		int cpu;
+ 		u64 expire_time;
+ 
++		count++;
++
+ 		try_to_freeze();
+ 
+ 		/* round robin to cpus */
+@@ -224,6 +227,7 @@ static int power_saving_thread(void *data)
+ 	}
+ 
+ 	exit_round_robin(tsk_index);
++	printk("xxx  task %d count %ld\n", tsk_index, count);
+ 	return 0;
+ }
+ 
+@@ -495,7 +499,7 @@ static int acpi_pad_remove(struct acpi_device *device)
+ }
+ 
+ static const struct acpi_device_id pad_device_ids[] = {
+-	{"ACPI000C", 0},
++	{"ACPI000D", 0},
+ 	{"", 0},
+ };
+ MODULE_DEVICE_TABLE(acpi, pad_device_ids);
+
+After the kernel is rebuilt, do the following to see the counter results.
+
+
+# cd /sys/devices/LNXSYSTM:00/device:00/ACPI000D:00
+# echo 1 > rrtime
+# echo 11 > idlecpus; sleep 10; echo 0 > idlecpus
+# dmesg | tail -11
+

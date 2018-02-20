@@ -1,0 +1,22 @@
+
+
+
+Am 26.04.2013 16:43, schrieb Regina Anger:
+> I have accidentially deleted all contents oft my Boot partition. the system is still running so is there any cure
+> which allows recreating the content there?
+>
+> i already ran dracut but that only recreated the initramfs file
+
+that's easy
+
+yum reinstall kernel grub2-tools
+dracut -f
+grub2-mkconfig -o /boot/grub2/grub.cfg
+________________________
+
+[root@srv-rhsoft:~]$ rpm -q --file /boot/grub2
+grub2-tools-2.00-15.fc18.x86_64
+
+that's why re-install grub2-tools too is a good idea
+
+

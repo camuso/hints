@@ -1,0 +1,6 @@
+* To see UUID of partition
+
+	# blkid /dev/sda1
+
+	# dumpe2fs /dev/sda1 | grep UUID
+

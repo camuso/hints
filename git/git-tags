@@ -1,0 +1,26 @@
+Looking at historical versions
+
+The git log command lists the changes recorded in your repository, starting with the most recent and working back. The big hexadecimal numbers are unique identifiers (sha1sum) for each commit. If you want to specify a commit, you only need the first few digits, enough to form a unique prefix. (Six digits should be plenty.)
+
+Note that git log will only follow renames if you give the --follow option.
+
+You can limit the log to a specific file or directory, which lists only the commits changing that file/directory. Just add the file(s) you're interested in to the end of the git log command line.
+
+The option "-1" tells git log to display only the specific commit you pointed it at. The "-p" option shows the patch as well as the description. The git show command is an alternative for git log -p -1.
+
+The git tag -l command shows all the tagged releases. These human-readable names can be used as synonyms for the appropriate commit identifier, which is useful when doing things like checkout and diff. The special tag "master" points to the most recent commit.
+
+The git blame $FILE command displays all the changes that resulted in the current state of a file. It shows each line, prefixed with the commit identifier which last changed that line. (If the default version of git blame is difficult to read on an 80 charater terminal, try git blame $FILE | sed 's/([^)]*)//' to see more of the file itself.)
+
+
+Working with historical versions
+
+The git checkout command changes your working copy of the source to a specific version. The -f option to checkout backs out any local changes you've made to the files. The git clean command deletes any extra files in your working directory (ones which aren't checked into the repository). The -d option to clean deletes untracked directories as well as files, the -x option bypasses git ignore rules, and the -f option is required by stupid handholding git configurations like the one that comes with Ubuntu to mean "yes, I really meant to type git clean and hit enter".
+
+So to reset your working copy of the source to a historical version, go git checkout -f $VERSION; git clean -fdx where $VERSION is the tag or sha1sum identifier of the version you want. If you don't specify a $VERSION, git will default to "master" which is the most recent checkout in Linus's tree (what mercurial calls "tip" and Subversion calls HEAD), returning you to the present and removing any uncommitted local changes.
+
+Another way to undo all changes to your copy is to do "rm -rf *" in the linux-git directory (which doesn't delete hidden files like ".git"), followed by "git checkout -f" to grab fresh copies from the repository in the .git subdirectory. This generally isn't necessary. Most of the time, git checkout -f is sufficient to reset your working copy to the most recent version in the repository.
+
+If you lose track of which version is currently checked out as your working copy, use git log to see the most recent commits to the version you're looking at, and git log master to compare against the most recent commits in the repository.
+
+

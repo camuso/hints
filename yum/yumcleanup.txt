@@ -1,0 +1,8 @@
+yum install yum-utils
+yum-complete-transaction
+yum clean metadata
+yum clean all
+package-cleanup --dupes (and check if only the dupes are listed)
+package-cleanup --cleandupes
+yum check
+

@@ -1,0 +1,4 @@
+# remove any trailing slashes in the directory names
+#
+kmoddir=
+kmoddir=${kmoddir%/}

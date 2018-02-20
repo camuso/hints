@@ -1,0 +1,15 @@
+# cat /var/log/yum.log | grep Feb\ 14
+Feb 14 16:09:08 Updated: alsa-firmware-1.0.24.1-1.fc14.noarch
+Feb 14 16:09:09 Updated: alsa-tools-firmware-1.0.24.1-1.fc14.i686
+Feb 14 16:09:19 Updated: 1:java-1.6.0-openjdk-1.6.0.0-52.1.9.6.fc14.i686
+Feb 14 16:09:19 Updated: 1:java-1.6.0-openjdk-plugin-1.6.0.0-52.1.9.6.fc14.i686
+Feb 14 16:09:20 Updated: 2:shadow-utils-4.1.4.2-11.fc14.i686
+
+# yum downgrade java-1.6.0-openjdk java-1.6.0-openjdk-plugin
+
+# getenforce
+Enforcing
+# setenforce 0
+# getenforce
+Permissive
+

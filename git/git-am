@@ -1,0 +1,14 @@
+First, extract the patches from your email using mutt.
+See ~/hints/mutt/folders.txt
+
+git am /home/tcamuso/Maildir/{subfolder}/cur/*.patch
+
+If anything goes wrong ...
+
+git am --abort
+
+... is your freind.
+
+Do not try to apply empty patches, like patch 00 of {n}.
+Patch 00 typically has only commentary.
+

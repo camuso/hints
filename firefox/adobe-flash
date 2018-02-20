@@ -1,0 +1,75 @@
+Subject: Re: install the plugin of the Adobe Flash Player
+From: Heinz Diehl <htd@fritha.org>
+Date: 06/10/2013 02:48 AM
+To: users@lists.fedoraproject.org
+
+On 10.06.2013, Lingxian Guo wrote:
+
+> Just but unfamiliar，I am using Fedora 18 64bit .The plugin of the Adobe
+> Flash Player should be installed to Firefox,I do not know how to do?
+
+1. Download the plugin from Adobe from
+http://get.adobe.com/flashplayer/ and choose the tar.gz. file.
+
+2. Copy libflashplayer.so into ~/.mozilla/plugins
+
+3. Restart Firefox
+
+----------------------------------------------------
+
+Subject: Re: install the plugin of the Adobe Flash Player
+From: Frank Murphy <frankly3d@gmail.com>
+Date: 06/10/2013 02:51 AM
+To: users@lists.fedoraproject.org
+
+On Mon, 10 Jun 2013 12:28:59 +0800
+Lingxian Guo <LingxianGuo@Hotmail.com> wrote:
+
+> Just but unfamiliar，I am using Fedora 18 64bit .The plugin of the
+> Adobe Flash Player should be installed to Firefox,I do not know how
+> to do?
+
+1: https://get.adobe.com/flashplayer/
+2: yum for linux
+3: Download Now and Install it.
+4: in terminal: yum install flash-plugin
+
+Afterwards flash will update like any other update, if available.
+
+------------------------------------------------
+
+Subject: Re: install the plugin of the Adobe Flash Player
+From: Marc Blanc <arsace@orange.fr>
+Date: 06/10/2013 03:04 AM
+To: users@lists.fedoraproject.org
+
+Le Mon, 10 Jun 2013 12:28:59 +0800,
+Lingxian Guo <LingxianGuo@Hotmail.com> a écrit :
+
+> Just but unfamiliar，I am using Fedora 18 64bit .The plugin of the Adobe
+> Flash Player should be installed to Firefox,I do not know how to do?
+
+Install adobe-release-x86_64, after : yum install flash-plugin.
+
+----------------------------------------------------
+
+On Friday 07 June 2013 02:26:32 T.C. Hollingsworth wrote:
+> You have the 32-bit version of the Flash Player installed on a 64-bit
+> system.  64-bit Firefox cannot use 32-bit NPAPI plugins.  This might
+> have happened if you downloaded the "adobe-release" RPM on a 32-bit
+> system or you used an old download from a different system.
+>
+> To fix this, remove the "adobe-release-i386" and "flash-plugin"
+> packages with yum:  `yum remove adobe-release-i386 flash-plugin`.
+> Then visit the Adobe website at http://get.adobe.com/flashplayer on
+> the computer you intend to install it on.  Make sure the Operating
+> System information at the top reads "Linux 64-bit", and then select
+> the YUM rpm option, which will download an "adobe-release-x86_64" RPM
+> as opposed to the "adobe-release-i386" RPM you used previously.
+> Install it, then run `yum install flash-plugin` and everything should
+> work fine.
+>
+> -T.C.
+
+# repoquery --archlist=x86_64 -f *install.rdf | grep -i shumway ; echo $?
+

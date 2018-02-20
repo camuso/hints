@@ -1,0 +1,4 @@
+# Copy this file to ~/.rpmmacros
+#
+%_smp_mflags  -j32
+

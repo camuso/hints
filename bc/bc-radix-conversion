@@ -1,0 +1,15 @@
+# echo "ibase=16; obase=2; A+A" | bc
+10100
+
+# bc
+bc 1.06.95
+Copyright 1991-1994, 1997, 1998, 2000, 2004, 2006 Free Software Foundation, Inc.
+This is free software with ABSOLUTELY NO WARRANTY.
+For details type `warranty'.
+ibase=16;	# sets input radix to 16 (hexadecimal)
+A+B
+21
+obase=10;	# sets output radix to 16, must use 0x10,
+A+B		# : since input radix is now hex
+15
+

@@ -1,0 +1,24 @@
+>I've had this exact same problem, and I uninstalled yum reinstalled it
+>and it work for a day and then back to the same.  I've also had it
+>working temporarily by doing a yum clean-all then yum makecache.  But
+>next day it went back to doing the same old hang up.  I'm not sure if
+>this is a yum problem or a centos problem.
+>  
+>
+
+I was having this exact issue recently. Or at least, Yum was hanging at 
+the same stage as what you describe.
+
+It was recommended to me on this list to do the following:
+
+cd /var/lib/rpm
+rm __db.00*
+rpm --rebuilddb
+
+
+This seems to have cleared up the problem for me. It might work for you.
+
+I'm a newbie though, so maybe I'm missing the mark on what your problem 
+is. I hope it helps, though.
+
+

@@ -1,0 +1,127 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[gui]
+        wmstate = normal
+        geometry = 844x415+678+373 189 188
+[format]
+	# subjectprefix = RHEL6.5 PATCH
+	subjectprefix = RHEL6.6 PATCH
+        numbered = true
+
+[remote "origin"]
+	fetch = +refs/heads/*:refs/remotes/origin/*
+	url = git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[remote "rh7"]
+	url = git://git.app.eng.bos.redhat.com/rhel7.git
+	fetch = +refs/heads/*:refs/remotes/rh7/*
+[branch "rh7"]
+        remote = rh7
+        merge = refs/heads/master
+[remote "rh6"]
+	url = git://git.app.eng.bos.redhat.com/rhel6.git
+	fetch = +refs/heads/*:refs/remotes/rh6/*
+[branch "rh6"]
+	remote = rh6
+	merge = refs/heads/master
+[remote "rh6.4z"]
+	url = git://git.app.eng.bos.redhat.com/rhel-6.4.z.git
+	fetch = +refs/heads/*:refs/remotes/rh6.4z/*
+[branch "rh6.4z"]
+        remote = rh6.4z
+        merge = refs/heads/master
+[remote "linux-next"]
+	url = git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+	fetch = +refs/heads/*:refs/remotes/linux-next/*
+[remote "rh5"]
+	url = git://git.app.eng.bos.redhat.com/rhel5/kernel.git
+	fetch = +refs/heads/*:refs/remotes/rh5/*
+[branch "rh5"]
+	remote = rh5
+	merge = refs/heads/master
+[remote "xhci"]
+	url = git://git.kernel.org/pub/scm/linux/kernel/git/sarah/xhci.git
+	fetch = +refs/heads/*:refs/remotes/xhci/*
+[branch "xhci-next"]
+	remote = xhci
+	merge = refs/heads/for-usb-next
+[remote "davem-net-next"]
+	url = git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
+	fetch = +refs/heads/*:refs/remotes/davem-net-next/*
+[branch "davem-net-next"]
+	remote = davem-net-next
+	merge = refs/heads/master
+[remote "davem-net"]
+	url = git://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git
+	fetch = +refs/heads/*:refs/remotes/davem-net/*
+[branch "davem-net"]
+	remote = davem-net
+	merge = refs/heads/master
+[remote "linux-stable"]
+	url = git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+	fetch = +refs/heads/*:refs/remotes/linux-stable/*
+[branch "linux-stable"]
+	remote = linux-stable
+	merge = refs/heads/master
+[remote "jbenc7"]
+	url = git://git.engineering.redhat.com/users/jbenc/rhel7-net.git
+	fetch = +refs/heads/*:refs/remotes/jbenc7/*
+[remote "linux-ipmi"]
+	url = git://git.code.sf.net/p/openipmi/linux-ipmi
+	fetch = +refs/heads/*:refs/remotes/linux-ipmi/*
+[branch "linux-ipmi"]
+	remote = linux-ipmi
+	merge = refs/heads/master
+[remote "linux-acpi"]
+	url = git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux
+	fetch = +refs/heads/*:refs/remotes/linux-acpi/*
+[remote "scsi"]
+	url = http://git.kernel.org/cgit/linux/kernel/git/jejb/scsi.git
+	fetch = +refs/heads/*:refs/remotes/scsi/*
+[branch "net-next"]
+	remote = davem-net-next
+	merge = refs/heads/master
+[branch "scsi-misc"]
+	remote = scsi
+	merge = refs/heads/misc
+[branch "ipmi-master"]
+	remote = linux-ipmi
+	merge = refs/heads/master
+[branch "jbenc7-q"]
+	remote = jbenc7
+	merge = refs/heads/queue
+[branch "lenb-linux-next"]
+	remote = linux-acpi
+	merge = refs/heads/next
+[remote "dledford"]
+	url = git://git.engineering.redhat.com/users/dledford/linus.git
+	fetch = +refs/heads/*:refs/remotes/dledford/*
+[remote "pmoore"]
+	url = git://git.infradead.org/users/pcmoore/selinux
+	fetch = +refs/heads/*:refs/remotes/selinux/*
+[branch "selinux"]
+	remote = pmoore
+	merge = refs/heads/master
+[remote "driver-core"]
+	url = git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
+	fetch = +refs/heads/*:refs/remotes/driver-core/*
+[remote "linux-block"]
+	url = git://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
+	fetch = +refs/heads/*:refs/remotes/linux-block/*
+[remote "dhowells-rh7"]
+	url = git://git.engineering.redhat.com/users/dhowells/rhel7-kernel.git
+	fetch = +refs/heads/*:refs/remotes/dhowells-rh7/*
+[branch "dhowells-keys"]
+	remote = dhowells-rh7
+	merge = refs/heads/keys
+[branch "scsi-master"]
+	remote = scsi
+	merge = refs/heads/master
+[branch "scsi-next"]
+	remote = scsi
+	merge = refs/heads/for-next

@@ -1,0 +1,20 @@
+Get the latest acpi-ca.
+http://www.acpica.org/downloads
+
+Get the latest ACPI utilities
+http://www.lesswatts.org/projects/acpi/utilities.php
+
+Get the iasl assembler from intel.
+http://www.acpi.info/toolkit.htm
+
+.. or better yet ...
+# yum install iasl
+ ... or download it from the source, for RHEL6, that's
+http://ftp.redhat.com/pub/redhat/rhel/beta/6/optional/x86_64/os/Packages/iasl-20090123-3.1.el6.x86_64.rpm
+.. and yum localinstall
+
+Then, to dump the DMAR table, for example...
+# accpidump --table DMAR -b > dmar.out
+# iasl -d dmar.out
+# cat dmar.dsl
+

@@ -1,0 +1,4 @@
+yum install rpmdevtools yum-utils
+yumdownloader -e core-source -e updates-source --source kernel
+rpm -ivh kernel-$(uname -r).src.rpm
+

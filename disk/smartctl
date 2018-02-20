@@ -1,0 +1,12 @@
+Report hard disk health
+-----------------------
+smartctl -a -H /dev/sda
+
+Determine hard disk size
+---------------------------
+
+smartctl --info --health --attributes /dev/sda
+
+hdparm -I /dev/sda
+
+cfdisk /dev/sda

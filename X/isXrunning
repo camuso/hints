@@ -1,0 +1,5 @@
+# nmap localhost | grep -i x
+
+# use runlevel to determine if X is running. runlevel 5 is X.
+
+runlevel

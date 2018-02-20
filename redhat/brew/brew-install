@@ -1,0 +1,44 @@
+# RHEL5
+#
+	wget http://download.devel.redhat.com/rel-eng/brew/rhel/5/brew.repo
+	cp brew.repo /etc/yum.repos.d
+	yum install brewkoji patchutils rpm-build
+
+# RHEL6
+#
+        wget http://download.devel.redhat.com/rel-eng/brew/rhel/6Workstation/brew.repo
+        cp brew.repo /etc/yum.repos.d
+	yum install brewkoji patchutils rpm-build
+
+# Fedora 18
+#
+	wget http://download.devel.redhat.com/rel-eng/brew/fedora/18/brew.repo
+	cp brew.repo /etc/yum.repos.d
+	yum install brewkoji patchutils rpm-build
+
+
+New method
+---------
+
+Install koji
+
+For RHEL6, go to http://download.devel.redhat.com/rel-eng/brew/rhel/6Workstation/
+
+yum install http://download.devel.redhat.com/rel-eng/brew/rhel/6Workstation/koji-1.8.0-7.el6.noarch.rpm
+
+ To configure Koji to talk to Brew, add the following section to your ~/.koji/config:
+
+[brew]
+server = http://brewhub.devel.redhat.com/brewhub
+authtype = kerberos
+topdir = /mnt/redhat/brewroot
+weburl = http://brewweb.devel.redhat.com/brew
+topurl = http://download.devel.redhat.com/brewroot
+#topurl = http://download.lab.bos.redhat.com/brewroot
+#
+#(If you are local to BOS, you should use the alternate topurl)
+#
+#Then add the symlink:
+#
+## ln -s /usr/bin/koji ~/bin/brew
+#

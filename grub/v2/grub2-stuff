@@ -1,0 +1,104 @@
+Now list all possible menu entries
+
+# grep ^menuentry /boot/grub2/grub.cfg | cut -d "'" -f2
+
+Now set the desired default menu entry
+
+# grub2-set-default "menu entry title"
+
+Verify the default menu entry
+
+# grub2-editenv list
+
+-------------------------------------------------------
+
+5.3 Multi-boot manual config
+
+Currently autogenerating config files for multi-boot environments
+depends on os-prober and has several shortcomings. While fixing it
+is scheduled for the next release, meanwhile you can make use of
+the power of GRUB syntax and do it yourself. A possible configuration
+is detailed here, feel free to adjust to your needs.
+
+First create a separate GRUB partition, big enough to hold GRUB. Some
+of the following entries show how to load OS installer images from this
+same partition, for that you obviously need to make the partition large
+enough to hold those images as well. Mount this partition on/mnt/boot
+and disable GRUB in all OSes and manually install self-compiled latest
+GRUB with:
+
+grub-install --boot-directory=/mnt/boot /dev/sda
+
+In all the OSes install GRUB tools but disable installing GRUB in
+bootsector, so you'll have menu.lst and grub.cfg available for use.
+Also disable os-prober use by setting:
+
+GRUB_DISABLE_OS_PROBER=true
+
+in /etc/default/grub
+
+Then write a grub.cfg (/mnt/boot/grub/grub.cfg):
+
+     
+     menuentry "OS using grub2" {
+        insmod xfs
+        search --set=root --label OS1 --hint hd0,msdos8
+        configfile /boot/grub/grub.cfg
+     }
+     
+     menuentry "OS using grub2-legacy" {
+        insmod ext2
+        search --set=root --label OS2 --hint hd0,msdos6
+        legacy_configfile /boot/grub/menu.lst
+     }
+     
+     menuentry "Windows XP" {
+        insmod ntfs
+        search --set=root --label WINDOWS_XP --hint hd0,msdos1
+        ntldr /ntldr
+     }
+     
+     menuentry "Windows 7" {
+        insmod ntfs
+        search --set=root --label WINDOWS_7 --hint hd0,msdos2
+        ntldr /bootmgr
+     }
+     
+     menuentry "FreeBSD" {
+               insmod zfs
+               search --set=root --label freepool --hint hd0,msdos7
+               kfreebsd /freebsd@/boot/kernel/kernel
+               kfreebsd_module_elf /freebsd@/boot/kernel/opensolaris.ko
+               kfreebsd_module_elf /freebsd@/boot/kernel/zfs.ko
+               kfreebsd_module /freebsd@/boot/zfs/zpool.cache type=/boot/zfs/zpool.cache
+               set kFreeBSD.vfs.root.mountfrom=zfs:freepool/freebsd
+               set kFreeBSD.hw.psm.synaptics_support=1
+     }
+     
+     menuentry "experimental GRUB" {
+               search --set=root --label GRUB --hint hd0,msdos5
+               multiboot /experimental/grub/i386-pc/core.img
+     }
+     
+     menuentry "Fedora 16 installer" {
+               search --set=root --label GRUB --hint hd0,msdos5
+               linux /fedora/vmlinuz lang=en_US keymap=sg resolution=1280x800
+               initrd /fedora/initrd.img
+     }
+     
+     menuentry "Fedora rawhide installer" {
+               search --set=root --label GRUB --hint hd0,msdos5
+               linux /fedora/vmlinuz repo=ftp://mirror.switch.ch/mirror/fedora/linux/development/rawhide/x86_64 lang=en_US keymap=sg resolution=1280x800
+               initrd /fedora/initrd.img
+     }
+     
+     menuentry "Debian sid installer" {
+               search --set=root --label GRUB --hint hd0,msdos5
+               linux /debian/dists/sid/main/installer-amd64/current/images/hd-media/vmlinuz
+               initrd /debian/dists/sid/main/installer-amd64/current/images/hd-media/initrd.gz
+     }
+     
+
+Notes:
+
+    Argument to search after –label is FS LABEL. You can also use UUIDs with –fs-uuid UUID instead of –label LABEL. You could also use direct root=hd0,msdosX but this is not recommened due to device name instability.

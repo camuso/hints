@@ -1,0 +1,364 @@
+// In order to satisfy searches that only contain some of the words in
+// the decl field of the kabi table in the database file,
+// (kabitree.sql), create a virtual table of the decl field.
+// Partial searches can then be conducted from the virtual table as
+// follows.
+//	select decl from declaration where decl match "device"
+
+No need to create a virtual table.
+
+Partial searches can be conducted thusly.
+
+select * from kabitree where decl like "%struct device %";
+
+Think of the % as *.
+
+Leaving a space makes for a whole word match, no space is match any.
+
+Joins
+-------
+
+Consider this schema
+
+sqlite> create view ipmi_smi as select * from kabitree where decl like '%ipmi_smi%';
+
+qlite> .schema
+CREATE TABLE kabitree (id integer64, parentid integer64, level integer, flags
+		integer, prefix text, decl text, parentdecl text);
+CREATE VIEW ipmi_smi as select * from kabitree where decl like '%ipmi_smi%';
+
+qlite> select distinct kabitree.decl,kabitree.parentdecl,kabitree.level from kabitree join ipmi_smi on ipmi_smi.parentid=kabitree.id;
+ drivers/char/ipmi/ipmi_msghandler.i |   | 0
+ function int ipmi_smi_watcher_register |  drivers/char/ipmi/ipmi_msghandler.i | 1
+ function int ipmi_smi_watcher_unregister |  drivers/char/ipmi/ipmi_msghandler.i | 1
+ struct ipmi_user *user |  function int ipmi_create_user | 2
+ struct ipmi_smi *intf |  struct ipmi_user *user | 3
+ function int ipmi_get_smi_info |  drivers/char/ipmi/ipmi_msghandler.i | 1
+ struct ipmi_smi_info *data |  function int ipmi_get_smi_info | 2
+ function int ipmi_smi_add_proc_entry |  drivers/char/ipmi/ipmi_msghandler.i | 1
+ function int ipmi_register_smi |  drivers/char/ipmi/ipmi_msghandler.i | 1
+ function int ipmi_unregister_smi |  drivers/char/ipmi/ipmi_msghandler.i | 1
+ function void ipmi_smi_msg_received |  drivers/char/ipmi/ipmi_msghandler.i | 1
+ function void ipmi_smi_watchdog_pretimeout |  drivers/char/ipmi/ipmi_msghandler.i | 1
+ function struct ipmi_smi_msg *ipmi_alloc_smi_msg |  drivers/char/ipmi/ipmi_msghandler.i | 1
+
+sqlite> select distinct kabitree.decl,kabitree.parentdecl,kabitree.level from kabitree join ipmi_smi on ipmi_smi.parentid=kabitree.id where ipmi_smi.level=4;
+ struct ipmi_smi *intf |  struct ipmi_user *user | 3
+
+sqlite> select distinct kabitree.decl,kabitree.parentdecl,kabitree.level from kabitree join ipmi_smi on ipmi_smi.parentid=kabitree.id where ipmi_smi.level=3;
+ struct ipmi_user *user |  function int ipmi_create_user | 2
+ struct ipmi_smi_info *data |  function int ipmi_get_smi_info | 2
+
+select distinct kabitree.decl,kabitree.parentdecl,kabitree.level from kabitree join ipmi_smi on ipmi_smi.parentid=kabitree.id where ipmi_smi.id=41288381032896658;
+ struct ipmi_smi *intf |  struct ipmi_user *user | 3
+
+sqlite> select distinct kabitree.decl,kabitree.parentdecl,kabitree.level from kabitree join ipmi_smi on ipmi_smi.parentid=kabitree.id where ipmi_smi.id=41288381032896658;
+ struct ipmi_smi *intf |  struct ipmi_user *user | 3
+
+sqlite> select distinct kabitree.level,kabitree.decl,kabitree.parentdecl from kabitree join ipmi_smi on ipmi_smi.parentid=kabitree.id group by kabitree.level;
+0 |  drivers/char/ipmi/ipmi_msghandler.i |  
+1 |  function struct ipmi_smi_msg *ipmi_alloc_smi_msg |  drivers/char/ipmi/ipmi_msghandler.i
+2 |  struct ipmi_smi_info *data |  function int ipmi_get_smi_info
+3 |  struct ipmi_smi *intf |  struct ipmi_user *user
+
+sqlite> select distinct kabitree.level,kabitree.decl from kabitree join ipmi_smi on ipmi_smi.parentid=kabitree.id group by kabitree.level;
+0 |  drivers/char/ipmi/ipmi_msghandler.i
+1 |  function struct ipmi_smi_msg *ipmi_alloc_smi_msg
+2 |  struct ipmi_smi_info *data
+3 |  struct ipmi_smi *intf
+sqlite> 
+
+produces the same results without "distinct" filter
+
+sqlite> select kabitree.level,kabitree.decl from kabitree join ipmi_smi on ipmi_smi.parentid=kabitree.id group by kabitree.level;
+0 |  drivers/char/ipmi/ipmi_msghandler.i
+1 |  function struct ipmi_smi_msg *ipmi_alloc_smi_msg
+2 |  struct ipmi_smi_info *data
+3 |  struct ipmi_smi *intf
+
+sqlite> .headers on
+sqlite> .mode column
+sqlite> .nullvalue [NULL]
+sqlite> 
+sqlite> select level,id,parentid,decl from ipmi_smi_handlers;
+level       id                 parentid           decl                               
+----------  -----------------  -----------------  -----------------------------------
+4           41288381032896658  41258007024179346   struct ipmi_smi_handlers *handlers
+2           41516942012520594  41516529695660178   struct ipmi_smi_handlers *handlers
+
+When using logical operators, you must use CAPITAL letters, i.e. AND, NOT. OR.
+
+sqlite> select * from kabitree where left >= 6113113947060813345 AND left < 6113113947060882641;
+le  id                    parentid              left                  right                 flags     prefix    decl                                      parentdecl                              
+--  --------------------  --------------------  --------------------  --------------------  --------  --------  ----------------------------------------  ----------------------------------------
+0   6113113947060813345   0                     6113113947060813345   6113113947060882641   400       FILE      drivers/ras/ras.i                                                                 
+1   6113113947060848147   6113113947060813345   6113113947060848147   6113113947060874936   14        EXPORTED  struct tracepoint __tracepoint_extlog_me  drivers/ras/ras.i                       
+2   6113113947060872543   6113113947060848147   6113113947060872543   6113113947060873781   20        RETURN                                              struct tracepoint __tracepoint_extlog_me
+1   6113113947060876708   6113113947060813345   6113113947060876708   6113113947060880328   14        EXPORTED  struct tracepoint __tracepoint_mc_event   drivers/ras/ras.i                       
+2   6113113947060877973   6113113947060876708   6113113947060877973   6113113947060879201   20        RETURN                                              struct tracepoint __tracepoint_mc_event 
+
+What happens when you do not use capitals? Observe.
+
+sqlite> select * from kabitree where left >= 6113113947060813345 and right < 6113113947060882641;
+le  id                    parentid              left                  right                 flags     prefix    decl                                      parentdecl                              
+--  --------------------  --------------------  --------------------  --------------------  --------  --------  ----------------------------------------  ----------------------------------------
+1   6113113947060848147   6113113947060813345   6113113947060848147   6113113947060874936   14        EXPORTED  struct tracepoint __tracepoint_extlog_me  drivers/ras/ras.i                       
+2   6113113947060872543   6113113947060848147   6113113947060872543   6113113947060873781   20        RETURN                                              struct tracepoint __tracepoint_extlog_me
+1   6113113947060876708   6113113947060813345   6113113947060876708   6113113947060880328   14        EXPORTED  struct tracepoint __tracepoint_mc_event   drivers/ras/ras.i                       
+2   6113113947060877973   6113113947060876708   6113113947060877973   6113113947060879201   20        RETURN                                              struct tracepoint __tracepoint_mc_event 
+
+
+Show a source file and all the exports and their structured arguments
+---------------------------------------------------------------------
+sqlite> select * from kabitree where kabitree.level=0 and kabitree.decl like
+   ...> '%ipmi%' union select * from kabitree where level=1 and decl like '%ipmi%'
+   ...> union select * from kabitree where level=2 and decl like '%ipmi%' order by id;
+
+---  --------------------  --------------------  --------  ---------  ----------------------------------------  ----------------------------------------
+0    156327808746120067    0                     400       FILE       drivers/char/ipmi/ipmi_msghandler.i                                               
+1    156328221062980483    156327808746120067    0000001d  EXPORTED   function struct ipmi_shadow_smi_handlers  drivers/char/ipmi/ipmi_msghandler.i     
+2    156328633379840899    156328221062980483    25        RETURN     struct ipmi_shadow_smi_handlers *         function struct ipmi_shadow_smi_handlers
+1    156329045696701315    156327808746120067    18        EXPORTED   function int ipmi_smi_watcher_register    drivers/char/ipmi/ipmi_msghandler.i     
+2    156329458013561731    156329045696701315    45        ARG        struct ipmi_smi_watcher *watcher          function int ipmi_smi_watcher_register  
+1    156879076388496259    156327808746120067    18        EXPORTED   function int ipmi_smi_watcher_unregister  drivers/char/ipmi/ipmi_msghandler.i     
+2    156879488705356675    156879076388496259    45        ARG        struct ipmi_smi_watcher *watcher          function int ipmi_smi_watcher_unregister
+1    156880038461170563    156327808746120067    18        EXPORTED   function int ipmi_validate_addr           drivers/char/ipmi/ipmi_msghandler.i     
+2    156880450778030979    156880038461170563    45        ARG        struct ipmi_addr *addr                    function int ipmi_validate_addr         
+1    156883199557100419    156327808746120067    18        EXPORTED   function unsigned int ipmi_addr_length    drivers/char/ipmi/ipmi_msghandler.i     
+1    156884161629774723    156327808746120067    18        EXPORTED   function int ipmi_create_user             drivers/char/ipmi/ipmi_msghandler.i     
+2    156885123702449027    156884161629774723    45        ARG        struct ipmi_user_hndl *handler            function int ipmi_create_user           
+2    156887322725704579    156884161629774723    45        ARG        struct ipmi_user *user                    function int ipmi_create_user           
+1    157094443228586883    156327808746120067    18        EXPORTED   function int ipmi_get_smi_info            drivers/char/ipmi/ipmi_msghandler.i     
+2    157095405301261187    157094443228586883    45        ARG        struct ipmi_smi_info *data                function int ipmi_get_smi_info          
+1    157098428958237571    156327808746120067    18        EXPORTED   function int ipmi_destroy_user            drivers/char/ipmi/ipmi_msghandler.i     
+2    157098841275097987    157098428958237571    45        ARG        struct ipmi_user *user                    function int ipmi_destroy_user          
+1    157099391030911875    156327808746120067    18        EXPORTED   function void ipmi_get_version            drivers/char/ipmi/ipmi_msghandler.i     
+2    157099803347772291    157099391030911875    45        ARG        struct ipmi_user *user                    function void ipmi_get_version          
+1    157101452615213955    156327808746120067    18        EXPORTED   function int ipmi_set_my_address          drivers/char/ipmi/ipmi_msghandler.i     
+2    157101864932074371    157101452615213955    45        ARG        struct ipmi_user *user                    function int ipmi_set_my_address        
+1    157103514199516035    156327808746120067    18        EXPORTED   function int ipmi_get_my_address          drivers/char/ipmi/ipmi_msghandler.i     
+2    157103926516376451    157103514199516035    45        ARG        struct ipmi_user *user                    function int ipmi_get_my_address        
+1    157105575783818115    156327808746120067    18        EXPORTED   function int ipmi_set_my_LUN              drivers/char/ipmi/ipmi_msghandler.i     
+2    157105988100678531    157105575783818115    45        ARG        struct ipmi_user *user                    function int ipmi_set_my_LUN            
+1    157107637368120195    156327808746120067    18        EXPORTED   function int ipmi_get_my_LUN              drivers/char/ipmi/ipmi_msghandler.i     
+2    157108049684980611    157107637368120195    45        ARG        struct ipmi_user *user                    function int ipmi_get_my_LUN            
+1    157109698952422275    156327808746120067    18        EXPORTED   function int ipmi_get_maintenance_mode    drivers/char/ipmi/ipmi_msghandler.i     
+2    157110111269282691    157109698952422275    45        ARG        struct ipmi_user *user                    function int ipmi_get_maintenance_mode  
+1    157110661025096579    156327808746120067    18        EXPORTED   function int ipmi_set_maintenance_mode    drivers/char/ipmi/ipmi_msghandler.i     
+2    157111073341956995    157110661025096579    45        ARG        struct ipmi_user *user                    function int ipmi_set_maintenance_mode  
+1    157112172853584771    156327808746120067    18        EXPORTED   function int ipmi_set_gets_events         drivers/char/ipmi/ipmi_msghandler.i     
+2    157112585170445187    157112172853584771    45        ARG        struct ipmi_user *user                    function int ipmi_set_gets_events       
+1    157113684682072963    156327808746120067    18        EXPORTED   function int ipmi_register_for_cmd        drivers/char/ipmi/ipmi_msghandler.i     
+2    157114096998933379    157113684682072963    45        ARG        struct ipmi_user *user                    function int ipmi_register_for_cmd      
+1    157116296022188931    156327808746120067    18        EXPORTED   function int ipmi_unregister_for_cmd      drivers/char/ipmi/ipmi_msghandler.i     
+2    157116708339049347    157116296022188931    45        ARG        struct ipmi_user *user                    function int ipmi_unregister_for_cmd    
+1    157118907362304899    156327808746120067    18        EXPORTED   function int ipmi_request_settime         drivers/char/ipmi/ipmi_msghandler.i     
+2    157119319679165315    157118907362304899    45        ARG        struct ipmi_user *user                    function int ipmi_request_settime       
+2    157119869434979203    157118907362304899    45        ARG        struct ipmi_addr *addr                    function int ipmi_request_settime       
+2    157122205897188227    157118907362304899    45        ARG        struct kernel_ipmi_msg *msg               function int ipmi_request_settime       
+1    157127153699513219    156327808746120067    18        EXPORTED   function int ipmi_request_supply_msgs     drivers/char/ipmi/ipmi_msghandler.i     
+2    157127566016373635    157127153699513219    45        ARG        struct ipmi_user *user                    function int ipmi_request_supply_msgs   
+2    157128115772187523    157127153699513219    45        ARG        struct ipmi_addr *addr                    function int ipmi_request_supply_msgs   
+2    157130452234396547    157127153699513219    45        ARG        struct kernel_ipmi_msg *msg               function int ipmi_request_supply_msgs   
+2    157133750769279875    157127153699513219    45        ARG        struct ipmi_recv_msg *supplied_recv       function int ipmi_request_supply_msgs   
+1    157134850280907651    156327808746120067    18        EXPORTED   function int ipmi_smi_add_proc_entry      drivers/char/ipmi/ipmi_msghandler.i     
+2    157135262597768067    157134850280907651    45        ARG        struct ipmi_smi *smi                      function int ipmi_smi_add_proc_entry    
+1    157149006493115267    156327808746120067    18        EXPORTED   function void ipmi_poll_interface         drivers/char/ipmi/ipmi_msghandler.i     
+2    157149418809975683    157149006493115267    45        ARG        struct ipmi_user *user                    function void ipmi_poll_interface       
+1    157149968565789571    156327808746120067    18        EXPORTED   function int ipmi_register_smi            drivers/char/ipmi/ipmi_msghandler.i     
+2    157150380882649987    157149968565789571    45        ARG        struct ipmi_smi_handlers *handlers        function int ipmi_register_smi          
+2    157155603562881923    157149968565789571    45        ARG        struct ipmi_device_id *device_id          function int ipmi_register_smi          
+1    157164124777997187    156327808746120067    18        EXPORTED   function int ipmi_unregister_smi          drivers/char/ipmi/ipmi_msghandler.i     
+2    157164537094857603    157164124777997187    45        ARG        struct ipmi_smi *intf                     function int ipmi_unregister_smi        
+1    157165499167531907    156327808746120067    18        EXPORTED   function void ipmi_smi_msg_received       drivers/char/ipmi/ipmi_msghandler.i     
+2    157165911484392323    157165499167531907    45        ARG        struct ipmi_smi *intf                     function void ipmi_smi_msg_received     
+2    157166873557066627    157165499167531907    45        ARG        struct ipmi_smi_msg *msg                  function void ipmi_smi_msg_received     
+1    157171821359391619    156327808746120067    18        EXPORTED   function void ipmi_smi_watchdog_pretimeo  drivers/char/ipmi/ipmi_msghandler.i     
+2    157172233676252035    157171821359391619    45        ARG        struct ipmi_smi *intf                     function void ipmi_smi_watchdog_pretimeo
+1    157173195748926339    156327808746120067    0000001d  EXPORTED   function struct ipmi_smi_msg *ipmi_alloc  drivers/char/ipmi/ipmi_msghandler.i     
+2    157173608065786755    157173195748926339    25        RETURN     struct ipmi_smi_msg *                     function struct ipmi_smi_msg *ipmi_alloc
+1    157174020382647171    156327808746120067    18        EXPORTED   function void ipmi_free_recv_msg          drivers/char/ipmi/ipmi_msghandler.i     
+2    157174432699507587    157174020382647171    45        ARG        struct ipmi_recv_msg *msg                 function void ipmi_free_recv_msg        
+sqlite> 
+
+CREATE VIEW dd as select * from kabitree where decl like '%struct device %';
+CREATE VIEW ee as select * from kabitree union select * from dd where left <= dd.left and right >= dd.right;
+CREATE VIEW ff as select * from kabitree union all select * from dd where left <= dd.left and right >= dd.right;
+CREATE VIEW gg as select * from kabitree union all select * from dd where level <= dd.level;
+sqlite> select * from kabitree intersect select * from (select * from ee except select * from kabitree where kabitree.level > level) limit 20 offset 40;
+
+
+sqlite> select * from kabitree where decl like '%struct device %' union select * from kabitree where level <= 2 limit 40 offset 40;
+1170|0|6114544785339625228|6114544785342629072|400|FILE|drivers/nfc/pn544/pn544.i|
+1171|1|6114544785339629425|6114544785342621506|18|EXPORTED|function int pn544_hci_probe|drivers/nfc/pn544/pn544.i
+1172|2|6114544785339631815|6114544785339633315|41|ARG|void *phy_id|function int pn544_hci_probe
+1173|2|6114544785339634457|6114544785339648960|45|ARG|struct nfc_phy_ops *phy_ops|function int pn544_hci_probe
+1177|2|6114544785339650090|6114544785339651456|41|ARG|char *llc_name|function int pn544_hci_probe
+1178|2|6114544785339652576|6114544785339653888|40|ARG|int phy_headroom|function int pn544_hci_probe
+1179|2|6114544785339655007|6114544785339656277|40|ARG|int phy_tailroom|function int pn544_hci_probe
+1180|2|6114544785339657401|6114544785339660524|40|ARG|int phy_payload|function int pn544_hci_probe
+1181|2|6114544785339661650|6114544785342620307|45|ARG|struct nfc_hci_dev *hdev|function int pn544_hci_probe
+1200|4|6114544785339740782|6114544785341612786|84|NESTED|struct device dev|struct nfc_dev *ndev
+1201|5|6114544785339742697|6114544785339745166|85|NESTED|struct device *parent|struct device dev
+1296|6|6114544785340151471|6114544785340153303|85|NESTED|struct device *dev_root|struct bus_type *bus
+1746|1|6114544785342623927|6114544785342627918|18|EXPORTED|function void pn544_hci_remove|drivers/nfc/pn544/pn544.i
+1747|2|6114544785342625270|6114544785342626791|45|ARG|struct nfc_hci_dev *hdev|function void pn544_hci_remove
+1748|0|6114544785390834017|6114544785399959091|400|FILE|drivers/rpmsg/virtio_rpmsg_bus.i|
+1749|1|6114544785390841355|6114544785399811066|0000001d|EXPORTED|function struct rpmsg_endpoint *rpmsg_create_ept|drivers/rpmsg/virtio_rpmsg_bus.i
+1750|2|6114544785390843323|6114544785390844697|25|RETURN|struct rpmsg_endpoint *|function struct rpmsg_endpoint *rpmsg_create_ept
+1751|2|6114544785390846080|6114544785399783081|45|ARG|struct rpmsg_channel *rpdev|function struct rpmsg_endpoint *rpmsg_create_ept
+1755|5|6114544785390873090|6114544785398650060|84|NESTED|struct device dev|struct virtio_device *vdev
+1756|6|6114544785390875028|6114544785390876704|85|NESTED|struct device *parent|struct device dev
+2571|7|6114544785395993099|6114544785395994838|85|NESTED|struct device *dev_root|struct bus_type *bus
+2920|3|6114544785399720255|6114544785399722823|84|NESTED|struct device dev|struct rpmsg_channel *rpdev
+2927|2|6114544785399784177|6114544785399794634|49|ARG|function void *cb|function struct rpmsg_endpoint *rpmsg_create_ept
+2928|2|6114544785399795685|6114544785399802068|41|ARG|void *priv|function struct rpmsg_endpoint *rpmsg_create_ept
+2929|2|6114544785399803129|6114544785399809980|40|ARG|unsigned int addr|function struct rpmsg_endpoint *rpmsg_create_ept
+
+=============================================================================================
+
+THIS ONE!!!!
+Verbose where dups are ok.
+
+sqlite> CREATE VIEW aa as select * from kabitree where decl like '%struct device %';
+sqlite> select kabitree.* from kabitree,aa where kabitree.left <= aa.left and kabitree.right >= aa.right limit 20 offset 0;
+
+8|0|6114544781888433725|6114544781892398755|400|FILE|drivers/nfc/mei_phy.i|
+22|1|6114544781888479038|6114544781892397220|18|EXPORTED|function void nfc_mei_phy_free|drivers/nfc/mei_phy.i
+23|2|6114544781888480387|6114544781892395507|45|ARG|struct nfc_mei_phy *phy|function void nfc_mei_phy_free
+25|3|6114544781888489795|6114544781892380955|85|NESTED|struct nfc_hci_dev *hdev|struct nfc_mei_phy *phy
+26|4|6114544781888492402|6114544781890808521|85|NESTED|struct nfc_dev *ndev|struct nfc_hci_dev *hdev
+44|5|6114544781888549185|6114544781890534377|84|NESTED|struct device dev|struct nfc_dev *ndev
+8|0|6114544781888433725|6114544781892398755|400|FILE|drivers/nfc/mei_phy.i|
+22|1|6114544781888479038|6114544781892397220|18|EXPORTED|function void nfc_mei_phy_free|drivers/nfc/mei_phy.i
+23|2|6114544781888480387|6114544781892395507|45|ARG|struct nfc_mei_phy *phy|function void nfc_mei_phy_free
+25|3|6114544781888489795|6114544781892380955|85|NESTED|struct nfc_hci_dev *hdev|struct nfc_mei_phy *phy
+26|4|6114544781888492402|6114544781890808521|85|NESTED|struct nfc_dev *ndev|struct nfc_hci_dev *hdev
+44|5|6114544781888549185|6114544781890534377|84|NESTED|struct device dev|struct nfc_dev *ndev
+45|6|6114544781888551416|6114544781888554080|85|NESTED|struct device *parent|struct device dev
+8|0|6114544781888433725|6114544781892398755|400|FILE|drivers/nfc/mei_phy.i|
+22|1|6114544781888479038|6114544781892397220|18|EXPORTED|function void nfc_mei_phy_free|drivers/nfc/mei_phy.i
+23|2|6114544781888480387|6114544781892395507|45|ARG|struct nfc_mei_phy *phy|function void nfc_mei_phy_free
+25|3|6114544781888489795|6114544781892380955|85|NESTED|struct nfc_hci_dev *hdev|struct nfc_mei_phy *phy
+26|4|6114544781888492402|6114544781890808521|85|NESTED|struct nfc_dev *ndev|struct nfc_hci_dev *hdev
+44|5|6114544781888549185|6114544781890534377|84|NESTED|struct device dev|struct nfc_dev *ndev
+137|6|6114544781888973690|6114544781889118416|85|NESTED|struct bus_type *bus|struct device dev
+
+And THIS ONE ...
+Non-verbose where dups are ok.
+
+CREATE VIEW aa as select * from kabitree where decl like '%struct device %';
+sqlite> select kabitree.* from kabitree,aa where kabitree.level == 1 and kabitree.left <= aa.left and kabitree.right >= aa.right limit 20 offset 0;
+
+22|1|6114544781888479038|6114544781892397220|18|EXPORTED|function void nfc_mei_phy_free|drivers/nfc/mei_phy.i
+22|1|6114544781888479038|6114544781892397220|18|EXPORTED|function void nfc_mei_phy_free|drivers/nfc/mei_phy.i
+22|1|6114544781888479038|6114544781892397220|18|EXPORTED|function void nfc_mei_phy_free|drivers/nfc/mei_phy.i
+593|1|6114544781937363910|6114544781940639391|18|EXPORTED|function int microread_probe|drivers/nfc/microread/microread.i
+593|1|6114544781937363910|6114544781940639391|18|EXPORTED|function int microread_probe|drivers/nfc/microread/microread.i
+593|1|6114544781937363910|6114544781940639391|18|EXPORTED|function int microread_probe|drivers/nfc/microread/microread.i
+1171|1|6114544785339629425|6114544785342621506|18|EXPORTED|function int pn544_hci_probe|drivers/nfc/pn544/pn544.i
+1171|1|6114544785339629425|6114544785342621506|18|EXPORTED|function int pn544_hci_probe|drivers/nfc/pn544/pn544.i
+1171|1|6114544785339629425|6114544785342621506|18|EXPORTED|function int pn544_hci_probe|drivers/nfc/pn544/pn544.i
+1749|1|6114544785390841355|6114544785399811066|0000001d|EXPORTED|function struct rpmsg_endpoint *rpmsg_create_ept|drivers/rpmsg/virtio_rpmsg_bus.i
+1749|1|6114544785390841355|6114544785399811066|0000001d|EXPORTED|function struct rpmsg_endpoint *rpmsg_create_ept|drivers/rpmsg/virtio_rpmsg_bus.i
+1749|1|6114544785390841355|6114544785399811066|0000001d|EXPORTED|function struct rpmsg_endpoint *rpmsg_create_ept|drivers/rpmsg/virtio_rpmsg_bus.i
+1749|1|6114544785390841355|6114544785399811066|0000001d|EXPORTED|function struct rpmsg_endpoint *rpmsg_create_ept|drivers/rpmsg/virtio_rpmsg_bus.i
+2949|1|6114544785449802636|6114544785464815087|18|EXPORTED|function int vga_get|drivers/gpu/vga/vgaarb.i
+2949|1|6114544785449802636|6114544785464815087|18|EXPORTED|function int vga_get|drivers/gpu/vga/vgaarb.i
+2949|1|6114544785449802636|6114544785464815087|18|EXPORTED|function int vga_get|drivers/gpu/vga/vgaarb.i
+2949|1|6114544785449802636|6114544785464815087|18|EXPORTED|function int vga_get|drivers/gpu/vga/vgaarb.i
+2949|1|6114544785449802636|6114544785464815087|18|EXPORTED|function int vga_get|drivers/gpu/vga/vgaarb.i
+4805|1|6114544785521552780|6114544785538317339|18|EXPORTED|function int vga_switcheroo_register_client|drivers/gpu/vga/vga_switcheroo.i
+4805|1|6114544785521552780|6114544785538317339|18|EXPORTED|function int vga_switcheroo_register_client|drivers/gpu/vga/vga_switcheroo.i
+sqlite>
+
+
+And this one for
+Verbose --no-dups
+a
+sqlite> select * from kabitree where decl like '%struct device %' union select kabitree.* from kabitree,aa where kabitree.level=1 and kabitree.left <= aa.left and kabitree.right >= aa.right limit 20;
+
+Or, since we already have aa as a view ..
+
+CREATE VIEW aa as select * from kabitree where decl like '%struct device %';
+sqlite> select * from aa union select kabitree.* from kabitree,aa where kabitree.level=1 and kabitree.left <= aa.left and kabitree.right >= aa.right limit 20;
+
+22|1|6114544781888479038|6114544781892397220|18|EXPORTED|function void nfc_mei_phy_free|drivers/nfc/mei_phy.i
+44|5|6114544781888549185|6114544781890534377|84|NESTED|struct device dev|struct nfc_dev *ndev
+45|6|6114544781888551416|6114544781888554080|85|NESTED|struct device *parent|struct device dev
+140|7|6114544781888985161|6114544781888987124|85|NESTED|struct device *dev_root|struct bus_type *bus
+593|1|6114544781937363910|6114544781940639391|18|EXPORTED|function int microread_probe|drivers/nfc/microread/microread.i
+622|4|6114544781937451219|6114544781939513212|84|NESTED|struct device dev|struct nfc_dev *ndev
+623|5|6114544781937453579|6114544781937455791|85|NESTED|struct device *parent|struct device dev
+718|6|6114544781937989323|6114544781937991380|85|NESTED|struct device *dev_root|struct bus_type *bus
+1171|1|6114544785339629425|6114544785342621506|18|EXPORTED|function int pn544_hci_probe|drivers/nfc/pn544/pn544.i
+1200|4|6114544785339740782|6114544785341612786|84|NESTED|struct device dev|struct nfc_dev *ndev
+1201|5|6114544785339742697|6114544785339745166|85|NESTED|struct device *parent|struct device dev
+1296|6|6114544785340151471|6114544785340153303|85|NESTED|struct device *dev_root|struct bus_type *bus
+1749|1|6114544785390841355|6114544785399811066|0000001d|EXPORTED|function struct rpmsg_endpoint *rpmsg_create_ept|drivers/rpmsg/virtio_rpmsg_bus.i
+1755|5|6114544785390873090|6114544785398650060|84|NESTED|struct device dev|struct virtio_device *vdev
+1756|6|6114544785390875028|6114544785390876704|85|NESTED|struct device *parent|struct device dev
+2571|7|6114544785395993099|6114544785395994838|85|NESTED|struct device *dev_root|struct bus_type *bus
+2920|3|6114544785399720255|6114544785399722823|84|NESTED|struct device dev|struct rpmsg_channel *rpdev
+2949|1|6114544785449802636|6114544785464815087|18|EXPORTED|function int vga_get|drivers/gpu/vga/vgaarb.i
+2988|4|6114544785449916999|6114544785463131295|85|NESTED|struct device *bridge|struct pci_bus *bus
+2989|5|6114544785449919482|6114544785449921194|85|NESTED|struct device *parent|struct device *bridge
+
+
+
+And this one for ..
+Non-verbose --no-dups
+
+CREATE VIEW aa as select * from kabitree where decl like '%struct device %';
+sqlite> select * from kabitree where level== 1 union select * from aa where left <= aa.left and right >= aa.right limit 10;
+
+2|1|6114544781761649280|6114544781761651047|18|EXPORTED|function int ras_userspace_consumers|drivers/ras/debugfs.i
+4|1|6114544781811542896|6114544781811551924|14|EXPORTED|struct tracepoint __tracepoint_extlog_mem_event|drivers/ras/ras.i
+6|1|6114544781811554881|6114544781811562645|14|EXPORTED|struct tracepoint __tracepoint_mc_event|drivers/ras/ras.i
+9|1|6114544781888438409|6114544781888443673|18|EXPORTED|function int nfc_mei_phy_enable|drivers/nfc/mei_phy.i
+11|1|6114544781888445530|6114544781888449479|18|EXPORTED|function void nfc_mei_phy_disable|drivers/nfc/mei_phy.i
+13|1|6114544781888450910|6114544781888460019|18|EXPORTED|function void nfc_mei_event_cb|drivers/nfc/mei_phy.i
+17|1|6114544781888461679|6114544781888469313|14|EXPORTED|struct nfc_phy_ops mei_phy_ops|drivers/nfc/mei_phy.i
+19|1|6114544781888470831|6114544781888477417|0000001d|EXPORTED|function struct nfc_mei_phy *nfc_mei_phy_alloc|drivers/nfc/mei_phy.i
+22|1|6114544781888479038|6114544781892397220|18|EXPORTED|function void nfc_mei_phy_free|drivers/nfc/mei_phy.i
+44|5|6114544781888549185|6114544781890534377|84|NESTED|struct device dev|struct nfc_dev *ndev
+
+
+====================================================================================================================
+
+
+Very slow, but does the job...
+sqlite> select distinct kabitree.* from kabitree,aa where kabitree.left <= aa.left and kabitree.right >= aa.right limit 20 offset 0;
+8|0|6114544781888433725|6114544781892398755|400|FILE|drivers/nfc/mei_phy.i|
+22|1|6114544781888479038|6114544781892397220|18|EXPORTED|function void nfc_mei_phy_free|drivers/nfc/mei_phy.i
+23|2|6114544781888480387|6114544781892395507|45|ARG|struct nfc_mei_phy *phy|function void nfc_mei_phy_free
+25|3|6114544781888489795|6114544781892380955|85|NESTED|struct nfc_hci_dev *hdev|struct nfc_mei_phy *phy
+26|4|6114544781888492402|6114544781890808521|85|NESTED|struct nfc_dev *ndev|struct nfc_hci_dev *hdev
+44|5|6114544781888549185|6114544781890534377|84|NESTED|struct device dev|struct nfc_dev *ndev
+45|6|6114544781888551416|6114544781888554080|85|NESTED|struct device *parent|struct device dev
+137|6|6114544781888973690|6114544781889118416|85|NESTED|struct bus_type *bus|struct device dev
+140|7|6114544781888985161|6114544781888987124|85|NESTED|struct device *dev_root|struct bus_type *bus
+
+sqlite> select * from kabitree where level ==1 intersect select * from aa where left <= aa.left AND right >= aa.right order by rowid limit 20;
+239439|1|6114544871328238069|6114544871328271676|19|EXPORTED|function struct device *tty_port_register_device|drivers/tty/tty_port.i
+239444|1|6114544871328273409|6114544871328435251|19|EXPORTED|function struct device *tty_port_register_device_attr|drivers/tty/tty_port.i
+253088|1|6114544875483117814|6114544875483148415|0000001d|EXPORTED|function struct device *tty_register_device|drivers/tty/tty_io.i
+253093|1|6114544875483151381|6114544875483195667|0000001d|EXPORTED|function struct device *tty_register_device_attr|drivers/tty/tty_io.i
+364284|1|6114544906275067534|6114544906275136737|0000001d|EXPORTED|function struct device *iscsi_find_flashnode_sess|drivers/scsi/scsi_transport_iscsi.i
+364289|1|6114544906275141788|6114544906275175602|0000001d|EXPORTED|function struct device *iscsi_find_flashnode_conn|drivers/scsi/scsi_transport_iscsi.i
+877295|1|6114545146670486178|6114545146672540951|0000001d|EXPORTED|function struct device *hwmon_device_register|drivers/hwmon/hwmon.i
+976918|1|6114545189630331799|6114545189630350677|0000001d|EXPORTED|function struct device *driver_find_device|drivers/base/driver.i
+977383|1|6114545189685900080|6114545189685920448|0000001d|EXPORTED|function struct device *bus_find_device|drivers/base/bus.i
+977389|1|6114545189685922205|6114545189685936152|0000001d|EXPORTED|function struct device *bus_find_device_by_name|drivers/base/bus.i
+977394|1|6114545189685938086|6114545189685951743|0000001d|EXPORTED|function struct device *subsys_find_device_by_id|drivers/base/bus.i
+977436|1|6114545189686095851|6114545189686106580|0000001d|EXPORTED|function struct device *subsys_dev_iter_next|drivers/base/bus.i
+977892|1|6114545189723191171|6114545189723209829|0000001d|EXPORTED|function struct device *class_dev_iter_next|drivers/base/class.i
+977902|1|6114545189723250522|6114545189723271921|0000001d|EXPORTED|function struct device *class_find_device|drivers/base/class.i
+979103|1|6114545189882762327|6114545189882768946|0000001d|EXPORTED|function struct device *get_cpu_device|drivers/base/cpu.i
+979122|1|6114545189971038487|6114545189971042250|14|EXPORTED|struct device platform_bus|drivers/base/platform.i
+991493|1|6114545193977403549|6114545193977416655|0000001d|EXPORTED|function struct device *attribute_container_find_class_device|drivers/base/attribute_container.i
+994916|1|6114545194149697015|6114545194149736692|0000001d|EXPORTED|function struct device *device_find_child|drivers/base/core.i
+994931|1|6114545194149772803|6114545194149779332|0000001d|EXPORTED|function struct device *get_device|drivers/base/core.i
+994942|1|6114545194149857917|6114545194149883577|0000001d|EXPORTED|function struct device *__root_device_register|drivers/base/core.i
+sqlite> 
+

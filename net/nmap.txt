@@ -1,0 +1,5 @@
+nmap -sP 10.16.42.0/24 | grep -iB2 hp
+
+# To see what's running on the network:
+nmap -A -T4 192.168.5.1-255
+

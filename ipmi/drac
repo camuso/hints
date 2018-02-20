@@ -1,0 +1,21 @@
+DELL Drac IPMI
+
+The Drac is just like iLO.
+
+You can capture windows.
+
+The attach is via system -drac-xx.lab.redhat.com
+
+root (hobs)
+
+/usr/bin/ipmitool -I lanplus -H dell-pe1950-05-ipmi.lab.bos.redhat.com -U root -P calvin sol activate
+  886   /usr/bin/ipmitool -I lanplus -H dell-pe1950-05-ipmi.lab.bos.redhat.com -U root -P calvin sol deactivate
+  887   /usr/bin/ipmitool -I lanplus -H dell-pe1950-05-ipmi.lab.bos.redhat.com -U root -P calvin sol activate
+  891   /usr/bin/ipmitool -I lanplus -H dell-p50-05-ipmi.lab.bos.redhat.com -U root -P calvin chassis status
+  893   /usr/bin/ipmitool -I lanplus -H dell-pe1950-05-ipmi.lab.bos.redhat.com -U root -P calvin chassis status
+  894   /usr/bin/ipmitool -I lanplus -H dell-pe1950-05-ipmi.lab.bos.redhat.com -U root -P calvin help set
+  895   /usr/bin/ipmitool -I lanplus -H dell-pe1950-05-ipmi.lab.bos.redhat.com -U root -P calvin chassis set
+  896   /usr/bin/ipmitool -I lanplus -H dell-pe1950-05-ipmi.lab.bos.redhat.com -U root -P calvin chassis
+  897   /usr/bin/ipmitool -I lanplus -H dell-pe1950-05-ipmi.lab.bos.redhat.com -U root -P calvin chassis power on
+  899   /usr/bin/ipmitool -I lanplus -H dell-pe1950-05-ipmi.lab.bos.redhat.com -U root -P calvin chassis power on
+

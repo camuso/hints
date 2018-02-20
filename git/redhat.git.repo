@@ -1,0 +1,19 @@
+
+Rsync an entire git directory over:
+
+  Server side:
+    Much faster: ssh sh-el6.eng.rdu2.redhat.com
+
+     $ git init --bare --shared=all RHEL7
+
+    --Change perms to 755 so people can see it.
+
+  Workstation:
+     $ rsync -av RHEL7/ shell.devel.redhat.com:~/public_git/RHEL7/
+
+  Internal notes:   https://mojo.redhat.com/docs/DOC-982603
+
+    Gitweb description
+             vim .git/description
+
+

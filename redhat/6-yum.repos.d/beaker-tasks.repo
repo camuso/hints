@@ -1,0 +1,5 @@
+[beaker-tasks]
+name=beaker-tasks
+baseurl=http://beaker-01.app.eng.bos.redhat.com/repos/17386
+enabled=0
+gpgcheck=0

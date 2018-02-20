@@ -1,0 +1,23 @@
+>    1. Boot the system from an installation boot medium. (live CD/DVD/USB)
+>    2. Type linux rescue at the installation boot prompt to
+>       enter the rescue environment.
+>    3. mkdir /mnt/sysimage
+>    4. mount /dev/sda10 /mnt/sysimage
+>    5. mount /dev/sda9 /mnt/sysimage/boot
+>    6. mount --bind /dev /mnt/sysimage/dev
+>    7. mount --bind /proc /mnt/sysimage/proc
+>    8. mount --bind /sys /mnt/sysimage/sys
+>    9. chroot /mnt/sysimage              # root partition.
+>   10. grub2-install /dev/sda9           # boot partition.
+>   11. grub2-mkconfig -o /boot/grub2/grub.cfg
+>   12. Review the /etc/grub.d/10_linux
+>   13. Reboot the system.
+Addendum:
+1. Step 10: Add --force argument
+2. Step 11: Will update grub.cfg, so save the original for comparison,
+if desired.
+
+Since I used rsync to restore from backups, touch .autorelabel in /
+and then reboot. Ignore the complaints due to SELinux permissions
+SELinux will reset the permissions and will reboot.
+

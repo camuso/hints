@@ -1,0 +1,11 @@
+grep -i ipmi .config
+find /lib/modules/ -type f -name "*ipmi*"
+modprobe -v ipmi_devintf
+modprobe -v ipmi_poweroff
+modprobe -v ipmi_watchdog
+ipmitool mc getenables
+ipmitool mc
+ipmitool mc guid
+ipmitool mc info
+ipmitool mc watchdog get
+

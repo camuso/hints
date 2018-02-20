@@ -1,0 +1,1 @@
+git apply -v --check ../gpio-1.patch >../patch.log 2>&1

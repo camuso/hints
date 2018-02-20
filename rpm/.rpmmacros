@@ -1,0 +1,4 @@
+%_smp_mflags  -j32
+%_topdir /usr/src/redhat
+%_default_patch_fuzz 2
+

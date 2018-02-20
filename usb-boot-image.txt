@@ -1,0 +1,41 @@
+This has proven useful to me when attempting to update ProLiant BIOS in
+the following circumstances.
+
+* There is no Linux shell script available for your distribution and you
+  ust use the DOS-based ROMPAQ
+
+* You, or the customer you are trying to help, cannot be on-site to connect
+  a USB thumb drive with the ROMPAQ update on it.
+
+The method is somewhat obvious, but here it is, just in case it could save
+anybody pain or time.
+
+* Download the ROMPAQ from the HP Drivers & Support web page for your
+  specific ProLiant.
+
+* Follow the instructions on the web page to create the ROMPAQ bootable
+  USB on a windows machine, using the HPQUSB.exe utility and the lowest
+  capacity USB key available to you.
+
+* Connect the USB drive to a Linux host, but do not mount. If it
+  automatically mounts, dismount it.
+
+* Use parted, or gparted if you prefer gui, to resize the USB partition
+  containing the ROMPAQ to about 10% more than the smallest size. You
+  should be able to get it down to 64 MB, anyway. The reason for this is
+  to make uploading faster.
+
+* Use dd to create the bootable USB image file. The following example
+  command will create a 66MB bootable USB image file, where "/dev/sdc"
+  is the USB drive and "SP53709.fls" is the name of the output file
+
+	# dd if=/dev/sdc of=SP53709.fls bs=1M count=66
+
+* Upload the bootable USB image file to a system local to the target
+  system, which is also running the iLO interface to the target system.
+
+* From the iLO's Virtual Media interface, load the USB image file as a
+  USB key and boot.
+
+* ROM update should occur automatically, or you could type "ROMPAQ" at
+  the DOS prompt.

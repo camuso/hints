@@ -1,0 +1,130 @@
+Customizing initrd
+==================
+
+The initrd to be customized must be copied from the distrubution being
+customized.
+
+1. Provision a system, virtual or real, with the distro of RHEL6 to
+   be customized.
+
+   Login as root.
+
+   Create some working directories.
+
+   # mkdir -p /work/iso		# the dvd iso image gets downloaded here
+   # mkdir -p /mnt/iso		# this is for the ro mounted dvd iso image
+   # mkdir -p /work/distro	# this is for the rw distro tree
+
+2. Download the distro's dvd iso image from a source into a work directory.
+
+   # cd /work/iso
+
+   # wget \
+     http://download.lab.bos.redhat.com/released/RHEL-6/6.4/Workstation/x86_64/iso/RHEL6.4-20130130.0-Workstation-x86_64-DVD1.iso
+
+
+3. Mount the iso image and copy its contents into a working tree.
+
+   # mount -t iso9660 \
+   /work/distro/RHEL6.4-20130130.0-Workstation-x86_64-DVD1.iso /mnt/iso
+
+   # rsync -va /mnt/iso/ /work/distro/
+
+   NOTE: The trailing "/" are important in the above rsync command.
+
+4. Create directories for the initrd work.
+
+   # mkdir -p /work/initrd
+   # mkdir -p /work/modules
+
+5. Unpack the initrd.img file.
+
+   If you are adding a new module to a RHEL5 initrd, rather than
+   replacing an existing module with an updated one, skip to step 7.
+
+   If you are adding or replacing existing modules in RHEL6, continue
+   with this step.
+
+   If you are simply replacing existing modules in RHEL5, continue with
+   this step.
+
+   Unzip and copy the contents of init rd to the local directory.
+   RHEL5 and RHEL6 are compressed differently, so each has its own
+   way of doing this.
+
+   5.1 RHEL5
+       # cd /work/initrd
+       # zcat /work/distro/isolinux/initrd.img | cpio -ivmd
+
+   5.2 RHEL6
+       # cd /work/distro/isolinux
+       # mv initrd.img initrd.img.xz
+       # xz --format=lzma initrd.img.xz --decompress
+       # cd /work/initrd
+       # cpio -ivdum < /work/distro/isolinux/initrd.img
+
+6. Unzip the modules file.
+
+   6.1 In RHEL5, you must decompress the modules into a separate directory.
+       # cd /work/modules
+       # zcat ../initrd/modules/modules.cgz | cpio -ivmd
+
+   6.2 In RHEL6, each individual module is compressed in its place in
+       the initrd directory tree. For example ...
+
+       # ls modules/2.6.32-358.el6.x86_64/kernel/drivers/net/e1000
+
+       e1000.ko.gz
+
+       To determine the compression method, use the file command.
+
+       # file  modules/2.6.32-358.el6.x86_64/kernel/drivers/net/e1000/e1000.ko.gz
+
+       modules/2.6.32-358.el6.x86_64/kernel/drivers/net/e1000/e1000.ko.gz: gzip
+       compressed data, was "e1000.ko", from Unix, last modified: Tue Jan 29 12:
+       08:39 2013, max compression
+
+   6.3 Copy updated modules to the appropriate directory. In RHEL5,
+       that would be /work/modules/2.6.18-265.el5/x86_64. In RHEL6,
+       it will be wherever the module goes in the kernel/drivers tree.
+
+7. RHEL5 only - Adding new kernel modules.
+
+   If you are not adding new modules to RHEL5, then skip this step.
+
+   To add a new kernel module, you must provide a new init script
+   to call it out. Unfortunately, the init scripts in RHEL are compiled
+   and are not easily decompiled.
+
+   The first step to doing this is creating your own initrd with
+   the kernel you will be using for your custom initrd. You should
+   create this initrd with the system booted on the kernel you will
+   be installing.
+
+   # mkdir /work/temp
+   # cd /work/temp
+   # mkinitrd -v --nocompress -f ./initrd.img $(uname -r)
+   # cd /work/initrd
+   # cpio -ivdum < /work/temp/initrd.img
+
+   Now you may edit the init script at the top of the initrd tree
+   to call out your new module. Simply copy the way the other
+   kernel modules are scripted.
+
+8. Now recompress the initrd tree into an initrd.img file.
+
+   8.1 RHEL5
+
+       # cd /work/modules
+       # find . | cpio -H newc --quiet -o | gzip -v \
+         > /work/initrd/modules/modules.cgz
+       # cd /work/initrd
+       # find  . | cpio -H newc --quiet -o | gzip -v \
+         > /work/distro/isolinux/initrd.img
+
+   8.2 RHEL6
+
+       # cd /work/initrd
+       # find . -print |cpio -o -H newc | xz --format=lzma \
+         > /work/distro/isolinux/initrd.img
+

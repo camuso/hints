@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# This command finds library routines and any symbolic links to them and
+# pipes them to zip for packaging.
+
+find /usr/lib -print | grep libQtGui | zip --symlinks bits-lin -@
+
+# The end result of the above command is that all the libQtGui files and
+# their symbolic links are zipped in the file bits-lin.zip. When this file
+# is unzipped, all the files and their symbolic links will be restored in
+# their original directories.

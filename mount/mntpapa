@@ -1,0 +1,1 @@
+mount -t cifs //192.168.1.77/downloads -o credentials=/root/.config/creds /mnt/papa

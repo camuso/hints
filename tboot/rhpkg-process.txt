@@ -1,0 +1,156 @@
+Patching, Rebasing, and Updating a User Space Package
+=====================================================
+
+Acquire the rhpkg repo:
+
+    RHEL:
+      $ sudo curl -o /etc/yum.repos.d/rhpkg.repo \
+	      http://download.eng.bos.redhat.com/rel-eng/dist-git/rhel/rhpkg.repo
+
+   Fedora:
+      $ sudo curl -o /etc/yum.repos.d/rhpkg.repo \
+	      http://download.devel.redhat.com/rel-eng/dist-git/fedora/rhpkg.repo
+
+Then install the required packages.
+
+   $ sudo yum install -y rhpkg trousers-devel
+
+
+
+1. rhpkg clone <package> <branch> [dest-dir]
+
+   package: 	Package name, e.g. kmod, tboot, etc
+   branch:	e.g. rhel-6.9, rhel-7.4
+   dest-dir:	optional destination directory. I usually use the same
+		string as for the branch, i.e. rhel-6.9, rhel-7.4, etc
+
+   Examples:
+	rhpkg clone -b rhel-6.9 module-init-tools ./rhel-6.9
+	rhpkg clone -b rhel-7.4 tboot /work/rhel-7.4
+
+   If you want to clone all the branches to subdirectories bearing the
+   names of the branches, use this command.
+
+   	rhpkg clone -B <package-name>
+
+2. If you're simply rebasing, download latest tar from the maintainers.
+
+   tboot:
+	http://sourceforge.net/projects/tboot/files
+	Using curl to get the bounce page ...
+
+	curl -L \
+	https://sourceforge.net/projects/tboot/files/latest/download?source=files \
+	-o tboot-1.9.6.tar.gz
+
+   module-init-tools:
+   	https://www.kernel.org/pub/linux/utils/kernel/module-init-tools/
+
+   kmod:
+	tar file: ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/
+	git repo: http://git.kernel.org/cgit/utils/kernel/kmod/kmod.git
+
+   After the tar is downloaded, move it into the directory created by
+   step 1 above.
+
+   $ mv ~/Downloads/tboot-1.9.4.tar.gz /work/tboot/rhel-7.3
+
+
+   If you're updating, then apply the patches to the sources after
+   un-packing the tar or gzip file for the version that you will be
+   updating.
+
+   This is the tar file that gets loaded into the package's top directory
+   when you issued the 'rhpkg clone' command.
+
+3. Edit the spec file to update the version number (rebase) or release
+   number (patches).
+
+   You must also update the changelog at the bottom of the spec file,
+   and insert the following line for each bugzilla being addressed by
+   the rebase or update.
+
+   Resolves: rhbz#<bug-number>
+
+4. Attempt a local build of the new package.
+
+	rhpkg local
+
+5. Resolve any errors from the attempted local build. For example, add
+   new files or delete files that no longer exist from spec file.  If
+   there were any errors, Go back to step 4.
+
+6. Upload the new tar file that you downloaded from the sourceforge
+   website. This will update the sources and .gitignore files.
+
+   $ rhpkg upload tboot-1.8.2.tar.gz
+
+7. Edit the sources file to remove the reference to the old tar file(s).
+
+8. git add and commit the changes.
+
+   $ git add tboot.spec
+   $ git commit
+
+   Be sure to include the following line in the commit message for each
+   bugzilla that the rebase or update fixes. Colon and space after
+   "Resolves: " is critical, as is the string "rhbz#" with no space
+   before the actual bugzilla number.
+
+   Resolves: rhbz#<bug-number>
+
+9. Run rhpkg local once more to be sure all is well, then set the
+   bugzilla to MODIFY. Also, be sure that the pm_ack and rhel-* flags
+   are set to '+'.
+
+   $ rhpkg push
+
+10. After the push, do a brew build.
+
+    First do a scratch build to make sure it all goes well.
+
+  	rhpkg scratch-build
+
+    Next, do a real build.
+
+    	rhpkg build
+
+    This build will be tagged with RHEL-*-candidate. Use the url that
+    appears on the screen after you submit the rhpkg build command to
+    access the brew build page and monitor its progess.
+
+11. Create an Errata at errata.devel.redhat.com
+
+    When you add your build to the errata, remember to include the el number.
+    For example:
+
+    kmod-20-7.el7, module-init-tools-3.9-26.el6, tboot-1.9.4-3.el7, etc.
+              ^^^                           ^^^               ^^^
+Here are a few scripts I've found useful in (re)naming patches according to
+the nvr (name-version-release) of the package. You can tailor them for your
+specific cases. You can avoid this nuisance if you change the spec file
+so that the names of the patches are absolute, and do not have
+%{release} or %{dist} in their names.
+
+for f in $(ls -1 *.patch); do \
+	    t1=$(echo $f | cut -d'-' -f-3); \
+	    t2=$(echo $f | cut -d'-' -f4-); \
+	    mv $f $t1".el7"-$t2; \
+	    done
+
+for f in $(ls -1 *.patch); do \
+	    fname=$(printf "tboot-1.8.3-2-%s" $f); \
+	    mv $f $fname; \
+	    done
+
+for f in $(ls -1 *.patch); do \
+	    t1=$(echo $f | cut -d'-' -f-3); \
+	    t2=$(echo $f | cut -d'-' -f4-); \
+	    mv $f $t1".el7"-$t2; \
+	    done
+
+for f in $(ls -1 *.patch); do \
+	    fname=$(printf "tboot-1.8.3-2-%s" $f); \
+	    mv $f $fname; \
+	    done
+

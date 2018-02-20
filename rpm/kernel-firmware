@@ -1,0 +1,1 @@
+rpmbuild -bb --target=noarch kernel.spec

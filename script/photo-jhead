@@ -1,0 +1,1 @@
+find ~/.imagesort/ -type f -iname *.jpg -exec jhead -ft -nf/home/tcamuso/Photos/%Y/%m/%d/LMC-%Y-%m-%d-%H:%M:%S '{}' \;

@@ -1,0 +1,5 @@
+firewall-cmd --get-services
+firewall-cmd --permanent --add-port=5900-6100/tcp
+firewall-cmd --add-service vnc-server
+firewall-cmd --reload
+firewall-cmd --list-services

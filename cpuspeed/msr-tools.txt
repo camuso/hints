@@ -1,0 +1,46 @@
+Description of problem:
+
+The frequency of CPU can not be changed on RHEL6.3
+
+Processor:i5-2400
+
+1."cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_min_freq"
+output:
+-------------------
+1600000
+1600000
+1600000
+1600000
+-------------------
+
+2."for i in {0..3}; do echo userspace >/sys/devices/system/cpu/cpu$i/cpufreq/scaling_governor ; cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_min_freq >/sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed; done"
+"cat /sys/devices/system/cpu/cpu*/cpufreq/cpuinfo_cur_freq"
+output:
+-------------
+2600000
+2600000
+2600000
+2600000
+-------------
+
+But the frequency can be changed on RHEL6.2, since cpuscaling test of v7
+can passed on RHEL6.2, And vendor have tested cpuscaling on windows too,
+it works fine, so I think is should be a bug of RHEL6.3
+
+-----------------------------------------------------------------------
+From https://bugzilla.redhat.com/show_bug.cgi?id=847934
+
+The failure is correct, not spurious. The following patch in RHEL 6:
+
+6e9b1347e3e91d7449c9017441568897c7c45374 - [drm] i915: load a ring frequency scaling table
+
+results in the CPU never dropping below around 2.4GHz. To verify, install
+msr-tools (from Fedora 12) and do:
+
+service cpuspeed stop
+for x in `seq 0 3`; do wrmsr -p $x 0x199 0x1000; done
+rdmsr --bitfield 15:0 0x198
+
+rdmsr should return 0x1000. If it returns a larger number then the CPU has
+not dropped to the requested P state. I get 0x1a00. Reassigning to Adam so
+he can take a look.

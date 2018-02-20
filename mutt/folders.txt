@@ -1,0 +1,29 @@
+Save a thread to a directory as separate files.
+
+Position on the first thread and type esc-t. This should tag the
+whole thread, and you will see a * beside each post in the thread.
+
+Type ;-esc-C (uppercase C) to save the thread to a folder.
+When you are prompted for the folder, DO NOT USE THE "=" provided
+by default. Instead, type the folder path directly. E.g ...
+
+You will be presented with this prompt ...
+Decode-copy tagged to mailbox ('?' for list): =rhkernel-list
+
+Backspace all the way to the colon ...
+Decode-copy tagged to mailbox:
+
+And enter a directory or sub-directory that has not been created by you.
+Mutt wants to create its own directory.
+Decode-copy tagged to mailbox ('?' for list):/home/tcamuso/Maildir/871559
+
+You will find your files saved in ...
+
+/home/tcamuso/Maildir/<folder-name>/cur
+
+... if they have already been read, or ...
+
+/home/tcamuso/Maildir/<folder-name>/new
+
+... if they have not yet been read.
+

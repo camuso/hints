@@ -1,0 +1,66 @@
+
+On the target (server) system, you can clear the password with the following
+command.
+
+# ipmitool shell
+ipmitool> lan set 1 password
+Password cleared for user 1
+
+         -- or --
+
+# ipmitool lan set 1 password
+
+Clear user passwords by just hitting return when prompted for a password.
+
+# ipmitool user set password 1
+Password for user 1:
+Password for user 1:
+
+# ipmitool user set password 2
+Password for user 2:
+Password for user 2:
+
+To get the names of the users, on the server type .. ...
+
+# ipmitool user list
+ID  Name	     Callin  Link Auth	IPMI Msg   Channel Priv Limit
+1                    true    false      true       NO ACCESS
+2   super            true    false      true       ADMINISTRATOR
+
+
+On the client system, issue the following command to access the ipmi
+running there.
+
+ipmitool -I lanplus -U super -H 10.19.46.183 -P "" chassis power status
+
+Run an sol loop test from the client.
+	looptest [<loop times> [<loop interval(in ms)> [<instance>]]]
+
+$ ipmitool -I lanplus -U super -H 10.19.46.183 -P '' sol looptest 5 500
+remain loop test counter: 5
+[SOL Session operational.  Use ~? for help]
+remain loop test counter: 4
+[SOL Session operational.  Use ~? for help]
+remain loop test counter: 3
+[SOL Session operational.  Use ~? for help]
+remain loop test counter: 2
+[SOL Session operational.  Use ~? for help]
+remain loop test counter: 1
+[SOL Session operational.  Use ~? for help]
+
+
+Connect to the server SOL from the client.
+ipmitool -I lanplus -U super -H 10.19.46.183 -P '' sol activate
+
+ 1034  ipmitool -I lanplus -H 10.16.44.8 -U admin -P admin sol activate
+ 1035  ipmitool -I lanplus -H 10.16.44.8 -U admin -P admin sol activate
+ 1036  ipmitool -I lanplus -H 10.16.44.8 -U admin -P admin fru print
+ 1036  ipmitool -I lanplus -H 10.16.44.8 -U admin -P admin bmc info (list?)
+ 1037  ipmitool -I lanplus -H 10.16.44.8 -U admin -P admin power reset
+ 1038  ipmitool -I lanplus -H 10.16.44.8 -U admin -P admin sol activate
+ 1039  ipmitool -I lanplus -H 10.16.44.8 -U admin -P admin power off
+ 1040  ipmitool -I lanplus -H 10.16.44.8 -U admin -P admin power status
+ 1041  ipmitool -I lanplus -H 10.16.44.8 -U admin -P admin power status
+ 1042  ipmitool -I lanplus -H 10.16.44.8 -U admin -P admin power on
+ 1043  ipmitool -I lanplus -H 10.16.44.8 -U admin -P admin sol activate
+

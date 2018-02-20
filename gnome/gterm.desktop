@@ -1,0 +1,12 @@
+# cat .local/share/applications/gterm.desktop 
+# see https://bbs.archlinux.org/viewtopic.php?pid=930816#p930816
+# for more details
+#
+[Desktop Entry]
+Name=gterm-110x52
+GenericName=Gnome Terminal
+Exec=/usr/bin/gnome-terminal --geometry 110x52
+Icon=/usr/share/help/el/gnome-terminal/figures/gnome-terminal-icon.png
+Type=Application
+Categories=Favorites;Utilities;
+

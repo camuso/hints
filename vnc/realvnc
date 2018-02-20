@@ -1,0 +1,6 @@
+To start realvnc in service mode (connect as any user)
+sudo vncserver-x11-serviced
+
+To connect, no need for a port (display) number
+vncviewer  10.19.40.113 &
+

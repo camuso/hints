@@ -1,0 +1,54 @@
+
+VNC FontPath problem
+====================
+
+If you see the following error in your ~/.vnc/*.log file ...
+ "Could not open default font 'fixed'. "
+... then you need to find the X11 fonts for your system. On
+RHEL6.1, I found them here.
+
+# alf /usr/share/X11/fonts/
+total 56K
+drwxr-xr-x. 7 root root 4.0K Aug 23 11:47 ./
+drwxr-xr-x. 6 root root 4.0K Aug 23 11:41 ../
+drwxr-xr-x. 2 root root  20K Aug 23 11:47 100dpi/
+drwxr-xr-x. 3 root root 4.0K Aug 23 11:46 encodings/
+drwxr-xr-x. 2 root root  16K Aug 23 11:46 misc/
+drwxr-xr-x. 2 root root 4.0K Aug 23 11:46 Type1/
+drwxr-xr-x. 2 root root 4.0K Aug 23 11:23 util/
+
+After finding where these font files are, you must edit the vncserver
+script in /usr/bin/vncserver.
+
+# vim /usr/bin/vncserver
+
+$cmd .= " -fp /usr/share/X11/fonts/misc/,/usr/share/X11/fonts/100dpi/,/usr/share/X11/fonts/encodings/,/usr/share/X11/fonts/Type1/,/usr/share/X11/fonts/util/";
+
+
+
+SELinux
+=======
+
+You can set SELinux to permissive ...
+# setenforce 0
+
+Or you can edit this file to establish a policy for the user.
+
+# vim /etc/dbus-1/system.d/nm-applet.conf
+
+i.e, right after the "root" entry, put this one.
+
+        <policy user="camuso">
+                <allow own="org.freedesktop.NetworkManagerUserSettings"/>
+
+                <allow send_destination="org.freedesktop.NetworkManagerUserSettings"
+                       send_interface="org.freedesktop.NetworkManagerSettings"/>
+
+                <allow send_destination="org.freedesktop.NetworkManagerUserSettings"
+                       send_interface="org.freedesktop.NetworkManagerSettings.Connection"/>
+
+                <!-- Only root can get secrets -->
+                <allow send_destination="org.freedesktop.NetworkManagerUserSettings"
+                       send_interface="org.freedesktop.NetworkManagerSettings.Connection.Secrets"/>
+        </policy>
+

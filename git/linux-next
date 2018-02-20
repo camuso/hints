@@ -1,0 +1,60 @@
+just a quick tip, i think it's often useful to pull in
+linux-next git trees:
+
+$ git remote add next \
+   git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+$ git remote update
+
+then you could:
+
+$ git tag --contains 5865fc1b6a99bc7dcf245770c2735577b8596b6e
+next-20130625
+next-20130626
+next-20130628
+
+which means it's probably coming in from net-next.git
+
+https://git.kernel.org/cgit/linux/kernel/git/davem/net-next.git/commit/drivers/net/ethernet/broadcom/tg3.c?id=5865fc1b6a99bc7dcf245770c2735577b8596b6e
+
+
+Date: Wed, 8 May 2013 07:28:44 -0400
+From: Don Zickus <dzickus@redhat.com>
+To: Myron Stowe <mstowe@redhat.com>
+Cc: rhkernel-hw <rhkernel-hw@redhat.com>
+Subject: Re: 'git': Working with Remotes notes
+User-Agent: Mutt/1.5.21 (2010-09-15)
+
+On Tue, May 07, 2013 at 09:10:32PM -0600, Myron Stowe wrote:
+>
+> Note that this time the "pm" refspec specifically targets 'linux-next'
+> (i.e. there are no '*'; a.k.a. "default glob"s).
+>
+> Next, 'git fetch ...' to retrieve the remote repositories content not yet
+> acquired (i.e. any new data).  Afterwards you will have references to all
+> the branches from the remote (or a subset thereof if 'git remote add's' "-t"
+> option was used):
+>   % git fetch pm
+>   From git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+>    * [new branch]      linux-next -> pm/linux-next
+>
+>   % git branch -a
+>   * master
+>     remotes/origin/HEAD -> origin/master
+>     remotes/origin/master
+>     remotes/pm/linux-next
+>
+> Now create your own local topic branch, based upon Rafael's 'linux-next'
+> remote tracking branch, and use it for the work you intend to post to
+> the upstream linux-acpi mail list:
+>   % git checkout -b pm/<local-working-branch-name> pm/linux-next
+>   Branch pm/test set up to track remote branch linux-next from pm.
+>   Switched to a new branch 'pm/test'
+
+I also believe, if later you realize there was another branch you wanted
+in addition to linux-next, you can just re-run the 'git remote add -t ..'
+command to append new branches.  Though I haven't tried that in awhile.
+
+Cheers,
+Don
+

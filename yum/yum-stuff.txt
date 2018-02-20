@@ -1,0 +1,34 @@
+Trying "yum info yum-plugin-ps" we get:
+
+        When this plugin is installed it adds the yum command "ps",
+        which allows you to see which running processes are accociated
+        with which packages (and if they need rebooting, or have
+        updates, etc.)
+
+# yum install yum-plugin-ps
+
+for a complete listing you need to do "yum ps all" (as
+root of course), while "yum ps foo\*" restricts output to packages (or
+is it processes?)
+
+# yum ps all
+
+Loaded plugins: product-id, ps, refresh-packagekit, security,
+subscription-manager
+Updating certificate-based repositories.
+       pid proc                  CPU      RSS      State uptime
+ConsoleKit-0.4.1-3.el6.x86_64
+      3442 console-kit-dae      0:02   3.6 MB   Sleeping:  20 day(s) 1:12:19
+DeviceKit-power-014-3.el6.x86_64
+      3518 devkit-power-da      0:53   6.0 MB   Sleeping:  20 day(s) 1:12:19
+      3619 gnome-session        0:10    11 MB   Sleeping:  20 day(s) 1:11:57
+
+------------------------------------------------------------------------------
+
+# yum clean metadata && yum upgrade
+
+yum distro-sync
+yum list extras
+yum update
+yum remove
+

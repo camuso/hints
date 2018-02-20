@@ -1,0 +1,7 @@
+See https://fedoraproject.org/wiki/EPEL?rd=Epel to get the right pointer,
+first.
+
+# wget http://mirrors.mit.edu/epel/5/i386/epel-release-5-4.noarch.rpm
+# yum install --nogpgcheck epel-release-5-4.noarch.rpm
+# yum install git
+

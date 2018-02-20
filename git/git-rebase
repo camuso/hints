@@ -1,0 +1,8 @@
+Q.
+let's say I commit a change,  C1_id.
+then I commit a second change, C2_id.
+can I ' git commit --amend C1_id '  ?   without affecting the second commit?
+
+A.
+git rebase --interactive <Parent Commit ID>
+

@@ -1,0 +1,2 @@
+2637 /usr/sbin/sshd
+24047 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@hp-z820-01.lab.bos.redhat.com

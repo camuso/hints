@@ -1,0 +1,156 @@
+
+UPDATE for installing a virtual machine using virt-install.
+
+Fully virtualized guest using an iso file on the host as the install DVD.
+
+$ sudo virt-install \
+	--hvm \
+	--vnc \
+	--arch=x86_64 \
+	--os-type=linux \
+	--os-variant=rhel6 \
+	--name=rhel6-x86_64 \
+	--ram=512 \
+	--disk path=/var/lib/libvirt/images/rhel6-x86_64.img \
+	--cdrom=/work/distros/rhel6/RHEL6.0-20100512.0-Server-x86_64-DVD1.iso 
+
+Command for paravirtualized guest (os with native kvm support)
+
+$ sudo virt-install \
+	--vnc \
+	--arch=i686 \
+	--os-type=linux \
+	--os-variant=fedora12 \
+	--virt-type kvm \
+	--location=http://download.fedoraproject.org/pub/fedora/linux/releases/12/Fedora/i386/os/ \
+	--disk path=/var/lib/libvirt/images/f1232,size=8,sparse=false,format=raw,perms=sh \
+	--ram=512 \
+	--name f1232
+
+Command for fully virtualized guest (os having no native kvm support)
+. May also need --noapic and --noacpi
+
+$ sudo virt-install \
+	--hvm \
+	--vnc \
+	--arch=x86_64 \
+	--os-type=linux \
+	--os-variant=rhel5 \
+	--virt-type=kvm \
+	--location nfs:bigpapi.bos.redhat.com:/vol/engineering/redhat/released/RHEL-5-Server/U2/x86_64/os \
+	--disk path=/var/lib/libvirt/images/rhel5.2-x86_64.img,size=8,sparse=false,format=raw,perms=sh \
+	--ram=512 
+	--name=rhel5.2-x86_64 &
+
+
+Some recently created virtual machines.
+
+sudo virt-install \
+	--vnc \
+	--os-type=linux \
+	--os-variant=RHEL6 \
+	--virt-type kvm \
+	--location=nfs:curly.devel.redhat.com:/vol/engineering/devarchive/redhat/rel-eng/RHEL6.0-RC-4/6/Workstation/x86_64/os \
+	--disk path=/home/vmdisk/anadev-6,size=20,sparse=false,format=raw,perms=sh \
+	--ram=4096 \
+	--vcpus=4 \
+	--cpuset=auto \
+	--cpuset=46,47 \
+	--network bridge=br0 \
+	--name=anadev-6
+
+sudo virt-install \
+	--vnc \
+	--os-type=linux \
+	--os-variant=RHEL6 \
+	--virt-type kvm \
+	--location=http://qafiler.bos.redhat.com/redhat/rel-eng/RHEL6.0-RC-4/6/Workstation/x86_64/os/ \
+	--disk path=/home/vmdisk/tvm,size=20,sparse=false,format=raw,perms=sh \
+	--ram=4096 \
+	--vcpus=4 \
+	--cpuset=auto \
+	--cpuset=46,47 \
+	--network bridge=br0 \
+	--name=anadev-6
+
+#!/bin/bash
+
+sudo virt-install \
+        --vnc \
+        --os-type=linux \
+        --os-variant=fedora12 \
+        --virt-type kvm \
+        --cdrom=/home/work/isos/fedora/Fedora-13-i386-DVD.iso \
+        --disk path=/home/vmdisk/tvm,size=8,sparse=false,format=raw,perms=sh \
+        --ram=2048 \
+        --vcpus=2 \
+        --cpuset=46,47 \
+        --network bridge=br0 \
+        --name=tvm
+
+
+
+UPDATE for installing a virtual machine using virt-install.
+
+Fully virtualized guest using an iso file on the host as the install DVD.
+
+$ sudo virt-install \
+	--hvm \
+	--vnc \
+	--arch=x86_64 \
+	--os-type=linux \
+	--os-variant=rhel6 \
+	--name=rhel6-x86_64 \
+	--ram=512 \
+	--disk path=/var/lib/libvirt/images/rhel6-x86_64.img \
+	--cdrom=/work/distros/rhel6/RHEL6.0-20100512.0-Server-x86_64-DVD1.iso 
+
+Command for paravirtualized guest (os with native kvm support)
+
+$ sudo virt-install \
+	--vnc \
+	--arch=i686 \
+	--os-type=linux \
+	--os-variant=fedora12 \
+	--virt-type kvm \
+	--location=http://download.fedoraproject.org/pub/fedora/linux/releases/12/Fedora/i386/os/ \
+	--disk path=/var/lib/libvirt/images/f1232,size=8,sparse=false,format=raw,perms=sh \
+	--ram=512 \
+	--name f1232
+
+Command for fully virtualized guest (os having no native kvm support)
+. May also need --noapic and --noacpi
+
+$ sudo virt-install --hvm \
+	--vnc \
+	--arch=x86_64 \
+	--os-type=linux \
+	--os-variant=rhel5 \
+	--virt-type=kvm \
+	--location nfs:bigpapi.bos.redhat.com:/vol/engineering/redhat/released/RHEL-5-Server/U2/x86_64/os \
+	--disk path=/var/lib/libvirt/images/rhel5.2-x86_64.img,size=8,sparse=false,format=raw,perms=sh \
+	--ram=512
+	--name=rhel5.2-x86_64 &
+
+
+So, better to use an nfs image.
+
+sudo virt-install
+	--hvm \
+	--vnc \
+	--arch=i686 \
+	--os-type=linux \
+	--os-variant=rhel6 \
+	--location nfs:curly.devel.redhat.com:/vol/engineering/devarchive/redhat/rel-eng/RHEL6.0-Snapshot-4/6/Server/i386/os \
+	--disk path=/var/lib/libvirt/images/rhel6-i386.img,size=8,sparse=false,format=raw,perms=sh \
+	--ram=512 \
+	--name=rhel6-i386 &
+
+
+
+
+kvm web sites
+
+http://www.redhat.com/docs/en-US/Red_Hat_Enterprise_Linux/5.4/html/Virtualization_Guide/
+http://www.techotopia.com/index.php/Managing_and_Monitoring_Fedora_based_KVM_Guest_Systems
+

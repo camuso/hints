@@ -1,0 +1,1 @@
+pkcheck --action-id org.libvirt.unix.manage --allow-user-interaction --process 16697

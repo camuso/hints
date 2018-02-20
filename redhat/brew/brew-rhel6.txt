@@ -1,0 +1,17 @@
+ 658  make rh-brew
+  665  brew help
+  666  brew list-tags
+  667  brew list-tags | RHEL-6
+  668  brew list-tags | grep RHEL-6
+  669  brew build --scratch RHEL-6.1 redhat/rpm/SRPMS/kernel-2.6.32-115.el6.test.src.rpm 
+  670  brew help
+  671  brew list-targets | grep -i rhel-6
+  672  brew build --scratch RHEL-6.1-build redhat/rpm/SRPMS/kernel-2.6.32-115.el6.test.src.rpm 
+  673  brew build --scratch RHEL-6.1-test redhat/rpm/SRPMS/kernel-2.6.32-115.el6.test.src.rpm 
+  674  brew list-targets | grep RHEL-6
+  675  brew build --scratch RHEL-6-test redhat/rpm/SRPMS/kernel-2.6.32-115.el6.test.src.rpm 
+  806  yum install brew
+  807   wget http://download.devel.redhat.com/rel-eng/brew/fedora/14/brew.repo
+  808  mv brew.repo /etc/yum.repos.d/
+  809  yum install brewkoji
+

@@ -1,0 +1,30 @@
+# save this as: mymakefile.mk
+# usage: to compile myprog.c:
+#  make -f mymakefile.mk  myprog
+# will compile simple programs that don't require other files
+# to compile. 
+
+# C compiler name
+CC=gcc
+
+# loggging
+LOGIT=2>&1 | tee -a make.log
+
+# flags for C like -s or -Wall
+# you add what you want here
+CFLAGS=
+
+# linker objects like anotherfile.o or somefile.a
+# you add what you want here
+LNKFILES=
+
+#libraries to read
+# left blank you add what you want here
+LNKLIB=
+
+# compile C code
+.c:
+        @ rm -f make.log
+        $(CC) $(CFLAGS) $*.c -o $* $(LNKFILES) $(LNKLIB)
+        @rm -f $*.o
+        @ echo "Successful Compilation of $*.c"

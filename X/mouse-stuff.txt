@@ -1,0 +1,58 @@
+r/bin/xinput'
+
+for F in `$X list|grep Logitech|cut -d = -f 2|cut -c1-3` ; do
+  $X set-prop $F "Evdev Middle Button Emulation"
+done
+
+Since F-14 I have had to fix this problem after new installs and occasionally
+after updates by editing /usr/share/X11/xorg.conf.d/10-evdev.conf by adding
+following at the end the:
+
+Section "InputClass"
+     Identifier		"whatever"
+     MatchIsPointer	"on"
+     Option		"Emulate3Buttons" "on"
+EndSection
+
+Section "InputClass"
+     Identifier		"system-setup-keyboard"
+     MatchIsKeyboard	"on"
+     Option		"XkbOptions" "terminate:ctrl_alt_bksp"
+EndSection
+
+The second section is to make Control+Alternate+Backspace work again which you
+may not care about. I think this requires a reboot?
+
+Subject:
+Re: fedup upgrade to 18 broke my touchpad on DELL Vostro
+From:
+Gary Stainburn <gary.stainburn@ringways.co.uk>
+Date:
+06/19/2013 05:04 AM
+To:
+users@lists.fedoraproject.org
+
+I was given the following suggestion which has worked for other but not for 
+me. Does this give anyone any ideas what I can try next?
+
+Gary
+
+I had the same issue with a Dell when I upgraded to Fedora 18, so I
+added 'i8042.reset i8042.nomux=1' (without quotes) at the end of the
+kernel boot options in Grub:
+
+[root@portdav2 ~]# cat /etc/default/grub
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="Fedora"
+GRUB_DEFAULT=saved
+GRUB_CMDLINE_LINUX="rd.md=0 rd.lvm=0 rd.dm=0 SYSFONT=True rd.luks=0
+LANG=es_ES.UTF-8 KEYTABLE=es i8042.reset i8042.nomux=1"
+[root@portdav2 ~]#
+
+Some useful links:
+
+http://unix.stackexchange.com/questions/28736/what-does-the-i8042-nomux-1-kernel-option-do-during-booting-of-ubuntu
+http://forums.linuxmint.com/viewtopic.php?f=46&t=41200
+
+Hope this helps,
+

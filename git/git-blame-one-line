@@ -1,0 +1,1 @@
+git log -S'the line from your file' -- path/to/your/file

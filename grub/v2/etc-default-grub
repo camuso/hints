@@ -1,0 +1,23 @@
+GRUB_TIMEOUT=10
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+# GRUB_DEFAULT=saved
+#
+# To identify a custom default, use the following for GRUB_DEFAULT.
+# The '>' character denotes a submenu item.
+#
+GRUB_DEFAULT='Custom RHEL7 boot options>RHEL7 Workstation - VGA mode (3.7.0-0.36.el7.bz874297.x86_64)'
+GRUB_TERMINAL_OUTPUT="console"
+#
+# GRUB_CMD_LINE_LINUX gives the command line options.
+#
+GRUB_CMDLINE_LINUX="nomodeset rd.md=0 rd.lvm=0 rd.dm=0 $([ -x /usr/sbin/rhcrashkernel-param ] && /usr/sbin/rhcrashkernel-param || :) rd.luks=0 vconsole.keymap=us rhgb quiet"
+GRUB_DISABLE_RECOVERY="true"
+GRUB_THEME="/boot/grub2/themes/system/theme.txt"
+
+# GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS0,115200n8"
+GRUB_CMDLINE_LINUX="console=tty1 console=ttyS1,115200n8 nomodeset"
+
+# Uncomment to disable graphical terminal (grub-pc only)
+# GRUB_TERMINAL=serial
+GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=1 --word=8 --parity=no --stop=1"
+

@@ -1,0 +1,101 @@
+Prarit Bhargava 2012-11-29 18:51:16 EST
+
+[root@intel-canoepass-03 ~]# uname -a
+Linux intel-canoepass-03.lab.bos.redhat.com 2.6.32-279.el6.x86_64 #1 SMP Wed
+Jun 13 18:24:36 EDT 2012 x86_64 x86_64 x86_64 GNU/Linux
+[root@intel-canoepass-03 ~]#
+[root@intel-canoepass-03 ~]# lsmod | grep ipmi
+ipmi_si                42401  0
+ipmi_msghandler        35992  1 ipmi_si
+
+So checking for ipmi_si should be sufficient to verify that both ipmi_si &
+impi_msghandler are loaded.
+
+Switching back to a recent kernel (6.4a1), where the modules are now built-in,
+one can verify the status of ipmi_si & ipmi_msghandler by doing
+
+[root@intel-canoepass-03 ~]# ls -l /sys/module/ipmi_si/
+total 0
+drwxr-xr-x. 2 root root 0 Nov 29 23:45 drivers
+drwxr-xr-x. 2 root root 0 Nov 29 23:45 parameters
+[root@intel-canoepass-03 ~]#
+
+ie) the check you have in hp-health is incomplete.  The code needs to check
+both for built-in and modular ipmi.
+
+Patch to ipmi init script to show how to detect statically linked ipmi driver.
+
+--- ipmi	2010-05-28 04:07:51.000000000 -0400
++++ /root/ipmi	2012-12-11 08:48:12.255512106 -0500
+@@ -134,6 +134,16 @@
+ 		if /sbin/lsmod | grep $m >/dev/null 2>&1 ; then
+ 			echo "$m module loaded."
+ 			OnePlusLoaded=1
++		elif [ -d "/sys/module/$m" ] ; then
++			echo "$m module in kernel."
++			OnePlusLoaded=1
++		elif [ "$m" == "ipmi_msghandler" ] ; then
++			if [ -d "/sys/module/ipmi_si" ] ; then
++				echo "$m module in kernel."
++				OnePlusLoaded=1
++			else
++				OnePlusUnloaded=1
++			fi
+ 		else
+ 			echo "$m module not loaded."
+ 			OnePlusUnloaded=1
+@@ -148,6 +158,35 @@
+ 	for m in $@; do
+ 		if /sbin/lsmod | grep $m >/dev/null 2>&1 ; then
+ 			OnePlusLoaded=1
++		elif [ -d "/sys/module/$m" ] ; then
++			OnePlusLoaded=1
++		elif [ "$m" == "ipmi_msghandler" ] ; then
++			if [ -d "/sys/module/ipmi_si" ] ; then
++				OnePlusLoaded=1
++			else
++				OnePlusUnloaded=1
++			fi
++		else
++			OnePlusUnloaded=1
++		fi
++	done
++}
++
++modules_unloaded()
++{
++	OnePlusLoaded=0
++	OnePlusUnloaded=0
++	for m in $@; do
++		if /sbin/lsmod | grep $m >/dev/null 2>&1 ; then
++			OnePlusLoaded=1
++		elif [ -d "/sys/module/$m" ] ; then
++			OnePlusUnloaded=1
++		elif [ "$m" == "ipmi_msghandler" ] ; then
++			if [ -d "/sys/module/ipmi_si" ] ; then
++				OnePlusUnloaded=1 # XXX: compiled in kernel
++			else
++				OnePlusUnloaded=1
++			fi
+ 		else
+ 			OnePlusUnloaded=1
+ 		fi
+@@ -430,7 +469,7 @@
+ {
+ 	echo -n "Stopping ${MODULE_NAME} drivers: "
+ 	unload_ipmi_modules_leave_features
+-	modules_loaded ${MODULES_INTERFACES}
++	modules_unloaded ${MODULES_INTERFACES}
+ 	if [ ${OnePlusLoaded} -ne 0 ]; then
+ 		RETVAL=$((RETVAL | 32))
+ 		log_failure_msg "may be in use"
+@@ -444,7 +483,7 @@
+ {
+ 	echo -n $"Stopping all ${MODULE_NAME} drivers: "
+ 	unload_all_ipmi_modules
+-	modules_loaded ${MODULES}
++	modules_unloaded ${MODULES}
+ 	if [ ${OnePlusLoaded} -ne 0 ]; then
+ 		RETVAL=$((RETVAL | 32))
+ 		log_failure_msg "may be in use"
+

@@ -1,0 +1,59 @@
+https://docspace.corp.redhat.com/docs/DOC-55498
+
+2. For non-CSB systems, please use this /etc/krb5.conf
+
+[logging]
+ default = FILE:/var/log/krb5libs.log
+ kdc = FILE:/var/log/krb5kdc.log
+ admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+ ticket_lifetime = 36000
+ default_realm = REDHAT.COM
+ dns_lookup_realm = false
+ dns_lookup_kdc = false
+ allow_weak_crypto = yes
+
+[realms]
+  REDHAT.COM = {
+   kdc = kerberos.rdu.redhat.com.:88
+   kdc = kerberos.bos.redhat.com.:88
+   kdc = kerberos.brq.redhat.com.:88
+   kdc = kerberos.bne.redhat.com.:88
+   admin_server = kerberos.corp.redhat.com.:749
+   default_domain = redhat.com
+  }
+
+[domain_realm]
+ .redhat.com = REDHAT.COM
+ redhat.com = REDHAT.COM
+
+[kdc]
+ profile = /var/kerberos/krb5kdc/kdc.conf
+
+[pam]
+ debug = false
+ ticket_lifetime = 36000
+ renew_lifetime = 36000
+ forwardable = true
+ krb4_convert = false
+
+It's possible that your current login username is NOT the same as your Red Hat ID (email address without "@redhat.com"), or you may be logged on as root, so you may need to run the command as below (replace "hzhao" with your own Red Hat ID):
+
+[root@hzhao ~]# kinit hzhao@REDHAT.COM
+Password for hzhao@REDHAT.COM:
+
+Attention: Please use capital REDHAT.COM
+
+[root@hzhao ~]# klist 
+Ticket cache: FILE:/tmp/krb5cc_0
+Default principal: hzhao@REDHAT.COM
+
+Valid starting     Expires            Service principal
+01/13/11 15:54:36  01/14/11 01:54:30  krbtgt/REDHAT.COM@REDHAT.COM
+
+ 
+
+You can destroy the Kerberos ticket and stop Kerberos authentication any time by running:
+
+[hzhao@hzhao ~]$ kdestroy 

@@ -1,0 +1,74 @@
+That's the old interface.  For Firefox 3.6 use
+
+/usr/java/jre1.6.0_21/lib/i386/libnpjp2.so
+
+Craig
+
+
+On Tue, 2010-08-10 at 11:10 -0400, binarynut@comcast.net wrote:
+> FC13 i686
+>
+> Doesn't doing a ln -s
+> /usr/java/jre1.6.0_21/plugin/i386/ns7/libjavaplugin.oji.so work anymore,
+> the link is showing in /usr/lib/mozilla/plugins
+>
+> About:plugins in firefox does not show a jre plugin.
+>
+> Boy these changes every week can STRESS a guy out.
+
+Did you check whether the IcedTea plugin is installed? The IcedTea
+plugin represents jre.
+
+if not installed do:
+yum install java-1.6.0-openjdk-plugin-1.6.0.0-41.b18.fc13.x86_64
+
+============================================================================
+Firefox - java - youtube
+============================================================================
+  Using firefox-3.6.7-1.fc13.i686
+Whever i browse Youtube, I get a pink banner from youtube saying:
+
+Hello, you seem to have JavaScript turned off. Please enable it to see
+search results properly.
+
+But I checked all of my Firefox settings and options. Java and
+Javascript are enabled.
+
+Also, i have o add-ons or extensions that have anything to do with
+restricting java or javascripts.
+
+So what could be the cause of this?
+
+It makes  many links in-operative.
+
+----------------------------------------------------------------------------
+On Wed, Aug 11, 2010 at 10:25 AM, JD <jd1008@gmail.com> wrote:
+
+> So what could be the cause of this?
+
+
+Try out,
+http://sites.google.com/site/indiadoor/java-jre
+
+----------------------------------------------------------------------------
+I already have these java rpms installed:
+
+java-1.6.0-openjdk-1.6.0.0-41.b18.fc13.i686
+java-1.6.0-openjdk-devel-1.6.0.0-41.b18.fc13.i686
+java-1.6.0-openjdk-javadoc-1.6.0.0-41.b18.fc13.i686
+java-1.6.0-openjdk-plugin-1.6.0.0-41.b18.fc13.i686
+java-1.5.0-gcj-1.5.0.0-32.fc13.i686
+java_cup-0.11a-4.fc13.noarch
+
+I also installed jre-6u21-linux-i586.rpm from the Sun (Oracle) site.
+
+Still the same problem.
+
+-----------------------------------------------------------------------------
+Hi,
+JavaScript and Java are two different things.
+
+With regard to that error message:
+http://answers.yahoo.com/question/index?qid=20090710085221AAJXwt5
+
+

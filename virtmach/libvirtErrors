@@ -1,0 +1,9 @@
+
+libvirtError solutions
+----------------------
+
+libvirtError: Unable to read from monitor: Connection reset by peer
+$ su -c 'virsh managedsave-remove NameOfDomain'
+See ... http://johnpoelstra.com/resuming-corrupted-suspended-guests/
+and ... http://www.0937686468.com/2012/05/solved-libvirterror-unable-to-read-from.html
+

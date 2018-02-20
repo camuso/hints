@@ -1,0 +1,1 @@
+rpm -qa | grep 86_64 | sed 's/x86_64/i686/' | xargs yum -y install

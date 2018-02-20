@@ -1,0 +1,5 @@
+ mount -t nfs bigpapi.bos.redhat.com:/vol/engarchive2/redhat/
+
+# yum install autofs
+# service autofs start
+

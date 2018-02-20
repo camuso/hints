@@ -1,0 +1,1 @@
+find ./ -type f -iname *.jpg -exec jhead -ds2012:08:09  '{}' \;

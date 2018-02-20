@@ -1,0 +1,47 @@
+# For Fedora 16+, you MUST FIRST issue the following command
+#
+systemctl start nfs-server.service
+
+# or the legacy way (which may not last ...
+#
+service nfs-server start
+
+# Then you must allow nfs to propagate through the firewall
+# ssh -Y root@your.nfs.server
+# firewall-config &
+# Then open nfs and rcpbind ports.
+
+# create or edit the /etc/exports file
+#
+# The following line in the /etc/exports file sets up the
+# /mnt/data/isos/distros directory for nfs mount.
+#
+# the 10.16.0.0/16 says that the address range of allowed
+# IPs is 10.16.0.0 to 10.16.255.255
+#
+# The (ro,sync) options configure for read-only access and
+# for synchronization.
+
+/mnt/data1/isos/distros 10.16.0.0/16(ro,sync)
+
+# Next, run the following command from the root. You should
+# get no errors and no warnings.
+
+exportfs -ra
+
+# Then, start, or restart the nfs service
+#
+service nfs restart
+
+# On the client side, do the following.
+
+mkdir /mnt/tcamuso-distro
+mount -t nfs tcamuso.usersys.redhat.com:/mnt/data1/isos/distros /mnt/tcamuso-distro
+
+# Alternatively, you can set it up in the client's /etc/fstab
+# this way.
+
+tcamuso.usersys.redhat.com:/mnt/data1/isos/distros /mnt/tcamuso-distro  nfs defaults  0 0
+
+ls /mnt/tcamuso-distro
+centos  RHEL4-U7-re20080711.0-x86_64-AS-DVD-ftp.iso  RHEL5.2-Server-20080430.0-x86_64-DVD.iso

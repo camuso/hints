@@ -1,0 +1,4 @@
+yum install @development-tools
+yum install rpmdevtools
+yum install --nogpgcheck fedora-packager
+

@@ -1,0 +1,5 @@
+[rhel7-everything]
+name=Beta-1 $releasever - $basearch
+baseurl=http://lab-02.rhts.eng.bos.redhat.com/net/bigpapi.bos.redhat.com/vol/engarchive2/redhat/released/RHEL-7/7.0-Beta-1/Everything/x86_64/os/
+gpgcheck=0
+enabled=1

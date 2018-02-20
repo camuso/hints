@@ -1,0 +1,328 @@
+    1  uname -r
+    2  alf
+    3  ./init-my-stuff 
+    4  alf
+    5  uname -r
+    6  uname -a
+    7  reboot
+    8  sh init-my-stuff 
+    9  alf
+   10  uname -a
+   11  ls /mnt
+   12  mkdir /mnt/grub
+   13  mount /dev/sda7 /mnt/grub
+   14  ls /dev
+   15  ls /dev/cciss
+   16  mount /dev/cciss/c0d0p7 /mnt/grub
+   17  ls /mnt/grub/grub
+   18  vim /mnt/grub/grub/grub.conf 
+   19  vim /boot/grub/grub.conf 
+   20  mkdir /mnt/temp
+   21  mount /dev/cciss/c0d0p0 /mnt/temp
+   22  mount /dev/cciss/c0d0p1 /mnt/temp
+   23  vim /mnt/temp/grub/grub.conf 
+   24  umount /mnt/temp
+   25  mount /dev/cciss/c0d0p4 /mnt/temp
+   26  mount -t ext3 /dev/cciss/c0d0p4 /mnt/temp
+   27  mount -t ext4 /dev/cciss/c0d0p4 /mnt/temp
+   28  mount /dev/cciss/c0d0p5 /mnt/temp
+   29  vim /mnt/temp/grub/grub.conf 
+   30  umount /mnt/temp
+   31  mount /dev/cciss/c0d0p11 /mnt/temp
+   32  ls /mnt/temp
+   33  umount /mnt/temp
+   34  mount /dev/cciss/c0d0p12 /mnt/temp
+   35  mount /dev/cciss/c0d0p10 /mnt/temp
+   36  vim /mnt/temp/grub/grub.conf 
+   37  reboot
+   38  sh init-my-stuff 
+   39  alf
+   40  reboot
+   41  dmesg > dmesg.log
+   42  rsync -va dmesg.log camuso@camuso.usersys.redhat.com:/Downloads
+   43  git
+   44  yum install git
+   45  rpm -qa | grep perl
+   46  wget http://kernel.org/pub/software/scm/git/RPMS/i686/git-1.7.6.1-1.fc14.i686.rpm
+   47  yum localinstall git-1.7.6.1-1.fc14.i686.rpm 
+   48  wget http://kernel.org/pub/software/scm/git/RPMS/i686/git-all-1.7.6.1-1.fc14.i686.rpm
+   49  yum localinstall git-all-1.7.6.1-1.fc14.i686.rpm 
+   50  man yum
+   51  cd /etc/yum.repos.d/
+   52  alf
+   53  cat redhat.repo 
+   54  cat beaker-debug.repo 
+   55  echo [git] > git.repo
+   56  cat git.repo
+   57  echo "name=git" >> git.repo
+   58  cat git.repo 
+   59  echo "baseurl=http://kernel.org/pub/software/scm/git/RPMS/i686/repodata/" >> git.repo
+   60  echo "enabled=1" >> git.repo
+   61  echo "gpgcheck=0" >> git.repo
+   62  cat git.repo
+   63  yum install git
+   64  vim git.repo
+   65  yum install git
+   66  vim git.repo
+   67  yum install git
+   68  vim git.repo
+   69  yum install git
+   70  cd /usr/src
+   71  ls
+   72  cd /usr/share
+   73  ls
+   74  cd ../src
+   75  ls
+   76  ls redhat/
+   77  ls redhat/BUILD/
+   78  ls redhat/RPMS/
+   79  ls redhat/RPMS/x86_64/
+   80  ls kernels/
+   81  ls
+   82  [wd
+   83  pwd
+   84  cd /usr/local
+   85  ls
+   86  cd src
+   87  ls
+   88  wget http://www.kernel.org/pub/software/scm/git/git-1.7.6.tar.gz
+   89  tar -xvf git-1.7.6.tar.gz 
+   90  cd git-1.7.6
+   91  alf
+   92  ls
+   93  ./configure 
+   94  make install
+   95  git
+   96  cd 
+   97  df
+   98  mkdir work
+   99  cd work
+  100  git clone http://git.engineering.redhat.com/?p=users/jwilson/rhel5/kernel;a=commit;h=ed17c4337462d021268e9a80fddcb462a084ac78
+  101  git clone http://git.engineering.redhat.com/?p=users/jwilson/rhel5/kernel;a=commit;h=ed17c4337462d021268e9a80fddcb462a084ac78
+  102  git clone git://git.engineering.redhat.com/users/jwilson/rhel5/kernel
+  103  cd kernel/
+  104  cd ..
+  105  git clone git://git.engineering.redhat.com/users/jwilson/rhel5/xen
+  106  cd kernel/
+  107  make mrproper
+  108  make rh-configs-prep
+  109  rngd -r /dev/urandom
+  110  make rh-configs
+  111  uname -a
+  112  cp configs/kernel-2.6.18-x86_64.config .
+  113  mv kernel-2.6.18-x86_64.config .config
+  114  cat /proc/cpuinfo
+  115  make menuconfig
+  116  make -j16
+  117  make -j16 modules
+  118  make -j16 modules_install
+  119  make install
+  120  vim /boot/grub/grub.conf 
+  121  git log
+  122  reboot
+  123  uname -a
+  124  reboot
+  125  ls /mnt
+  126  mount /dev/sda7 /mnt/grub
+  127  mount /dev/cciss/c0d0p7 /mnt/grub
+  128  vim /mnt/grub/grub/grub.conf 
+  129  vim /boot/grub/grub.conf 
+  130  reboot
+  131  reboot
+  132  ls -la
+  133  cd .ssh
+  134  ls
+  135  cat id_dsa.pub
+  136  cd
+  137  ssh ktoyama@yamafish.usersys.redhat.com
+  138  ls -l
+  139  clear
+  140  ps -ef
+  141  w
+  142  ps -ef
+  143  vi /etc/modprobe.conf
+  144  cd /etc/sysconfig/network-scripts/
+  145  ls
+  146  cat ifcfg-eth0
+  147  ls
+  148  cp ifcfg-eth0 _ifcfg-eth0.bak
+  149  cp ifcfg-eth1 _ifcfg-eth1.bak
+  150  vi ifcfg-eth0
+  151  vi ifcfg-eth1
+  152  vi ifcfg-bond0
+  153  ls -la
+  154  ls -al
+  155  exit
+  156  ls -la
+  157  clear
+  158  ps -ef
+  159  w
+  160  df -k
+  161  uname -a
+  162  chkconfig --list kdump
+  163  ifconfig eth0
+  164  ifconfig eth1
+  165  ifconfig -a
+  166  virsh list --all
+  167  iptables -L
+  168  clear
+  169  ps -ef
+  170  chkconfig --list
+  171  chkconfig --list|grep "5:on"
+  172  ls -la
+  173  vi /boot/grub/grub.conf
+  174  cd
+  175  cd /root
+  176  ls
+  177  ls -la
+  178  vi .vimrc
+  179  mv .vimrc .vimrc.back
+  180  mv .vimrc.back .vimrc.bak
+  181  vi /boot/grub/grub.conf
+  182  ls -la
+  183  clear
+  184  ps -ef
+  185  cd /etc/sysconfig/
+  186  vi kdump
+  187  cd /etc/
+  188  vi kdump.conf
+  189  cd /root
+  190  cd .ssh
+  191  ls
+  192  ls -la
+  193  ssh-keygen
+  194  ssh-keygen -t dsa
+  195  ls
+  196  cat id_dsa.pub
+  197  ifconfig eth0
+  198  hostname
+  199  service network stop
+  200  service network start
+  201  ifconfig eth0
+  202  ifconfig eth1
+  203  ifconfig bond0
+  204  cat /proc/net/bonding/bond0 
+  205  ifconfig bond0
+  206  which gcc
+  207  gcc -V
+  208  gcc -version
+  209  gcc --version
+  210  ls -la
+  211  sftp ktoyama@yamafish.usersys.redhat.com
+  212  ls
+  213  tar xfj netperf-2.5.0.tar.bz2 
+  214  cd netperf-2.5.0
+  215  ./configure
+  216  make
+  217  make install
+  218  /usr/local/bin/netserver -D -d -p 123456
+  219  /usr/local/bin/netserver -D -p 123456
+  220  iptables -L
+  221  service iptables stop
+  222  /usr/local/bin/netserver -D -4 -p 123456
+  223  /usr/local/bin/netserver -D -4 -p 123456 -d
+  224  /usr/local/bin/netserver -D -4 -p 123456 -d
+  225  dmesg
+  226  tail -100 /var/log/messages
+  227  tail -100 /var/log/messages|grep bond
+  228  ifconfig eth0
+  229  ifconfig bond0
+  230  ps -ef|grep net
+  231  cat /etc/modprobe.conf
+  232  ls -l
+  233  cd /etc/sysconfig/network-scripts/
+  234  cat ifcfg-bond0
+  235  ls -la
+  236  cat /proc/net/bonding/bond0 
+  237  ifenslave eth1
+  238  ifenslave --help
+  239  ifenslave -c eth1
+  240  ifenslave -c bond0 eth1
+  241  ls -la
+  242  w
+  243  ps -ef|grep ssh
+  244  ls -la
+  245  w
+  246  ps -ef
+  247  tcpdump -i eth1 -vv
+  248  tcpdump -i eth0 -vv
+  249  tcpdump -i eth0 -vv|grep -v phx2
+  250  tcpdump -i eth0 -vv|grep -v phx2
+  251  ifconfig bond0
+  252  tcpdump -i eth1 -vv
+  253  ethtool -k eth0
+  254  ethtool -S eth0
+  255  ethtool -s eth0
+  256  ethtool -i eth0
+  257  exit
+  258  history > bl460cg7-02-history.txt
+  259  vim bl460cg7-02-history.txt 
+  260  rsync -av bl460cg7-02-history.txt camuso@camuso.usersys.redhat.com:
+  261   tcpdump -i eth1 -vv
+  262   tcpdump -i eth0 -vv|grep -v phx2
+  263  ifconfig eth1
+  264  ifconfig eth0
+  265  ifconfig
+  266  ps -ef | grep net
+  267  cat /proc/net/bonding/bond0
+  268  service network status
+  269  service network start
+  270  ls -la
+  271  cat /proc/net/bonding/bond0 
+  272  ifconfig bond0
+  273  netstat -rn
+  274  ping 10.16.47.254
+  275  ifconfig -a
+  276  ifenslave -c bond0 eth0
+  277  cat /proc/net/bonding/bond0 
+  278  ping yamafish.usersys.redhat.com
+  279  ls -la
+  280  cd
+  281  ifconfig
+  282  ifconfig | grep inet
+  283  vim /boot/grub/grub.conf 
+  284  uname -a
+  285  vim /boot/grub/grub.conf
+  286  ifconfig | grep inet
+  287  if config | less
+  288  ifconfig 
+  289   less
+  290  ifconfig | less
+  291  history | less
+  292  tcpdump -i eth1 -vv
+  293  ifconfig -a
+  294  uname -a
+  295  clear
+  296  ps -ef
+  297  shutdown -r now
+  298  man ip
+  299  man ip
+  300  ip link show eth0
+  301  ip link show bond0
+  302  ip link show eth1
+  303  man ip
+  304  man ip link
+  305  ip route
+  306  service network stop
+  307  ip route
+  308  ls -la
+  309  clear
+  310  ps -ef
+  311  ifconfig bond0
+  312  ifconfig eth0
+  313  clear
+  314  ps -ef
+  315  ls -al
+  316  clear
+  317  ps -ef
+  318  ifenslave -c bond0 eth0
+  319  ls -la
+  320  hostname
+  321  ifenslave -c bond0 eth1
+  322  ifenslave -c bond0 eth0
+  323  cat /proc/net/bonding/bond0 
+  324  ifenslave -c bond0 eth1
+  325  cat /proc/net/bonding/bond0 
+  326  ifenslave -c bond0 eth0
+  327  history
+  328  history > net-history.txt

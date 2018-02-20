@@ -1,0 +1,9 @@
+name=distro1
+baseurl=http://download.lab.bos.redhat.com/released/RHEL-5-Server/U10/x86_64/os/Server/
+enabled=1
+gpgcheck=0
+[distro4]
+name=distro2
+baseurl=http://mirrors.mit.edu/epel/5/x86_64/
+enabled=1
+gpgcheck=0

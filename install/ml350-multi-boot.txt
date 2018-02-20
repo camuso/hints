@@ -1,0 +1,189 @@
+* Booted from the first (main) bootable partition
+* -----------------------------------------------
+
+# df -h
+Filesystem            Size  Used Avail Use% Mounted on
+/dev/sda10             24G   13G  9.2G  59% /
+tmpfs                 3.9G     0  3.9G   0% /dev/shm
+/dev/sda1             194M   95M   89M  52% /boot
+
+# What fdisk sees ...
+
+# fdisk /dev/sda
+
+WARNING: DOS-compatible mode is deprecated. It's strongly recommended to
+         switch off the mode (command 'c') and change display units to
+         sectors (command 'u').
+
+Command (m for help): p
+
+Disk /dev/sda: 160.0 GB, 160005980160 bytes
+255 heads, 63 sectors/track, 19452 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 262144 bytes / 262144 bytes
+Disk identifier: 0x000118ca
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *           1          26      204800   83  Linux
+Partition 1 does not end on cylinder boundary.
+/dev/sda2              26          52      204800   83  Linux
+Partition 2 does not end on cylinder boundary.
+/dev/sda3              52          77      204800   83  Linux
+Partition 3 does not end on cylinder boundary.
+/dev/sda4              77       19453   155639808    5  Extended
+/dev/sda5              77        3137    24576000   83  Linux
+/dev/sda6            3137        6197    24576000   83  Linux
+/dev/sda7            6197        9256    24576000   83  Linux
+/dev/sda8            9256       12316    24576000   83  Linux
+/dev/sda9           12316       15376    24576000   83  Linux
+/dev/sda10          15376       18435    24576000   83  Linux
+/dev/sda11          18436       19200     6144000   82  Linux swap / Solaris
+/dev/sda12          19201       19226      204800   83  Linux
+/dev/sda13          19226       19252      204800   83  Linux
+/dev/sda14          19252       19277      204800   83  Linux
+
+
+* Use parted to find any free space on the disk.
+* ----------------------------------------------
+
+# parted
+GNU Parted 2.1
+Using /dev/sda
+Welcome to GNU Parted! Type 'help' to view a list of commands.
+
+(parted) print free
+Model: HP LOGICAL VOLUME (scsi)
+Disk /dev/sda: 160GB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+
+Number  Start   End     Size    Type      File system     Flags
+        32.3kB  1049kB  1016kB            Free Space
+ 1      1049kB  211MB   210MB   primary   ext4            boot
+ 2      211MB   420MB   210MB   primary   ext4
+ 3      420MB   630MB   210MB   primary   ext3
+ 4      630MB   160GB   159GB   extended
+ 5      632MB   25.8GB  25.2GB  logical   ext4
+ 6      25.8GB  51.0GB  25.2GB  logical   ext3
+ 7      51.0GB  76.1GB  25.2GB  logical   ext4
+ 8      76.1GB  101GB   25.2GB  logical   ext4
+ 9      101GB   126GB   25.2GB  logical   ext3
+10      126GB   152GB   25.2GB  logical   ext4
+        152GB   152GB   559kB             Free Space
+11      152GB   158GB   6291MB  logical   linux-swap(v1)
+        158GB   158GB   393kB             Free Space
+12      158GB   158GB   210MB   logical   ext3
+13      158GB   158GB   210MB   logical   ext4
+14      158GB   159GB   210MB   logical   ext4
+        159GB   160GB   1448MB            Free Space
+        160GB   160GB   623kB             Free Space
+
+* Create a small partition for a main grub menu
+* ---------------------------------------------
+
+(parted) mkpart logical ext2 158557MB 158600MB
+Warning: The resulting partition is not properly aligned for best performance.
+Ignore/Cancel? Ignore
+Warning: WARNING: the kernel failed to re-read the partition table on /dev/sda (Device or resource
+busy).  As a result, it may not reflect all of your changes until after reboot.
+
+* Align the new partition
+* -----------------------
+
+(parted) align-check
+alignment type(min/opt)  optimal/[minimal]?
+Partition number? 15
+
+* Have another look at the partition table to see our new partition aligned
+* -------------------------------------------------------------------------
+
+(parted) print
+Model: HP LOGICAL VOLUME (scsi)
+Disk /dev/sda: 160006MB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+
+Number  Start     End       Size      Type      File system     Flags
+ 1      1.05MB    211MB     210MB     primary   ext4            boot
+ 2      211MB     420MB     210MB     primary   ext4
+ 3      420MB     630MB     210MB     primary   ext3
+ 4      630MB     160005MB  159375MB  extended
+ 5      632MB     25798MB   25166MB   logical   ext4
+ 6      25799MB   50965MB   25166MB   logical   ext3
+ 7      50966MB   76132MB   25166MB   logical   ext4
+ 8      76133MB   101299MB  25166MB   logical   ext4
+ 9      101300MB  126466MB  25166MB   logical   ext3
+10      126467MB  151632MB  25166MB   logical   ext4
+11      151634MB  157925MB  6291MB    logical   linux-swap(v1)
+12      157926MB  158136MB  210MB     logical   ext3
+13      158137MB  158347MB  210MB     logical   ext4
+14      158348MB  158557MB  210MB     logical   ext4
+15      158557MB  158600MB  42.7MB    logical
+
+(parted) quit
+
+#
+
+* Reboot to activate and access the new partition
+* -----------------------------------------------
+# reboot
+
+
+* Copy all the files from the main bootloader partition to the new partition.
+* ---------------------------------------------------------------------------
+
+# mkdir /mnt/sda15
+# mount /dev/sda15 /mnt/sda15
+# rsync -va /boot/grub /mnt/sda15
+
+* Edit the grub.conf (menu.lst) file so it looks like this
+* --------------------------------------------------------
+
+# cat /mnt/sda15/grub/grub.conf
+# grub.conf generated by anaconda
+#
+# Note that you do not have to rerun grub after making changes to this file
+# NOTICE:  You have a /boot partition.  This means that
+#          all kernel and initrd paths are relative to /boot/, eg.
+#          root (hd0,0)
+#          kernel /vmlinuz-version ro root=/dev/sda10
+#          initrd /initrd-[generic-]version.img
+#boot=/dev/sda
+default=0
+timeout=10
+title RHEL6 64-bit
+        root (hd0,0)
+        configfile (hd0,0)/grub/menu.lst
+title RHEL6 32-bit
+        root (hd0,1)
+        chainloader +1
+title RHEL5 64-bit (RHEL5.7 x86_64)
+        root (hd0,2)
+        chainloader +1
+title RHEL5 32-bit (RHEL5.7 i386)
+        root (hd0,11)
+        chainloader +1
+
+* Use grub to tell the MBR where to find the main grub menu.
+* ----------------------------------------------------------
+
+# grub
+grub> root (hd0,14)
+grub> setup (hd0)
+setup (hd0)
+ Checking if "/boot/grub/stage1" exists... no
+ Checking if "/grub/stage1" exists... yes
+ Checking if "/grub/stage2" exists... yes
+ Checking if "/grub/e2fs_stage1_5" exists... yes
+ Running "embed /grub/e2fs_stage1_5 (hd0)"...  27 sectors are embedded.
+succeeded
+ Running "install /grub/stage1 (hd0) (hd0)1+27 p (hd0,14)/grub/stage2 /grub/grub.conf"... succeeded
+Done.
+grub> quit
+
+* Reboot to see the new main menu
+* -------------------------------
+
+# reboot
+

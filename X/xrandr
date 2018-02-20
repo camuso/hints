@@ -1,0 +1,11 @@
+
+       Xrandr is used to set the size, orientation and/or reflection of the outputs for a screen.  It
+       can also set the screen size.
+
+       If  invoked  without  any  option, it will dump the state of the outputs, showing the existing
+       modes for each of them, with a ’+’ after the preferred mode and a ’*’ after the current  mode.
+
+       There are a few global options. Other options modify the last output that is specified in ear-
+       lier parameters in the command line. Multiple outputs may be modified  at  the  same  time  by
+       passing  multiple  --output  options  followed  immediately  by  their corresponding modifying
+       options.

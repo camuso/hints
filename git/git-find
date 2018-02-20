@@ -1,0 +1,1 @@
+git log --oneline | awk '/604.el6/,/RHEL6.5/' | grep -i ipmi

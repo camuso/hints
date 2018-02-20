@@ -1,0 +1,1 @@
+scp kernel-2.6.18-53.el5.src.rpm root@10.12.7.213:

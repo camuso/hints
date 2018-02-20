@@ -1,0 +1,16 @@
+# hibernate and reboot
+#
+cd /sys/power
+echo reboot > disk
+echo disk > state
+
+# suspend and reboot
+#
+echo reboot > disk
+echo mem > disk
+
+# also ...
+#
+pm-hibernate
+pm-suspend
+

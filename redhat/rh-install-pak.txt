@@ -1,0 +1,12 @@
+yum install --nogpgcheck *.rpm
+yum install control-center-extra
+yum install conserver-client
+yum install xchat
+	irc.devel.redhat.com/6667
+	#kernel
+	#devel
+	#westford
+	#rhts
+
+# Zimbra mail
+https://mail.corp.redhat.com/zimbra

@@ -1,0 +1,10 @@
+git send-email --to openipmi-developer@lists.sourceforge.net --cc tcamuso@redhat.com --bcc peterm@redhat.com --smtp-server smtp.corp.redhat.com  ~/patches/0001-ipmi-add-new-kernel-options-to-prevent-automatic-ipm.patch
+
+[sendemail]
+	thread = false
+        chainreplyto = false
+        signoffbycc = false
+        suppresscc = all
+        suppressfrom = true
+
+

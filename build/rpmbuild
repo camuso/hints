@@ -1,0 +1,2 @@
+rpmbuild -bb --rebuild --with baseolny --without doc --without debuginfo redhat/rpm/SPECS/kernel.spec
+

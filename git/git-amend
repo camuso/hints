@@ -1,0 +1,58 @@
+
+# Amend the date of the most recent commit with the current time
+# stamp
+#
+git commit --amend --date="$(date -R)"
+
+# Amend the author of the most recent commit.
+#
+git commit --amend --author="Tony Camuso <tcamuso@redhat.com>"
+
+----------------------------------------------------------------
+
+From http://stackoverflow.com/questions/3926768/amend-a-commit-that-wasnt-the-previous-commit
+
+
+Amend a commit that wasn't the previous commit
+
+Frequently I'll have a workflow like the following:
+
+    Commit changes to a group of files
+    Commit changes to a different group of files
+    Realize I missed some changes that belong in the first commit
+
+I can't make use of git commit --amend because it's not the most recent
+commit that I need to change. What's the best way to add changes to the
+first commit without touching the second one?
+
+See also stackoverflow.com/questions/3940266/
+	for a scripted version. – VonC Oct 15 '10 at 9:15
+
+You can use git rebase to solve this. Run git rebase -i sha1 where
+sha1 is the commit hash of the one you want to change. Find the commit
+you want to change, and replace "pick" with "edit" as described in the
+comments of the rebase editor. When you continue from there, you can
+edit that commit.
+
+Note that this will change the sha1 of that commit as well as all
+children -- in other words, this rewrites the history from that point
+forward. You can break repos doing this, but if you haven't pushed,
+it's not as much of a big deal.
+
+@rspeicher: Instead of 'sha1' you might also want to check 'HEAD~N',
+where N is the number of commits before 'HEAD' where you want to begin
+your rebase. – 3lectrologos Oct 13 '10 at 18:46
+
+That looks like it. Thank you! – Robert Speicher Oct 13 '10 at 18:47
+
+@3lectrologos or any other way of referring to a commit: – MatrixFrog Nov 25 '10 at 7:54
+
+If you haven't pushed upstream, you can:
+
+git format-patch -1
+git reset --hard HEAD~1
+//change
+git commit --amend
+git am patchname
+
+

@@ -1,0 +1,266 @@
+From ...
+http://www.cyberciti.biz/tips/howto-linux-write-burn-data-to-dvd-or-dvdrw.html
+
+Howto: Linux write (burn) data to DVD or DVD/RW
+
+by NIX Craft on July 8, 2006 · 18 comments· LAST UPDATED July 10, 2007
+
+in Howto, Linux, RedHat/Fedora Linux
+
+In order to write DVD/DVD-RW from shell prompt you need to install a package
+called dvd+rw-tools.
+
+DVD is another good option for backup, archiving, data exchange etc. You can
+install dvd+rw-tools with following commands. Also note that this package
+works under *BSD, HP-UX, Solaris and other UNIX like operating systems.
+
+Debian installation:
+# apt-get install 'dvd+rw-tools'
+
+Fedora Core Linux installation:
+# yum install 'dvd+rw-tools'
+
+RedHat Enterprise Linux installation:
+# up2date 'dvd+rw-tools'
+
+In order to write DVD you need to install cdrecord tools.
+How do I write DVD?
+
+You need to use growisofs command, which combined mkisofs frontend/DVD
+recording program. From growisofs man page, "growisofs was originally designed
+as a frontend to mkisofs to facilitate appending of data to ISO9660 volumes
+residing on random-access media such as DVD+RW, DVD-RAM, plain files, hard
+disk partitions. In the course of development general purpose DVD recording
+support was implemented, and as of now growisofs supports not only
+random-access media, but even mastering of multiession DVD media such as DVD+R
+and DVD-R/-RW. In addition growisofs supports first-/single-session recording
+of arbitrary pre-mastered image (formatted as UDF, ISO9660 or any other file
+system, if formatted at all) to all supported DVD media types."
+
+First create the ISO image
+# mkisofs -r -o /tmp/var-www-disk1.iso /var/www
+
+Now use the growisofs command to write the ISO onto the DVD:
+# growisofs -Z /dev/dvd=/tmp/var-www-disk1.iso
+
+To append more data for same DVD:
+# growisofs -M /dev/dvd /tmp/file.1
+
+To format (erase) a DVD:
+# dvd+rw-format -force /dev/dvd
+OR
+# dvd+rw-format -force=full /dev/dvd
+
+The dvd+rw-format command formats dvd disk in the specified dvd drive.
+
+To display information about dvd drive and disk using dvd+rw-mediainfo
+command:
+# dvd+rw-mediainfo /dev/dvd
+See also:
+
+    For more information read man pages of above command
+    Visit official web site: DVD+RW/+R/-R[W] for Linux
+
+    submit to reddit
+    Download this as pdf
+
+
+Featured Articles:
+
+    30 Cool Open Source Software I Discovered in 2013
+    30 Handy Bash Shell Aliases For Linux / Unix / Mac OS X
+    Top 30 Nmap Command Examples For Sys/Network Admins
+    25 PHP Security Best Practices For Sys Admins
+    20 Linux System Monitoring Tools Every SysAdmin Should Know
+    20 Linux Server Hardening Security Tips
+    Linux: 20 Iptables Examples For New SysAdmins
+    Top 20 OpenSSH Server Best Security Practices
+    Top 20 Nginx WebServer Best Security Practices
+    20 Examples: Make Sure Unix / Linux Configuration Files Are Free From
+Syntax Errors
+    15 Greatest Open Source Terminal Applications Of 2012
+    My 10 UNIX Command Line Mistakes
+    Top 10 Open Source Web-Based Project Management Software
+    Top 5 Email Client For Linux, Mac OS X, and Windows Users
+    The Novice Guide To Buying A Linux Laptop
+
+{ 18 comments… read them below or add one }
+
+1 Hans-Werner July 12, 2006 at 10:32 am
+
+    Since growisofs has an inbuilt functionality that allows to directly pipe
+mkisofs’s output, it is probably more common that you call it without making
+an ISO beforehand. Note also that it’s absolutely not needed to format a
+DVD+RW more than once. You can just write again with the -Z option in later
+runs. Yes, this is different from CD-RWs.
+
+    Reply
+2 johhnycomelate July 12, 2006 at 8:22 pm
+
+    man growisofs is a much better manual to using growisofs
+
+    Reply
+3 BasketCase July 13, 2006 at 2:25 pm
+
+    Since having growisofs make the iso as it burns has already been mentioned
+here is another tip…
+
+    Before you start burning use par2create from par2cmdline
+(http://parchive.sourceforge.net/) to generate enough par2 recovery blocks to
+fill any space that is left on the disc. That way if the disc gets damaged
+later you may be able to recover the lost data.
+
+    I have written a perl script to calculate out the correct number of par2
+blocks to generate and to do it (it also makes a .md5 file). I have published
+the script here: http://www.sanitarium.net/unix_stuff/par2calc.txt
+
+    Reply
+4 notme October 25, 2006 at 4:38 pm
+
+    if the DVD gets damaged, how can you recover the file? Even it’s not only
+that the file is corrupted. It’s also that you can’t actually read the dvd.
+The dvd reader woudl go crazy and you wouldn’t be able to copy the damaged
+file to disk, afaik?
+
+    Reply
+5 nixCraft October 25, 2006 at 6:06 pm
+
+    Heh
+    perhaps what op or his script suggesting that you can recover particular
+block provided that DVD can be read by DVD drive.
+
+    But in most case DVD reader refuses to read corrupted DVD. I have used
+Sony, HP, Samsung DVD/RW etc none of they were able to read corrupted DVD.
+
+    Reply
+6 Jason January 30, 2007 at 11:05 pm
+
+    Thanks for the howto, I don’t think I would have figured out which tool to
+use otherwise.
+
+    Reply
+7 RichardBronosky February 4, 2007 at 8:40 pm
+
+    True, the man page for growisofs has more complete info, but I would have
+never know to look for growisofs without the page. I would not have felt
+confident in using mkisofs and growisofs together without this example. So I’d
+like to thank the author for his redundancy. This explanation works for the
+way I think.
+
+    Reply
+8 The Evil Bald Person November 26, 2007 at 9:13 pm
+
+    Using PAR2 on removable media is not as daft as some of you think.
+
+    I’ve read from a CD in the past where an edge… erm, chord, containing data
+had actually broken off!
+
+    Just use dd it to a disk image (possibly adding options
+conv=noerror,sync).
+
+    It’ll probably make loads of strange noises and take ages, but you should
+be able to do it depending on where the damage is… unles your disk blows up in
+the process of course!
+
+    Reply
+9 Levi Arias February 27, 2008 at 7:10 pm
+
+    I have a Acer laptop and when I put a cd/dvd disk in it the message
+says…No disc in drive E:
+
+    Reply
+10 dj March 11, 2008 at 2:23 am
+
+    Nice.
+
+    How about DVD-RW packet-writing and UDF filesystem.
+
+    Reply
+11 sohail March 13, 2008 at 5:00 pm
+
+    Will these steps work on RHEL4/RHEL5?
+
+    Will we need to mount the DVD drive before burning?
+
+    Reply
+12 nixCraft March 13, 2008 at 6:11 pm
+
+    Yes it should work on RHEL 4 / 5. No need to mount dvd.
+
+    Reply
+13 Saynos February 22, 2009 at 1:26 pm
+
+    I had a broken(?) DVD RW disc, that NeroLinux isn’t wrote. I run
+“dvd+rw-format -force=full /dev/dvd ” command on my Gentoo, later I wrote that
+DVD without any problem! Thaks a lot! :-)
+    (and sorry ma bad English)
+
+    Reply
+14 anonymouse February 20, 2010 at 8:57 am
+
+    Now use the growisofs command to write the ISO onto the DVD:
+    # growisofs -Z /dev/dvd=/tmp/var-www-disk1.iso
+
+    This will literally write an iso image into a directory on the DVD, which
+is probably not what most people want. I used this command:
+    growisofs -Z /dev/sr0=movie.iso
+    and now have a disc with an ISO image, and not an ISO image that was
+copied litereally on the DVD. Not a lot of use for my DVD player, and the
+waste of a DVD-R disc. Opps.
+    Oh well.
+
+    Reply
+15 anonymouse February 20, 2010 at 9:00 am
+
+    Update:
+    This is the command as specified in the man page, # man growisofs :-
+    To use growisofs to write a pre-mastered ISO-image to a DVD:
+
+    growisofs -dvd-compat -Z /dev/dvd=image.iso
+
+    Do not use the example above, which is
+    # growisofs -Z /dev/dvd=/tmp/var-www-disk1.iso
+
+    Reply
+16 Trevor September 14, 2010 at 1:33 am
+
+    I am unable to burn a DVD with any program. I tried the command above
+
+    trevor@Trevscomp:~/Desktop$ growisofs -Z /dev/dvd=dws5203209.iso
+    Executing ‘builtin_dd if=dws5203209.iso of=/dev/dvd obs=32k seek=0′
+    /dev/dvd: “Current Write Speed” is 3.3x1352KBps.
+    0/2206629888 ( 0.0%) @0x, remaining ??:?? RBU 100.0% UBU 0.0%
+    0/2206629888 ( 0.0%) @0x, remaining ??:?? RBU 100.0% UBU 0.0%
+    0/2206629888 ( 0.0%) @0x, remaining ??:?? RBU 100.0% UBU 0.0%
+    0/2206629888 ( 0.0%) @0x, remaining ??:?? RBU 100.0% UBU 0.0%
+    0/2206629888 ( 0.0%) @0x, remaining ??:?? RBU 100.0% UBU 0.0%
+    0/2206629888 ( 0.0%) @0x, remaining ??:?? RBU 100.0% UBU 0.0%
+    0/2206629888 ( 0.0%) @0x, remaining ??:?? RBU 100.0% UBU 0.0%
+    0/2206629888 ( 0.0%) @0x, remaining ??:?? RBU 100.0% UBU 0.0%
+    0/2206629888 ( 0.0%) @0x, remaining ??:?? RBU 100.0% UBU 0.0%
+    0/2206629888 ( 0.0%) @0x, remaining ??:?? RBU 100.0% UBU 0.0%
+    0/2206629888 ( 0.0%) @0x, remaining ??:?? RBU 100.0% UBU 0.0%
+    0/2206629888 ( 0.0%) @0x, remaining ??:?? RBU 100.0% UBU 0.0%
+    :-[ WRITE@LBA=0h failed with SK=3h/POWER CALIBRATION AREA ERROR]:
+Input/output error
+    :-( write failed: Input/output error
+
+    CAN ANYONE HELP ME?????
+
+    Reply
+17 André October 5, 2013 at 8:22 am
+
+    i’m getting this:
+
+        root@Debian-Wheezy:/media/MINISTATION# growisofs -dvd-compat -Z
+/media/MINISTATION/mondorescue-1.iso
+        growisofs: no genisoimage options specified, aborting…
+        root@Debian-Wheezy:/media/MINISTATION#
+
+    Reply
+18 John Doe December 29, 2013 at 10:41 pm
+
+    link
+    http://fy.chalmers.se/~appro/linux/DVD+RW/
+    seems to be outdated.
+

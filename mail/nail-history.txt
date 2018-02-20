@@ -1,0 +1,14 @@
+ 1034  nail -s "This is a test" -r "tcamuso@redhat.com" camusos@myfairpoint.com << EOF
+ 1035  nail -s "This is a test" -r "tcamuso@redhat.com" camusos@myfairpoint.com << EOF
+ 1036  nail -s "This is a test" -r "tcamuso@redhat.com" camusos@myfairpoint.com << EOF
+ 1037  nail
+ 1038  nail 
+ 1039  nail -s "This is a test" -r "tcamuso@redhat.com" camusos@myfairpoint.com << EOF
+ 1040  nail -s "This is a test" -r "tcamuso@redhat.com" camusos@myfairpoint.net << EOF
+ 1041  nail -s "rhmaintaners patch" -r "tcamuso@redhat.com" prarit@redhat.com << EOF
+ 1042  man nail
+ 1044  nail -q rhmaint.patch -s "rhmaintainers patch -r "tcamuso@redhat.com" prarit@redhat.com << EOF
+ 1045  nail -q rhmaint.patch -s "rhmaintainers patch" -r "tcamuso@redhat.com" prarit@redhat.com << EOF
+ 1046  nail -q rhmaint.patch -s "rhmaintainers patch" -r "tcamuso@redhat.com" prarit@redhat.com << EOF
+ 1049  history | grep nail
+ 1052  history | grep nail > ~/hints/mail/nail-history.txt

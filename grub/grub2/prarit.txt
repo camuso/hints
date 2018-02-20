@@ -1,0 +1,132 @@
+
+
+[If you're planning on responding to this email thread with complaints about the
+general crapiness of grub2 ... don't.  It isn't anything I've heard or the rest
+of us have heard a billion times previously.  We're here and now.  If you want
+to complain about it, you can file BZs or write emails to the grub-devel list.
+*Jes, this means you.*]
+
+I'm sharing a system with another team member (again, thank you :)) to debug a
+problem with the firmware loading code upstream, and I noticed that my usual
+tricks of using grub2-reboot (and my wrapper script for it, grub2-bootonce) were
+not working.  While discussing the problem with the team member he mentioned
+that he did the following in /boot/grub2/grub.cfg
+
+if [ "${next_entry}" ] ; then
+   set default="${next_entry}"
+   set next_entry=
+   save_env next_entry
+   set boot_once=true
+else
+   set default=2
+fi
+set default=2
+
+in order to always boot the second grub2 entry by default.  I've heard from
+other engineers that grub2-reboot doesn't work all the time and I think I know
+why...
+
+The problem is that manually modifying /etc/grub2/grub.cfg breaks almost all of
+the grub2-* scripts on the system, it is not sticky and the file will be
+rewritten the moment the grub.cfg is regenerated.
+
+The proper thing to do here is use
+
+grub2-set-default 2
+
+on the command line and that should be permanent.
+
+IMO it is important for us to use the code that our customers will use and our
+guides will be written such that they should use grub2-set-default.  It is
+always important for us to "eat our own dogfood" even if it is just gruel.
+
+P.
+
+-----------------------------------------------------------------------------
+
+So you've installed your laptop, rebooted, and you have no grub2, or you've
+somehow magically booted into the dreaded grub2 prompt.  After you've finished
+screaming at the computer gods for smiting you, follow these instructions which
+should get you back up and running ...
+
+[WARNING: some systems have UEFI enable/disable as well as things like
+"Fast Boot" enable/disable in the BIOS.  The settings may have to be tweaked
+before the laptop will boot.]
+
+No grub2
+--------
+
+Take the live install media and boot into rescue or normal mode [AFAICT,
+rescue mode in Fedora 18 does not work].
+
+su -
+mkdir ~/boot
+mount /dev/sda2 ~/boot
+mount /dev/sda1 ~/boot/efi
+
+You need to install grub2-efi and shim packages via
+
+yum -y install grub2-efi shim
+
+[Note: no shim available in F17.  You may have to manually load the F18
+package]
+
+grub2-install --boot-directory=~/boot /dev/sda
+
+[grub2-mkconfig will not work here, as it looks at /boot, not ~/boot]
+
+reboot
+
+and move onto the next section ...
+
+
+The $%&^@!!! grub2 prompt at boot
+---------------------------------
+
+At the prompt do
+
+ls
+
+which will display all the partitions available, some will be marked as gpt
+and others will be marked as regular old partitions.
+
+Look at the gpt partitions to find your /boot, by using TAB-autocompletion
+
+ex)
+
+ls (hd0,gpt2)/
+
+The above partition will be your grub2 "root" partition.  This is not the
+"root" partition you normally use.
+
+Execute the following:
+
+1.  set root=(hd0,gpt2)
+2.  linux vmlinux-3-....fc18.x86_64 root=/dev/dm-2
+
+[Note that the step above took some trial-and-error to figure out that my
+root partition was dm-2.  If you have grub2/grub.cfg available, cat it and
+use the same boot arguments.]
+
+3.  initrd initramfs-3-....fc18.x86_64
+4.  boot
+
+The system should boot at this time.
+
+
+Fixing/Reinstalling grub2
+-------------------------
+
+1.  Login as root.
+2.  Execute
+
+grub2-mkconfig -o /boot/grub2/grub.cfg
+grub2-install --boot-directory=/boot /dev/sda
+
+3.  Reboot and that should work ...
+
+/me just spent the AM figuring that out.
+
+P.
+
+

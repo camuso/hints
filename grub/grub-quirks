@@ -1,0 +1,10 @@
+Grub v.97-13 and below have problems recognizing some filesystems,
+e.g. ext4. RHEL5 comes with v.97-13, so this will present a problem
+if you want to boot from partitions that are formatted ext4, such
+as RHEL6.
+
+The only way I've been able to recover from this is to install RHEL6
+on a different partition and boot it, then use the grub v.97-81 that
+comes with RHEL6 to setup the boot. That version of grub will be
+able to see all partitions.
+

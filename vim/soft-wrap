@@ -1,0 +1,52 @@
+Soft word wrap in VIM 7 (for prose mainly)
+
+Soft word wrap seems like a black art judging by Google’s search results,
+especially as many of the solutions are for previous version of Vim.  I finally
+came across the solution via vim’s homepage.  And this solution automatically
+re-soft wraps the text when you insert some text in an existing line,
+thankfully.  There are few more tweaks needed, however.
+
+In Vim 7:
+
+:set formatoptions=1
+:set linebreak
+
+“linebreak” tells Vim 7 to break the lines visually.  “formatoptions=1” tells
+vim not to include hard linebreaks and break on the previous word (see below).
+(Use :help fo-table for all the options.)  You must make sure you’ve got “list”
+off for this to work (:set nolist).  You now need to tell Vim 7 how to break
+the lines:
+
+:set breakat=\ |@-+;:,./?^I
+
+specifies spaces (\ ) and tabs (^I) etc cause lines to break.  This is the
+default.   But because now each paragraph is a single line, the j and k will
+move up and down whole paragraphs, instead of lines.  To fix this I have these
+lines in my .vimrc.  It sets the normal hjkl commands to work via visual, not
+actual, lines. You can issue these commands at runtime by prepending : to them.
+
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+
+In normal mode, gwap will wrap the paragraph according to defaults.
+
+If you want a border on the left of the screen in Vim 7, use:
+
+:set foldcolumn=7
+
+I’ve not found out how to include a border on the right of the screen with
+formatoptions=1 which seems to preclude “textwidth” etc.  I have a resized
+vertically split vim window using :vsplit (a la this) to achieve something
+similar.
+
+As these are not the kind of settings I use when I code, I use :mksession and
+:mksession! to save these settings and use that session, via vim -S
+Session.vim, whenever I fancy writing some prose.
+
+Decent format options for text:
+
+: set fo tqr2n
+:   formatoptions=tqran2
+

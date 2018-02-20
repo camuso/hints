@@ -1,0 +1,58 @@
+Marvin Kosmal <mkosmal <at> gmail.com> writes:
+
+>
+> Hi
+>
+> I want to dual boot FC13 and Sabayon5.3
+>
+> I googled and there are thousands of dual boots out there..
+>
+> Does Fedora have a simple good one?
+>
+> TIA
+>
+> Marvin
+Hi,
+you are very enigmatic with that "there are thousands of dual boots out there".
+Regardless, I will try to help, if the below is what you mean.
+
+Let's assume you have a fresh disk.
+
+You install F13 by formatting the disk accordingly (that is you take some space
+for F13, leave some for other distros/OS's), and install its boot loader (GRUB)
+to MBR, by which it becomes the main boot loader for F13 and other installations.
+
+Then, you install your other distro (e.g. Sabayon), but install its boot loader
+to its own root partition (/boot subdirectory).
+
+Next, you boot F13, sign in as root and modify its GRUB to present you with
+a boot menu that includes Sabayon, by whose selection you also boot it).
+
+Assuming that you partitioned the sda disk like:
+/dev/sda1         # F13 root partition, which corresponds to "root (hd0,0)"
+/dev/sda2         # Sabayon root partition, which corresponds to "root (hd0,1)"
+
+here is an example cut of a dual boot GRUB config file:
+
+# cat /etc/grub.conf
+...
+title Fedora (2.6.33.6-147.2.4.fc13.i686)
+        root (hd0,0)
+        kernel /boot/vmlinuz-2.6.33.6-147.2.4.fc13.i686 ro
+root=UUID=4a459357-74f1-4bb2-8924-0a834b58982c rd_NO_LUKS rd_NO_LVM rd_NO_MD
+rd_NO_DM LANG=en_US.UTF-8 SYSFONT=latarcyrheb-sun16 KEYBOARDTYPE=pc KEYTABLE=us
+noiswmd rhgb quiet
+        initrd /boot/initramfs-2.6.33.6-147.2.4.fc13.i686.img
+
+title Sabayon
+       rootnoverify (hd0,1)
+       chainloader +1
+
+JB
+
+
+
+
+
+
+

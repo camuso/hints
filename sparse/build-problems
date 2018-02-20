@@ -1,0 +1,35 @@
+# Problems building with Qt
+# =========================
+
+# fatal error: gtk/gtk.h: No such file or directory
+# fatal error: gdk/gdk.h: No such file or directory
+
+yum install gtk+ gtk+-devel
+
+find /usr/include -type f -name gtk.h
+/usr/include/gtk-1.2/gtk/gtk.h
+
+find /usr/include/ -name gdk.h
+/usr/include/gtk-1.2/gdk/gdk.h
+
+# instead of copying these files, which is a mess, it is better to
+# change the INCLUDE option in the Qt project file.
+#
+rsync -Pva /usr/include/gtk-1.2/gtk /usr/include/.
+rsync -Pva /usr/include/gtk-1.2/gdk /usr/include/.
+cp /usr/include/glib-1.2/glib.h /usr/include
+
+# /usr/include/glib.h:66: error: glibconfig.h: No such file or directory
+sudo find / -mount -name 'glibcon*'
+/usr/lib64/glib/include/glibconfig.h
+/usr/lib64/glib-2.0/include/glibconfig.h
+
+# Problems building with command line make
+# ========================================
+#
+# Makefile:66: Your system does not have libxml, disabling c2xml
+# Makefile:78: Your system does not have libgtk2, disabling test-inspect
+# Makefile:98: Your system does not have llvm, disabling sparse-llvm
+sudo dnf install libxml++ libxml++-devel libxml2 libxml2-devel
+sudo dnf install gtk2-devel.x86_64
+sudo dnf install llvm-devel
