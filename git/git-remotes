@@ -28,3 +28,14 @@ fatal: The current branch master has no upstream branch.
 To push the current branch and set the remote as upstream, use
 
     git push --set-upstream https://github.com/camuso/kabiparser.git master
+
+# To delete a local link to a remote directory
+#
+git branch -D <remote-branch>
+git remote rm <remote-repo>
+
+# Also useful
+#
+git remote prune <remote-repo>
+git gc --prune=now
+
