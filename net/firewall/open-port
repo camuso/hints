@@ -1,0 +1,4 @@
+firewall-cmd --get-active-zones
+firewall-cmd --zone=public --add-port=3389/tcp --permanent
+firewall-cmd --reload
+
