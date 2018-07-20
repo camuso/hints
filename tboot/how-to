@@ -87,10 +87,10 @@ PATCH PROCESS
    	$ git clone git://repo.or.cz/fast-export.git
 
    Create the git repo
-	$ mkdir git-repo
-	$ git init git-repo
-	$ cd git_repo
-	$ ~/fast-export/hg-fast-export.sh -r /path/to/old/mercurial_repo
+	$ mkdir git
+	$ git init git
+	$ cd git
+	$ ~/fast-export/hg-fast-export.sh -r ../hg/code
 	$ git checkout HEAD
 
 3. Use git format-patch to extract the patches you need to apply and save them

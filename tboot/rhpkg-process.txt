@@ -9,7 +9,7 @@ Acquire the rhpkg repo:
 
    Fedora:
       $ sudo curl -o /etc/yum.repos.d/rhpkg.repo \
-	      http://download.devel.redhat.com/rel-eng/dist-git/fedora/rhpkg.repo
+	      http://download-node-02.eng.bos.redhat.com/rel-eng/dist-git/fedora/rhpkg.repo
 
 Then install the required packages.
 
@@ -154,3 +154,22 @@ for f in $(ls -1 *.patch); do \
 	    mv $f $fname; \
 	    done
 
+Patch renaming and listing sequence.
+
+gitforpat ../patches/ 9e6a264~1..HEAD
+ls -1  ../patches/*.patch > 76.list
+
+count=1
+>t1
+while read line; do
+	printf -v linout "Patch%02d: " $count
+	echo $linout$line >> t1
+	let count++
+done < ../patches/patchlist.txt
+
+>t2
+count=$(cat t1 | wc -l)
+for ((i=1; i <= count; ++i)); do
+	printf -v linout "%%patch%02d -p1 -b .%04d" $i $i
+	echo $linout >> t2
+done
