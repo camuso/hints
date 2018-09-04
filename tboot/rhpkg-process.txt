@@ -55,13 +55,19 @@ Then install the required packages.
 
    $ mv ~/Downloads/tboot-1.9.4.tar.gz /work/tboot/rhel-7.3
 
+   Then upload the new source.tar.gz file
 
-   If you're updating, then apply the patches to the sources after
-   un-packing the tar or gzip file for the version that you will be
-   updating.
+   rhpkg-sha512 upload tboot-1.9.7.tar.gz	# rhel-8 requires SHA512
+   rhpkg upload tboot-1.9.6.tar.gz		# rhel-7 and below
 
-   This is the tar file that gets loaded into the package's top directory
-   when you issued the 'rhpkg clone' command.
+2.1  If you're patching an existing version.
+     Apply the patches to the sources after un-packing the tar or gzip file
+     for the version that you will be updating.
+
+     This is the tar file that gets loaded into the package's top directory
+     when you issued the 'rhpkg clone' command.
+
+     Be sure to bump the release number in tboot.spec.
 
 3. Edit the spec file to update the version number (rebase) or release
    number (patches).
