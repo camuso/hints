@@ -152,3 +152,12 @@ errata.devel.redhat.com
 
 brew latest-pkg rhel-7.3-candidate tboot
 
+ANNOCHECK
+=========
+dnf install -y annobin
+
+Include the following in the spec file.
+%build
+%set_build_flags	# <----------
+%make_build debug=y	# <----------
+
