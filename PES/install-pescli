@@ -1,0 +1,39 @@
+
+$ git -c http.sslVerify=false clone https://gitlab.cee.redhat.com/leapp/pescli
+Cloning into 'pescli'...
+warning: redirecting to https://gitlab.cee.redhat.com/leapp/pescli.git/
+remote: Counting objects: 172, done.
+remote: Compressing objects: 100% (110/110), done.
+remote: Total 172 (delta 67), reused 161 (delta 59)
+Receiving objects: 100% (172/172), 32.72 KiB | 6.54 MiB/s, done.
+Resolving deltas: 100% (67/67), done.
+
+$ pip3 install --user l ./pescli
+Processing ./pescli
+Collecting l
+  Downloading https://files.pythonhosted.org/packages/a9/64/8ee43ca4cfeae69fc5768502e1e44916adac11e6d6609edf50d481976341/l-0.11.0.tar.gz
+Requirement already satisfied: requests in /usr/lib/python3.6/site-packages (from pes-cli==1.0.0)
+Collecting betterpath (from l)
+  Downloading https://files.pythonhosted.org/packages/74/60/be35047cf73c77b76aeee08de0a729b745f9f3e6c7393670115f52597e81/betterpath-0.2.2.tar.gz
+Collecting click (from l)
+  Downloading https://files.pythonhosted.org/packages/fa/37/45185cb5abbc30d7257104c434fe0b07e5a195a6847506c074527aa599ec/Click-7.0-py2.py3-none-any.whl (81kB)
+    100% |████████████████████████████████| 81kB 1.1MB/s
+Requirement already satisfied: chardet<3.1.0,>=3.0.2 in /usr/lib/python3.6/site-packages (from requests->pes-cli==1.0.0)
+Requirement already satisfied: idna<2.8,>=2.5 in /usr/lib/python3.6/site-packages (from requests->pes-cli==1.0.0)
+Requirement already satisfied: urllib3<1.25,>=1.21.1 in /usr/lib/python3.6/site-packages (from requests->pes-cli==1.0.0)
+Collecting vcversioner (from betterpath->l)
+  Downloading https://files.pythonhosted.org/packages/c5/cc/33162c0a7b28a4d8c83da07bc2b12cee58c120b4a9e8bba31c41c8d35a16/vcversioner-2.16.0.0.tar.gz
+Collecting zope.interface>=4.0.0 (from betterpath->l)
+  Downloading https://files.pythonhosted.org/packages/19/17/1d198a6aaa9aa4590862fe3d3a2ed7dd808050cab4eebe8a2f2f813c1376/zope.interface-4.6.0-cp36-cp36m-manylinux1_x86_64.whl (167kB)
+    100% |████████████████████████████████| 174kB 1.5MB/s
+Requirement already satisfied: setuptools in /usr/lib/python3.6/site-packages (from zope.interface>=4.0.0->betterpath->l)
+Installing collected packages: vcversioner, zope.interface, betterpath, click, l, pes-cli
+  Running setup.py install for vcversioner ... done
+  Running setup.py install for betterpath ... done
+  Running setup.py install for l ... done
+  Running setup.py install for pes-cli ... done
+Successfully installed betterpath-0.2.2 click-7.0 l-0.11.0 pes-cli-1.0.0 vcversioner-2.16.0.0 zope.interface-4.6.0
+
+$ which pes-cli
+~/.local/bin/pes-cli
+
