@@ -37,3 +37,42 @@ Successfully installed betterpath-0.2.2 click-7.0 l-0.11.0 pes-cli-1.0.0 vcversi
 $ which pes-cli
 ~/.local/bin/pes-cli
 
+May need to do the following before doing a git pull in a new terminal
+session.
+
+$ git config --global http.sslVerify false
+
+After updating the git repo, you need to update the installed script
+with the following command.
+
+$ pip3 install --upgrade --user l ./pescli
+Processing ./pescli
+Requirement already up-to-date: l in /home/tcamuso/.local/lib/python3.6/site-packages
+Collecting requests (from pes-cli==1.0.0)
+  Downloading https://files.pythonhosted.org/packages/ff/17/5cbb026005115301a8fb2f9b0e3e8d32313142fe8b617070e7baad20554f/requests-2.20.1-py2.py3-none-any.whl (57kB)
+    100% |████████████████████████████████| 61kB 289kB/s
+Requirement already up-to-date: betterpath in /home/tcamuso/.local/lib/python3.6/site-packages (from l)
+Requirement already up-to-date: click in /home/tcamuso/.local/lib/python3.6/site-packages (from l)
+Collecting idna<2.8,>=2.5 (from requests->pes-cli==1.0.0)
+  Downloading https://files.pythonhosted.org/packages/4b/2a/0276479a4b3caeb8a8c1af2f8e4355746a97fab05a372e4a2c6a6b876165/idna-2.7-py2.py3-none-any.whl (58kB)
+    100% |████████████████████████████████| 61kB 580kB/s
+Requirement already up-to-date: chardet<3.1.0,>=3.0.2 in /usr/lib/python3.6/site-packages (from requests->pes-cli==1.0.0)
+Collecting certifi>=2017.4.17 (from requests->pes-cli==1.0.0)
+  Downloading https://files.pythonhosted.org/packages/56/9d/1d02dd80bc4cd955f98980f28c5ee2200e1209292d5f9e9cc8d030d18655/certifi-2018.10.15-py2.py3-none-any.whl (146kB)
+    100% |████████████████████████████████| 153kB 710kB/s
+Collecting urllib3<1.25,>=1.21.1 (from requests->pes-cli==1.0.0)
+  Downloading https://files.pythonhosted.org/packages/62/00/ee1d7de624db8ba7090d1226aebefab96a2c71cd5cfa7629d6ad3f61b79e/urllib3-1.24.1-py2.py3-none-any.whl (118kB)
+    100% |████████████████████████████████| 122kB 644kB/s
+Requirement already up-to-date: vcversioner in /home/tcamuso/.local/lib/python3.6/site-packages (from betterpath->l)
+Requirement already up-to-date: zope.interface>=4.0.0 in /home/tcamuso/.local/lib/python3.6/site-packages (from betterpath->l)
+Collecting setuptools (from zope.interface>=4.0.0->betterpath->l)
+  Downloading https://files.pythonhosted.org/packages/e7/16/da8cb8046149d50940c6110310983abb359bbb8cbc3539e6bef95c29428a/setuptools-40.6.2-py2.py3-none-any.whl (573kB)
+    100% |████████████████████████████████| 573kB 548kB/s
+Installing collected packages: idna, certifi, urllib3, requests, pes-cli, setuptools
+  Found existing installation: pes-cli 1.0.0
+    Uninstalling pes-cli-1.0.0:
+      Successfully uninstalled pes-cli-1.0.0
+  Running setup.py install for pes-cli ... done
+Successfully installed certifi-2018.10.15 idna-2.7 pes-cli-1.0.0 requests-2.20.1 setuptools-40.6.2 urllib3-1.24.1
+
+
