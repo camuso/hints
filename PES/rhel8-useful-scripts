@@ -1,0 +1,25 @@
+
+create the rhel8.0.repo in /etc/yum.repos.d
+- just copy the contents of the file from
+  https://gitlab.cee.redhat.com/thozza/rhel-8-useful-scripts/blob/master/rhel-8.0.repo
+
+- must install
+  . python-pyyaml
+  . jinja2
+  . python3-unicodecsv
+
+- Clone the rhel8 scripts repo and put it in your path.
+
+$ git -c http.sslVerify=false clone https://gitlab.cee.redhat.com/thozza/rhel-8-useful-scripts.git
+Cloning into 'rhel-8-useful-scripts'...
+remote: Counting objects: 74, done.
+remote: Compressing objects: 100% (42/42), done.
+remote: Total 74 (delta 37), reused 59 (delta 31)
+Unpacking objects: 100% (74/74), done.
+
+$ mv rhel-8-useful-scripts/ rhel8
+
+PATH=$PATH:$HOME/rhel8
+
+
+
