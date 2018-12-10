@@ -1,0 +1,41 @@
+
+# Get the session numbers
+#
+$  loginctl -l
+SESSION  UID USER    SEAT  TTY
+      2 1000 tcamuso seat0    
+      5 1000 tcamuso seat0    
+
+2 sessions listed.
+
+# Display information for session 2
+#
+$ loginctl show-session 2
+Id=2
+User=1000
+Name=tcamuso
+Timestamp=Mon 2018-12-10 05:39:49 EST
+TimestampMonotonic=32955388
+VTNr=1
+Seat=seat0
+Display=:0
+Remote=no
+Service=lightdm
+Desktop=cinnamon
+Scope=session-2.scope
+Leader=1671
+Audit=2
+Type=x11
+Class=user
+Active=no
+State=closing
+IdleHint=no
+IdleSinceHint=1544444079804252
+IdleSinceHintMonotonic=5722790394
+LockedHint=no
+
+# grep for the session-type
+#
+$ loginctl show-session 2 | grep Type
+Type=x11
+
