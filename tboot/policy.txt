@@ -1,11 +1,19 @@
 # Create a platform owner LCP as follows
 
 tpmnv_defindex -i 0x40000001 -s 54 -pv 2 -p $OWNER_PASSWORD
-
 lcp_mlehash -c "logging=serial,memory" /boot/tboot.gz >mle.txt
 lcp_crtpolelt --create --type mle --out mle.elt mle.txt
 lcp_crtpollist --create --out mle.lst mle.elt
 lcp_crtpol2 --create --type list --minver 0x30 --ctrl 0 --pol mle.pol --data mle.dat mle.lst
+
+New LCP as of 1.9.9
+
+lcp2_mlehash --create --alg sha256 --cmdline "logging=serial,memory" /boot/tboot.gz > mle.txt
+lcp2_crtpolelt --create --type mle --alg sha256 --ctrl 0x00 --minver 0 --out tbootmle.elt mle.txt
+lcp2_crtpollist --create --out list.lst tbootmle.elt
+lcp2_crtpol --verbose --create --type list --pol list.pol --alg sha256 --data list.data --sign 0x8 list.lst
+
+Output files are list.data and list.pol
 
 # txt-stat | grep -i secret
 ---------------------------
