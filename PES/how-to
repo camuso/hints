@@ -1,0 +1,5 @@
+
+Using events-to-pes.py command line
+
+$ events-to-pes.py removed --dry-run pes-removals.yaml
+
