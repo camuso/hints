@@ -1,0 +1,25 @@
+
+# Build the libsparse.a and get the sparse headers into /usr/include/sparse
+#
+cd /work
+git clone http://git.kernel.org/cgit/devel/sparse/sparse.git/
+
+cd sparse
+git clone https://github.com/camuso/libsparse.git redhat
+
+# If you intend to change anything in libsparse, use
+#
+git clone git+ssh://git.engineering.redhat.com/srv/git/users/tcamuso/libsparse/libsparse.git/.git redhat
+
+cd redhat
+make
+
+# Build the kabitools
+# ===================
+
+# You can skip this step if you built libsparse locally, as shown above.
+#
+sudo yum install http://people.redhat.com/tcamuso/kabitools/libsparse/x86_64/libsparse.a
+
+cd /work
+
