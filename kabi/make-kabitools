@@ -2,24 +2,36 @@
 # Build the libsparse.a and get the sparse headers into /usr/include/sparse
 #
 cd /work
-git clone http://git.kernel.org/cgit/devel/sparse/sparse.git/
-
+mkdir sparse
 cd sparse
+git clone git://git.kernel.org/pub/scm/devel/sparse/sparse.git src
 git clone https://github.com/camuso/libsparse.git redhat
 
 # If you intend to change anything in libsparse, use
 #
 git clone git+ssh://git.engineering.redhat.com/srv/git/users/tcamuso/libsparse/libsparse.git/.git redhat
 
+# Enter the redhat directory, create the rpmtree (~/bin/rpmtree), and
+# build libsparse.a
+#
 cd redhat
+rpmtree rpm
 make
+yum install rpm/RPMS/x86_64/libsparse-0.6.1-2.el8.x86_64.rpm
 
 # Build the kabitools
 # ===================
-
-# You can skip this step if you built libsparse locally, as shown above.
 #
-sudo yum install http://people.redhat.com/tcamuso/kabitools/libsparse/x86_64/libsparse.a
-
+yum install boost boost-devel -y
 cd /work
+mkdir kabi
+cd kabi
+git clone git://git.engineering.redhat.com/users/tcamuso/kabitools/kabitools.git src
+cd src/redhat
+rpmtree rpm
+make
+
+# Install the kabitools
+#
+yum install -y rpm/RPMS/x86_64/kabitools-3.6.2-2.el8.x86_64.rpm
 
