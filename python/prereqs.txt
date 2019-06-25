@@ -1,0 +1,13 @@
+# As root ..
+# ===========
+dnf install python-devel
+dnf install json
+dnf install python-pip
+dnf install python3-pip
+dnf install libtool
+
+# As user ..
+# ==========
+pip install jq	# json interpreter
+pip install yq	# yaml interpreter that uses json
+
