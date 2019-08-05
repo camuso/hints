@@ -1,0 +1,100 @@
+
+
+=============================
+UEFI systems: boot order foo
+=============================
+
+
+They are set to PXE first, then fall to the Shell prompt.
+
+If UEFI systems are running an automated Beaker job the jobs kickstart file will correct the boot order for reboots during automated testing:
+-------
+sample:
+-------
+https://beaker.engineering.redhat.com/kickstart/4413995
+---<-snip->---
+if efibootmgr &>/dev/null ; then
+    # The installer should have added a new boot entry for the OS
+    # at the top of the boot order. We move it to the end of the order
+    # and set it as BootNext instead.
+    boot_order=$(efibootmgr | awk '/BootOrder/ { print $2 }')
+    os_boot_entry=$(cut -d, -f1 <<<"$boot_order")
+    new_boot_order=$(cut -d, -f2- <<<"$boot_order"),"$os_boot_entry"
+    efibootmgr -o "$new_boot_order"
+    efibootmgr -n "$os_boot_entry"
+    # save the boot entry for later, so that rhts-reboot can set BootNext as well
+    echo "$os_boot_entry" >/root/EFI_BOOT_ENTRY.TXT
+fi
+---<-snip->---
+
+
+
+
+If you are running a Beaker job and have reserved the system
+with the reserve task (<task name="/distribution/reservesys" role="STANDALONE"/>), then running the rhts-reboot command
+helps you:
+
+--------------------
+/usr/bin/rhts-reboot
+--------------------
+$ cat /usr/bin/rhts-reboot
+-----<-snip->-----
+if efibootmgr &>/dev/null ; then
+    os_boot_entry=$(efibootmgr | awk '/BootCurrent/ { print $2 }')
+    # fall back to /root/EFI_BOOT_ENTRY.TXT if it exists and BootCurrent is not available
+    if [[ -z "$os_boot_entry" && -f /root/EFI_BOOT_ENTRY.TXT ]] ; then
+        os_boot_entry=$(</root/EFI_BOOT_ENTRY.TXT)
+    fi
+    if [[ -n "$os_boot_entry" ]] ; then
+        logger -s "efibootmgr -n $os_boot_entry"
+        efibootmgr -n $os_boot_entry
+    else
+        logger -s "Could not determine value for BootNext!"
+    fi
+fi
+-----<-snip->-----
+
+
+
+--------------------------------
+You can boot OS from the Shell>
+-------------------------------
+If you get to Shell> and want to boot the OS.
+Shell> map -r
+   (look for the FS*: for the hard drive)
+
+Shell> FS0:
+  (hard drive at FS0)
+
+FS0:\> cd efi
+
+FS0:\efi\> cd redhat
+
+FS0:\efi\redhat\> grubaa64.efi
+ (this will boot from grub)
+
+
+
+-------------------------------
+From booted aarch64 system
+-------------------------------
+man efibootmgr  
+
+
+
+That being said...
+Remember these systems are configured for automated testing.
+They are set to PXE first then fall to Shell by design.
+If you change the boot order you need return it to its original
+boot order before you return the system to Beaker. Else Beaker jobs
+will fail to install. With great power comes great responsibility.
+Please remember to be responsible 
+
+
+
+-EndFile
+
+Best,
+-pbunyan
+
+
