@@ -1,0 +1,10 @@
+http://download.eng.bos.redhat.com/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-8/compose/BaseOS/x86_64/os/Packages/
+
+yum install -y \
+    http://download.eng.bos.redhat.com/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-8/compose/BaseOS/x86_64/os/Packages/python3-requests-kerberos-0.12.0-2.el8+7.noarch.rpm \
+    http://download.eng.bos.redhat.com/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-8/compose/BaseOS/x86_64/os/Packages/python3-koji-cli-plugins-1.18.0-35.1.el8.noarch.rpm \
+    http://download.eng.bos.redhat.com/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-8/compose/BaseOS/x86_64/os/Packages/python3-koji-1.18.0-35.1.el8.noarch.rpm \
+    http://download.eng.bos.redhat.com/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-8/compose/BaseOS/x86_64/os/Packages/python3-kerberos-1.2.5-6.el8+7.x86_64.rpm \
+    http://download.eng.bos.redhat.com/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-8/compose/BaseOS/x86_64/os/Packages/python3-brewkoji-1.23-1.el8.noarch.rpm \
+    http://download.eng.bos.redhat.com/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-8/compose/BaseOS/x86_64/os/Packages/koji-1.18.0-35.1.el8.noarch.rpm \
+    http://download.eng.bos.redhat.com/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-8/compose/BaseOS/x86_64/os/Packages/brewkoji-1.23-1.el8.noarch.rpm
