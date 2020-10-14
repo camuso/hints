@@ -1,0 +1,10 @@
+
+After joining the kernel development group, install the necessities.
+
+sudo dnf install -y python-devel
+sudo dnf install -y libtool
+sudo dnf install -y python-bugzilla
+pip install --user setuptools
+python3 -m pip install --user git+https://gitlab.com/cki-project/cki-lib.git/#egg=cki_lib
+
+
