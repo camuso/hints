@@ -6,5 +6,12 @@ sudo dnf install -y libtool
 sudo dnf install -y python-bugzilla
 pip install --user setuptools
 python3 -m pip install --user git+https://gitlab.com/cki-project/cki-lib.git/#egg=cki_lib
+pip3 install --user --force-reinstall -e .  # <- don't forget the dot at the end!
+
+$ CKI_LOGGING_LEVEL=DEBUG \
+	python3 -m webhook.bugzilla \
+	--merge-request https://gitlab.com/redhat/rhel/kernel/8.y/kernel-test/-/merge_requests/68 \
+	--note request-bz-evaluation
+
 
 
