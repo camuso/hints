@@ -6,6 +6,10 @@ sudo dnf install -y libtool
 sudo dnf install -y python-bugzilla
 pip install --user setuptools
 python3 -m pip install --user git+https://gitlab.com/cki-project/cki-lib.git/#egg=cki_lib
+
+cd /work
+git clone https://gitlab.com/cki-project/kernel-webhooks.git webhook
+cd webhook
 pip3 install --user --force-reinstall -e .  # <- don't forget the dot at the end!
 
 Go here to generate personal token.
@@ -99,6 +103,11 @@ Merge Request passes bz validation
 2020-10-14T15:45:02.651 - [DEBUG] - cki.cki_lib.gitlab - Requested: https://gitlab.com/api/v4/projects/20363472/merge_requests/68/approvals
 2020-10-14T15:45:02.652 - [INFO] - cki.webhook.bugzilla - We have 0 approvals
 2020-10-14T15:45:02.652 - [DEBUG] - cki.webhook.bugzilla - Computed next state as State.CIBZVALID
-[tcamuso@dhcp40-158 webhooks]$ export GITLAB_TOKENS='{"gitlab.com": "COM_GITLAB_TOKEN"}'
 
+herton> if you run with IS_PRODUCTION=true it'll update the gitlab merge request with a comment in gitlab
+<herton> so let's say you're testing and is happy with it, you can run:
+<herton> CKI_LOGGING_LEVEL=DEBUG IS_PRODUCTION=true python3 -m webhook.bugzilla --merge-request https://gitlab.com/redhat/rhel/kernel/8.y/kernel-test/-/merge_requests/68 --note request-bz-evaluation
+<herton> and instead of getting the result on the console it updates the gitlab merge request with a comment
+<tcamuso> Excellent! MANY thanks!
+<tcamuso> So, now I'll know what to do when I actually have real content.
 
