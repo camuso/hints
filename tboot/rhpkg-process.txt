@@ -147,6 +147,19 @@ sudo update-ca-trust enable  # Only for RHEL-6 systems
 
     kmod-20-7.el7, module-init-tools-3.9-26.el6, tboot-1.9.4-3.el7, etc.
               ^^^                           ^^^               ^^^
+
+Dump patch prefixes for specfile to screen.
+
+ls -1 .patches/*.patch | while read line; do
+		printf "Patch%02d: " $count
+		let ++count
+		echo $line
+	done
+
+for ((i=1; i <= $(ls -1 .patches/*.patch | wc -l); ++i)); do
+	printf "%%patch%02d -p1 -b .%04d\n" $i $i
+done
+
 Here are a few scripts I've found useful in (re)naming patches according to
 the nvr (name-version-release) of the package. You can tailor them for your
 specific cases. You can avoid this nuisance if you change the spec file
