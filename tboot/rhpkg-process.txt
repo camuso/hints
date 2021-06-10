@@ -140,6 +140,13 @@ sudo update-ca-trust enable  # Only for RHEL-6 systems
     appears on the screen after you submit the rhpkg build command to
     access the brew build page and monitor its progess.
 
+    For CentOS ...
+    koji -p stream build --wait c9s-build-ssl3 "git+https://gitlab.com/redhat/centos-stream/rpms/tboot#c9s"
+
+    For RHEL-9
+    koji -p stream build --wait c9s-candidate "git+https://gitlab.com/redhat/centos-stream/rpms/tboot#c9s"
+
+
 11. Create an Errata at errata.devel.redhat.com
 
     When you add your build to the errata, remember to include the el number.
@@ -147,6 +154,15 @@ sudo update-ca-trust enable  # Only for RHEL-6 systems
 
     kmod-20-7.el7, module-init-tools-3.9-26.el6, tboot-1.9.4-3.el7, etc.
               ^^^                           ^^^               ^^^
+
+12. In order to test tboot on EFI systems, you must be sure that the
+    /boot/efi/EFI/redhat/x86_64-efi/multiboot2.mod file has been copied
+    to the /boot/efi/EFI/redhat/x86_64-efi/ directory.
+[ -d /boot/efi/EFI/redhat/x86_64-efi ] || \
+	mkdir -p /boot/efi/EFI/redhat/x86_64-efi
+[ -f /boot/efi/EFI/redhat/x86_64-efi/multiboot2.mod ] || \
+	cp /usr/lib/grub/x86_64-efi/multiboot2.mod /boot/efi/EFI/redhat/x86_64-efi/
+
 
 Dump patch prefixes for specfile to screen.
 
