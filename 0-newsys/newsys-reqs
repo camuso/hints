@@ -1,0 +1,26 @@
+install wget and curl
+dnf install wget curl -y
+
+Get and install the latest the CSB ssl certs here:
+http://hdn.corp.redhat.com/rhel7-csb-stage/repoview/redhat-internal-cert-install.html
+   $ wget http://hdn.corp.redhat.com/rhel7-csb-stage/RPMS/noarch/redhat-internal-cert-install-0.1-23.el7.csb.noarch.rpm
+   $ dnf install -y redhat-internal-cert-install-0.1-23.el7.csb.noarch.rpm
+
+
+Get the link to the latest RCM tools repo here:
+https://docs.engineering.redhat.com/pages/viewpage.action?spaceKey=RCMDOC&title=RCM+Tools+Release+Guide#RCMToolsReleaseGuide-Distributionandavailability
+
+Get the link for the appropriate RCM tools repo from that page
+   $ cd /etc/yum.repos.d
+   $ curl -L -O https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-fedora.repo
+
+Install rhpkg, which also installs brewkoji.
+   $ dnf install -y rhpkg
+
+Get centpkg install instructions from this link.
+https://copr.fedorainfracloud.org/coprs/james/centpkg/
+
+Install centpkg:
+   $ dnf copr enable james/centpkg
+   $ dnf install rhel-packager centpkg-sig -y
+
