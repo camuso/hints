@@ -1,0 +1,8 @@
+Patches can be developed as always, with a linus origin/master and
+RHEL remotes.
+
+To submit patches, however, you need a separate directory with nothing
+but the RHEL project in it. See ..
+https://docs.google.com/document/d/1PLPBqrnV-m4hr8Jos_7dhYGYqtMdiuCZZC72t2ljyEA/edit
+
+

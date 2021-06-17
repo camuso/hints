@@ -1,0 +1,12 @@
+ssh keys;
+https://docs.gitlab.com/ee/ssh/README.html#adding-an-ssh-key-to-your-gitlab-account
+
+personal access tokens:
+https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html
+
+KWF quick start
+https://docs.google.com/document/d/1PLPBqrnV-m4hr8Jos_7dhYGYqtMdiuCZZC72t2ljyEA/edit
+
+<Gopal> https://docs.google.com/document/d/145y8pf6tq1-H3GI3ZBmHypqUqZhVb-AsHpXdMhyDYxA/edit#
+<tcamuso_> Thanks! I'll have a look!
+<Gopal> git push -o merge_request.create -o merge_request.remove_source_branch -u prarit <branch_name>
