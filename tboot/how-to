@@ -79,6 +79,20 @@ PATCH PROCESS
    $ hg clone http://hg.code.sf.net/p/tboot/code/
 
 2. Migrate the hg repo to git
+
+   To use hg to create the patch, use the hg commit number.
+   e.g ...
+
+	$ hg log -l 1
+	changeset:   637:5bf5c12411d3
+	tag:         tip
+	user:        Lukasz Hawrylko <lukasz.hawrylko@intel.com>
+	date:        Wed Sep 15 16:53:34 2021 +0200
+	summary:     Use sha256 as default hashing algorithm in lcp2_mlehash and tb_polgen
+
+	$ hg export -r 5bf5c12411d3 > ../sha256.patch
+
+   To use git to create the patch ...
    If you don't already have fast-export, go get it.
 
    In the directory of your choice ...
