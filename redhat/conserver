@@ -1,3 +1,8 @@
+
+See ...
+	http://wiki.test.redhat.com/ReferenceManual/Conserver
+... for repos.
+
 yum install conserver-client
 
 console -M console.eng.bos.redhat.com intel-canoepass-05.lab.bos.redhat.com
