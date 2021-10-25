@@ -9,12 +9,19 @@ REBASE PROCESS
    a. RHEL7:
       $ sudo curl -o /etc/yum.repos.d/rhpkg.repo \
 	      http://download.eng.bos.redhat.com/rel-eng/dist-git/rhel/rhpkg.repo
+      $ sudo yum install -y rhpkg trousers-devel
 
    b. Fedora:
       $ sudo curl -o /etc/yum.repos.d/rhpkg.repo \
 	      http://download.devel.redhat.com/rel-eng/dist-git/fedora/rhpkg.repo
 
-   $ sudo yum install -y rhpkg trousers-devel
+   c. EFI systems, in order to launch tboot
+	$ sudo dnf install -y grub2-efi-x64-modules
+	$ sudo mkdir -p /boot/efi/EFI/centos/x86_64-efi
+	$ sudo cp /usr/lib/grub/x86_64-efi/relocator.mod \
+		/boot/efi/EFI/centos/x86_64-efi/
+	$ sudo cp /usr/lib/grub/x86_64-efi/multiboot2.mod \
+		/boot/efi/EFI/centos/x86_64-efi/
 
 1. Gets the current rhel package
 
@@ -169,6 +176,7 @@ brew latest-pkg rhel-7.3-candidate tboot
 ANNOCHECK
 =========
 dnf install -y annobin
+dnf install -y annobin-annocheck
 
 Include the following in the spec file.
 %build
