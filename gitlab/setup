@@ -10,3 +10,30 @@ https://docs.google.com/document/d/1PLPBqrnV-m4hr8Jos_7dhYGYqtMdiuCZZC72t2ljyEA/
 <Gopal> https://docs.google.com/document/d/145y8pf6tq1-H3GI3ZBmHypqUqZhVb-AsHpXdMhyDYxA/edit#
 <tcamuso_> Thanks! I'll have a look!
 <Gopal> git push -o merge_request.create -o merge_request.remove_source_branch -u prarit <branch_name>
+
+Setting up a new repo on a test system
+======================================
+
+# From a remote system
+--------------------------------------
+ark2host -i [-g] root@<system-url>
+
+# On the target system
+--------------------------------------
+# install lab
+yum install -y lab
+
+# run lab to enter your token when prompted
+lab
+Enter GitLab host (default: https://gitlab.com):
+Create a token with scope 'api' here: https://gitlab.com/-/profile/personal_access_tokens
+Enter default GitLab token, or leave blank to provide a command to load the token:
+# enter your token when prompted by above line
+
+# Create the target kernel directory and clone the kernel repo
+mkdir -p /work/7/kernel
+git clone git@gitlab.com:redhat/rhel/src/kernel/rhel-7.git kernel
+
+# Add your fork
+git remote add tcamuso git@gitlab.com/tcamuso/redhat/rhel/src/kernel/rhel-7
+
