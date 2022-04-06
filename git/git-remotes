@@ -34,6 +34,12 @@ To push the current branch and set the remote as upstream, use
 git branch -D <remote-branch>
 git remote rm <remote-repo>
 
+# To delete a remote branch
+#
+git push <remote> --delete <branch>
+e.g.
+git push tcamuso --delete tboot
+
 # Also useful
 #
 git remote prune <remote-repo>
