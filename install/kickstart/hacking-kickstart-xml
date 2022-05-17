@@ -1,0 +1,78 @@
+
+Provision a machine as usual.
+
+Cancel the job.
+
+Clone the job and edit the xml file
+
+In the <recipe whiteboasrd= > section, change rootfstype=ext4, or whatever you
+prefer for a file system.
+
+Scroll down to the <partitions> keyword and edit your partitions there, as
+shown below.
+
+<job retention_tag="120days">
+  <whiteboard>partitions : kernel-5.14.0-70.5.1.el9_0 [RHEL-9.0.0-20220329.0]</whiteboard>
+  <recipeSet priority="Normal">
+    <recipe whiteboard="5.14.0-70.5.1.el9_0" role="None" ks_meta="autopart_type=plain rootfstype=xfs swapsize=8192 harness='restraint-rhts beakerlib beakerlib-redhat'" kernel_options="" kernel_options_post="oops=panic">
+      <autopick random="true"/>
+      <watchdog panic="None"/>
+      <packages/>
+      <ks_appends>
+        <ks_append><![CDATA[
+%post
+cat << EOF >/etc/yum.repos.d/beaker-postrepo1.repo
+[beaker-postrepo1]
+name=beaker-postrepo1
+baseurl=http://brew-task-repos.usersys.redhat.com/repos/official/kernel/5.14.0/70.5.1.el9_0/\$basearch/
+enabled=1
+gpgcheck=0
+skip_if_unavailable=1
+EOF
+
+cat << EOF >/etc/yum.repos.d/beaker-BUILDROOT.repo
+[beaker-BUILDROOT]
+name=beaker-BUILDROOT
+baseurl=http://download.eng.bos.redhat.com/rhel-9/composes/BUILDROOT-9/BUILDROOT-9.0.0-RHEL-9-20220329.0/compose/Buildroot/aarch64/os
+enabled=1
+gpgcheck=0
+skip_if_unavailable=1
+EOF
+%end]]></ks_append>
+      </ks_appends>
+      <repos/>
+      <distroRequires>
+        <and>
+          <distro_family op="=" value="RedHatEnterpriseLinux9"/>
+          <distro_variant op="=" value="BaseOS"/>
+          <distro_name op="=" value="RHEL-9.0.0-20220329.0"/>
+          <distro_arch op="=" value="aarch64"/>
+        </and>
+      </distroRequires>
+      <hostRequires>   <not><hostname op="like" value="%rdma%"/></not>
+        <and>
+<key_value key="DISKSPACE" op="&gt;=" value="75000"/>
+        </and>
+      <system_type value="Machine"/></hostRequires>
+=================================================================================
+# Add your partitions here in this section
+      <partitions>
+        <partition type="part" name="/foo" size="10" fs="ext4"/>
+        <partition type="part" name="/work" size="50" fs="xfs"/>
+
+      </partitions>
+==================================================================================
+      <task name="/distribution/check-install" role="STANDALONE"/>
+      <task name="/distribution/kernelinstall" role="STANDALONE">
+        <params>
+          <param name="KERNELARGVARIANT" value="up"/>
+          <param name="KERNELARGNAME" value="kernel"/>
+          <param name="KERNELARGVERSION" value="5.14.0-70.5.1.el9_0"/>
+        </params>
+      </task>
+      <task name="/distribution/reservesys" role="STANDALONE"/>
+    </recipe>
+  </recipeSet>
+</job>
+
+
