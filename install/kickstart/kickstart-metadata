@@ -1,0 +1,1 @@
+<recipe autopart_type="plain"  fstype="ext4" rootfstype="ext4" > <partitions><partition type="part" name="work" fs="ext4" size="200" /></partitions></recipe>
