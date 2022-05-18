@@ -5,6 +5,57 @@ Cancel the job.
 
 Clone the job and edit the xml file
 
+The salient parts to edit are as follows:
+
+=====================
+partition /boot xfs:
+=====================
+Here / will be xfs
+        /foo ext4
+        /work ext4
+        /boot xfs
+
+https://beaker.engineering.redhat.com/jobs/6630583
+https://beaker.engineering.redhat.com/jobs/clone?job_id=6630583
+---%<-xml snip->%---
+<recipe whiteboard="5.14.0-70.5.1.el9_0" role="None" ks_meta="autopart_type=plain rootfstype=xfs swapsize=8192
+---%<-xml snip->%---
+
+<partitions>
+   <partition type="part" name="/foo" size="10" fs="ext4"/>
+   <partition type="part" name="/work" size="50" fs="ext4"/>
+   <partition type="part" name="/boot" size="50" fs="xfs"/>
+</partitions>
+---%<-xml snip->%---
+
+
+
+======================
+partition /boot ext4:
+======================
+Here / will be ext4
+        /foo ext4
+        /work ext4
+        /boot ext4
+
+https://beaker.engineering.redhat.com/jobs/6630559
+https://beaker.engineering.redhat.com/jobs/clone?job_id=6630559
+---%<-xml snip->%---
+<recipe whiteboard="5.14.0-70.5.1.el9_0" role="None" ks_meta="autopart_type=plain rootfstype=ext4 swapsize=8192
+---%<-xml snip->%---
+
+<partitions>
+   <partition type="part" name="/foo" size="10" fs="ext4"/>
+   <partition type="part" name="/work" size="50" fs="ext4"/>
+   <partition type="part" name="/boot" size="50" fs="ext4"/>
+</partitions>
+---%<-xml snip->%---
+
+
+======================
+More details
+======================
+
 In the <recipe whiteboasrd= > section, change rootfstype=ext4, or whatever you
 prefer for a file system.
 
