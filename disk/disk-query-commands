@@ -1,0 +1,15 @@
+# Disk configuration
+ lsblk -f
+
+# Logical groups, volumes, etc.
+ pvs
+ vgs
+ lvs
+ pvdisplay
+ vgdisplay
+ lvdisplay
+
+#RAID configuration
+ cat /etc/mdadm.conf
+ cat /proc/mdstat
+
