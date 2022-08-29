@@ -1,0 +1,9 @@
+Files:
+/etc/grub.d/10_linux
+
+/usr/lib/kernel/install.d/20-grubby.install
+ - this file has been deprecated
+
+Directories:
+ - /etc/grub.d
+ - /usr/lib/kernel/install.d
