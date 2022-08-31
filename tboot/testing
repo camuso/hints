@@ -1,14 +1,31 @@
+Look for systems in beaker with
+	CPU/Flags contains smx
+	Key/Value TPM contains " " (must be empty to get both TPM 1 and 2)
+
+For EFI systems
+	Key/Value NETBOOT_METHOD contains efi
+
+For Legacy systems
+	Key/Value NETBOOT_METHOD contains pxe
 
 1. Enable Intel VT/VTd, TPM and TXT in BIOS
 
 2. Install the necessities from root
-   # dnf install -y grub2-efi-x64-modules
-   # mkdir -p /boot/efi/EFI/redhat/x86_64-efi
-   # cp /usr/lib/grub/x86_64-efi/relocator.mod \
-	   /boot/efi/EFI/redhat/x86_64-efi/
-   # cp /usr/lib/grub/x86_64-efi/multiboot2.mod \
-	   /boot/efi/EFI/redhat/x86_64-efi/
-   # grub2-mkconfig -o $(find /boot -name grub.cfg -print -quit)
+   For earlier than tboot-1.10.5-2, grubenvdir is:
+     - el8
+       - BIOS: /boot/grub2
+       - EFI:  /boot/efi/EFI/redhat
+
+     - el9 /boot/grub2 for both BIOS and EFI
+
+     # dnf install -y grub2-efi-x64-modules
+     # mkdir -p ${grubenvdir}/x86_64-efi
+     # cp /usr/lib/grub/x86_64-efi/relocator.mod ${grubenvdir}/x86_64-efi/
+     # cp /usr/lib/grub/x86_64-efi/multiboot2.mod ${grubenvdir}/x86_64-efi/
+     # grub2-mkconfig -o ${grubenvdir}/grub.cfg
+
+  For tboot-1.10.5-2 and up, just install tboot. The scriptlet in the
+  spec file does the rest.
 
 3. Use 'efibootmgr -t 10' to set timeout to 10 seconds
    Use 'efibootmgr -o <order> to set the correct boot order so
@@ -30,6 +47,8 @@
     MirrorMemoryBelow4GB: false
 
 4. Boot into the tboot entry of the grub menu
+   To set the tboot as the default ...
+   # grub2-editenv - set saved_entry="$(grep -w ^submenu ${grubenvdir}/grub.cfg | cut -d'"' -f2)"
 
 5. If there are any problems, they should appear in the TBOOT: output
    to the console.
