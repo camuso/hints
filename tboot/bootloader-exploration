@@ -7,3 +7,41 @@ Files:
 Directories:
  - /etc/grub.d
  - /usr/lib/kernel/install.d
+
+ # ls -1 /usr/lib/kernel/install.d
+10-devicetree.install
+20-grubby.install
+20-grub.install
+50-depmod.install
+50-dracut.install
+51-dracut-rescue.install
+60-kdump.install
+90-loaderentry.install
+92-crashkernel.install
+95-kernel-hooks.install
+99-grub-mkconfig.install
+
+# ls -1 /usr/sbin/| grep grub2
+grub2-bios-setup
+grub2-get-kernel-settings
+grub2-install
+grub2-mkconfig
+grub2-probe
+grub2-reboot
+grub2-rpm-sort
+grub2-set-bootflag
+grub2-set-default
+grub2-set-password
+grub2-setpassword
+grub2-switch-to-blscfg
+
+# ls -1 /usr/bin/| grep grub2
+grub2-editenv
+grub2-file
+grub2-menulst2cfg
+grub2-mkimage
+grub2-mkpasswd-pbkdf2
+grub2-mkrelpath
+grub2-mount
+grub2-script-check
+
