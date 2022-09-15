@@ -1,0 +1,28 @@
+<job retention_tag="scratch">
+  <whiteboard>Reserve Workflow provision of distro RHEL-9.0.0 on a specific system for 86400 seconds</whiteboard>
+  <recipeSet priority="Normal">
+    <recipe whiteboard="" role="RECIPE_MEMBERS" ks_meta="autopart_type=plain rootfstype=xfs" kernel_options="" kernel_options_post="">
+      <autopick random="false"/>
+      <watchdog panic="ignore"/>
+      <packages/>
+      <ks_appends/>
+      <repos/>
+      <distroRequires>
+        <and>
+          <distro_family op="=" value="RedHatEnterpriseLinux9"/>
+          <distro_variant op="=" value="BaseOS"/>
+          <distro_name op="=" value="RHEL-9.0.0"/>
+          <distro_arch op="=" value="x86_64"/>
+        </and>
+      </distroRequires>
+      <hostRequires force="lenovo-st250v2-02.ml3.eng.bos.redhat.com"/>
+      <partitions>
+         <partition type="part" name="/home" size="500" fs="xfs" />
+         <partition type="part" name="/work" size="1200" fs="xfs" />
+      </partitions>
+      <task name="/distribution/check-install" role="STANDALONE"/>
+      <task name="/distribution/reservesys" role="STANDALONE">
+      </task>
+    </recipe>
+  </recipeSet>
+</job>

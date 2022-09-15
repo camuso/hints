@@ -1,0 +1,33 @@
+centosstream is still used for RHEL-9 development.
+
+For new point releases, however, you must create the point release
+branch for your package.
+
+So, for RHEL-9.2 you must push the rhel-9.1.0 point release into the
+rhel-9-main repo in order for the c9s repo to be valid for the new
+rhel-9.2.0 point release.
+
+mkdir /work/tboot/rh9
+cd rh9
+rhpkg co tboot
+cd tboot
+git checkout rhel-9-main
+git push origin rhel-9-main:rhel-9.1.0
+git pull
+git checkout rhel-9.1.0
+git pull
+git branch
+  master
+  rhel-9-main
+* rhel-9.1.0
+
+cd /work/tboot/rhel-9.1z
+git branch
+  91z
+* c9s
+
+# There was already an MR for c9s for this change, so ...
+git push -f tcamuso 91z
+
+CK Pipeline should pass and you can merge.
+
