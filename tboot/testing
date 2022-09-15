@@ -8,6 +8,32 @@ For EFI systems
 For Legacy systems
 	Key/Value NETBOOT_METHOD contains pxe
 
+Test Summary
+------------
+* UEFI and legacy BIOS platforms
+  - use efibootmgr to assure that you will boot the OS, not the network
+  - dnf install tboot
+  - reboot
+  - select tboot from the grub menu, and then from the tboot submenu
+  - upon successful boot, type from the CLI root account ..
+    # txt-stat | grep -i secret
+        secrets: TRUE
+     secrets flag set: TRUE
+TBOOT: set TXT.CMD.SECRETS flag
+
+    If you don't see "secrets: TRUE", then tboot test failed.
+    Upon failure, post a bugzilla and attach the output of txt-stat
+
+  - dnf erase tboot
+  - On RHEL-9 UEFI systems, check to see that /boot/grub2/x86_64-efi/
+    directory has been removed.
+  - On RHEL-8 UEFI systems, check to see that /boot/efi/EFI/redhat/x86_64-efi/
+    directory has been removed.
+  - reboot and see that tboot has been removed from the grub menu
+
+
+Test Details
+------------
 1. Enable Intel VT/VTd, TPM and TXT in BIOS
 
 2. Install the necessities from root
