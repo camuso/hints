@@ -1,0 +1,115 @@
+
+To build and install a kernel from the srcrpm file, you must first
+be certain you have the right tools.
+
+Log in as root and perform the following.
+
+which wget || dnf install -y wget
+which rpm  || dnf install -y rpm
+which xz   || dnf install -y xz
+which tar  || dnf install -y tar
+
+dnf install -y \
+bc \
+gcc \
+bison \
+flex \
+elfutils-libelf-devel \
+ncurses-devel \
+openssl-devel \
+python3
+
+You will need the following rpms that were built with the srcrpm
+for your kernel.
+
+kernel-headers
+kernel-tools
+kernel-tools-libs
+kernel-tools-devel
+
+In our example, we will download the srcrpm for an ipmi debug kernel
+and the kernel-tools necessary to build it.
+
+For readability, create a variable to contain the link to the tools.
+--------------------------------------------------------------------
+kern="https://people.redhat.com/tcamuso/.kernels/ipmidbg"
+
+Get the srcrpm and unpack it
+----------------------------
+wget "$kern"/kernel-4.18.0-372.9.1.el8.ipmi.dbg.src.rpm
+rpm -ivh kernel-4.18.0-372.9.1.el8.ipmi.dbg.src.rpm
+
+The srcrpm is unpacked in the rpm top directory
+-----------------------------------------------
+rpm --eval '%{_topdir}'
+/root/rpmbuild
+cd /root/rpmbuild/SOURCES
+
+Unpack the srcrpm
+-----------------
+unxz linux-4.18.0-372.9.1.el8.ipmi.dbg.tar.xz
+tar -xf linux-4.18.0-372.9.1.el8.ipmi.dbg.tar
+
+At this point, the redhat kernel will be expanded into a subdirectory
+named linux-4.18.0-372.9.1.el8.ipmi.dbg/
+You can rename or move this directory.
+
+Get and install the tools
+-------------------------
+wget "$kern"/kernel-headers-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm
+wget "$kern"/kernel-tools-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm
+wget "$kern"/kernel-tools-libs-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm
+wget "$kern"/kernel-tools-libs-devel-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm
+
+dnf localinstall -y \
+kernel-headers-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm \
+kernel-tools-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm \
+kernel-tools-libs-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm \
+kernel-tools-libs-devel-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm
+
+Navigate to the directory containing the kernel sources
+-------------------------------------------------------
+# cd /root/rpmbuild/SOURCES/linux-4.18.0-372.9.1.el8.ipmi.dbg
+
+Create the .config file
+-----------------------
+# make oldconfig
+
+Edit the .config file
+---------------------
+# make menuconfig
+
+Navigate to:
+  Cryptographic API
+     > Certificates for signature checking
+        > X.509 certificates to be preloaded into the system blacklist keyring
+ Change the 'certs/rhel.pem' string to ''
+
+Navigate to:
+  Kernel hacking
+     > Compile-time checks and compiler options  --->
+         [*] Generate BTF typeinfo
+
+Clear the asterisk using the space bar ...
+         [ ] Generate BTF typeinfo
+
+Save your .config and exit the menuconfig UI
+
+Build the Kernel
+----------------
+
+echo '.your.designation' > localversion
+# e.g. echo '.test' > localversion
+
+cores=$(cat /proc/cpuinfo | grep processor | wc -l)
+make -j$cores
+make -j$cores modules
+make -j$cores modules_install
+make -j$cores install
+
+If all the steps are successful, you will see your newly built kernel in
+the grub menu on your next reboot.
+
+You can also look for it in the /boot directory before rebooting to assure
+that it was installed successfully.
+
