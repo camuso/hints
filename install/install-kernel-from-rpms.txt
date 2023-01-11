@@ -1,0 +1,29 @@
+
+To install a kernel from rpm files.
+* Log in as root
+* Get the rpms for kernel, kernel-core, and kernel-modules.
+* dnf localinstall these three rpms
+
+Here is an example of how to install the required kernel rpms using an ipmi
+debug kernel.
+
+# which wget || dnf install -y wget
+
+# wget https://people.redhat.com/tcamuso/.kernels/ipmidbg/kernel-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm
+
+# wget https://people.redhat.com/tcamuso/.kernels/ipmidbg/kernel-core-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm
+
+# wget https://people.redhat.com/tcamuso/.kernels/ipmidbg/kernel-modules-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm
+
+# dnf localinstall -y \
+kernel-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm \
+kernel-core-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm \
+kernel-modules-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.rpm
+
+# ls -1 /boot | grep 'ipmi.dbg'
+System.map-4.18.0-372.9.1.el8.ipmi.dbg.x86_64
+config-4.18.0-372.9.1.el8.ipmi.dbg.x86_64
+initramfs-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.img
+initramfs-4.18.0-372.9.1.el8.ipmi.dbg.x86_64kdump.img
+symvers-4.18.0-372.9.1.el8.ipmi.dbg.x86_64.gz
+vmlinuz-4.18.0-372.9.1.el8.ipmi.dbg.x86_64
