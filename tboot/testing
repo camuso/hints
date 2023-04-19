@@ -35,6 +35,9 @@ TBOOT: set TXT.CMD.SECRETS flag
 Test Details
 ------------
 1. Enable Intel VT/VTd, TPM and TXT in BIOS
+   NOTE:
+   On Dell servers, you must enter 'TPM Advanced Settings' and
+   set 'TPM2 Algorithm Selection' to 'SHA256'
 
 2. Install the necessities from root
    For earlier than tboot-1.10.5-2, grubenvdir is:
