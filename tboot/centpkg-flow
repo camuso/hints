@@ -1,0 +1,89 @@
+
+On Mon, May 15, 2023 at 10:09 AM Leigh Griffin <lgriffin@redhat.com> wrote:
+
+    Adding 2 folks who might be able to help here :)
+
+    Leigh
+
+    On Mon, May 15, 2023 at 2:54 PM Leigh Griffin <lgriffin@redhat.com> wrote:
+
+        I don't have the skills / context to answer this, I'm wondering were you looking for some of my old reports?
+
+        Leigh
+
+        On Mon, May 15, 2023 at 2:44 PM Tony Camuso <tcamuso@redhat.com> wrote:
+
+
+            Good morning.
+
+            I have a package that needs to be updated. This used to be
+            a relatively simple process consisting of ...
+
+            . Download the new package tar
+
+            . Do a local build for sanity check using ...
+               rhpkg local
+               centpkg local
+
+            . Make any necessary code changes
+            . Test
+
+            . Upload the new tar to the dist-git
+               rhpkg upload
+               centpkg upload
+
+            . Remove the old SHA hash from the sources file.
+            . Update the spec file
+            . Commit the changes to git
+
+            . Push the updated package
+               rhpkg push
+               centpkg push
+
+            . Build the updated package
+               rhpkg build
+               centpkg build
+
+            . Create and manage Errata
+
+            This process does not work anymore, and I have no idea how to
+            get this done.
+
+First of all, the above behavior is still the proper course for changes going
+into a Z-stream release. If they are instead going into the next Y-stream
+release, then the process is actually much simplified (using bash and RHEL 9 as
+an example):
+
+$ centpkg clone bash
+$ centpkg fork[1]
+$ git checkout -b <branchname[2]> gitlabusername/c9s
+$ centpkg upload <package.tar.gz>
+$ <Packaging changes>
+$ centpkg local
+
+If all is good with the local build, testing the resulting rpm, then...
+$ git push gitlabusername c9s
+
+This step should provide you with a URL to create a merge request into CentOS
+Stream[3]. That will trigger some CI checks as well. Once the MR is approved,
+you can merge it through the Gitlab WebUI.
+
+Back at the console, you can now do:
+
+$ centpkg build
+
+This last step will trigger both the CentOS Stream 9 and RHEL 9 builds.
+
+
+[1] This may fail the first time if you don't have an API token set up. Run
+`centpkg fork -h` for instructions on how to do so.
+
+[2] Don't start the branch with `rhel-`. There's a known bug in Gitlab:
+https://gitlab.com/gitlab-org/gitlab/-/issues/378945
+
+[3] If you haven't logged into the `/redhat/centos` section of the Gitlab Web
+UI recently, you may stumble across
+https://gitlab.com/gitlab-org/gitlab/-/issues/391765 which results in being
+provided the wrong URL to create the merge request. If that happens, you may
+need to browse to the dist-git repo directly and create the MR manually.
+
