@@ -1,0 +1,11 @@
+rhpkg clone restraint
+rhpkg switch-branch fedora-40
+rhpkg build --scratch
+
+https://docs.engineering.redhat.com/pages/resumedraft.action?draftId=330173511&draftShareId=b96d0c32-d304-4559-997c-04f999afb95d&
+
+https://github.com/restraint-harness/restraint
+
+https://docs.engineering.redhat.com/pages/viewpage.action?pageId=154898357
+
+https://docs.engineering.redhat.com/display/BKR/Restraint+Release+New+Rawhide+Image

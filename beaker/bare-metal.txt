@@ -1,0 +1,2 @@
+If your recipe requires a bare metal machine, be sure to include
+<hypervisor op=”=” value=””/> in your <hostRequires/>
