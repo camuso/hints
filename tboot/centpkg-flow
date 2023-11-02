@@ -57,6 +57,10 @@ an example):
 $ centpkg clone bash
 $ centpkg fork[1]
 $ git checkout -b <branchname[2]> gitlabusername/c9s
+$ curl -L \
+	https://sourceforge.net/projects/tboot/files/latest/download?source=files \
+	-o tboot-1.9.6.tar.gz
+$ 
 $ centpkg upload <package.tar.gz>
 $ <Packaging changes>
 $ centpkg local
