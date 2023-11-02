@@ -85,4 +85,6 @@ Test Details
 6. Upon successful boot ...
    # txt-stat
    ... to see the successful tboot log.
+   # txt-stat | grep -i secret
+   ... to see just whether the secrets flag is set TRUE
 
