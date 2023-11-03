@@ -50,13 +50,18 @@ On Mon, May 15, 2023 at 10:09 AM Leigh Griffin <lgriffin@redhat.com> wrote:
             get this done.
 
 First of all, the above behavior is still the proper course for changes going
+$ git push <gitlabusername> <branchname>
 into a Z-stream release. If they are instead going into the next Y-stream
 release, then the process is actually much simplified (using bash and RHEL 9 as
 an example):
 
-$ centpkg clone bash
+$ rhpkg co <package>
+$ git checkout rhel-8-main
+  (or "git fetch origin" to get the latest state)
+$ git checkout rhel-8-main
+$ git push origin rhel-8-main:rhel-8.9.0
 $ centpkg fork[1]
-$ git checkout -b <branchname[2]> gitlabusername/c9s
+$ git checkout -b <branchname[2]>
 $ curl -L \
 	https://sourceforge.net/projects/tboot/files/latest/download?source=files \
 	-o tboot-1.9.6.tar.gz
@@ -64,6 +69,7 @@ $
 $ centpkg upload <package.tar.gz>
 $ <Packaging changes>
 $ centpkg local
+$ git push <gitlabusername> <branchname>
 
 If all is good with the local build, testing the resulting rpm, then...
 $ git push gitlabusername c9s
