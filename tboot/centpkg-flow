@@ -55,30 +55,53 @@ into a Z-stream release. If they are instead going into the next Y-stream
 release, then the process is actually much simplified (using bash and RHEL 9 as
 an example):
 
-$ rhpkg co <package>
-$ git checkout rhel-8-main
+# Clone the package from rhel into a rhel directory
+#
+$ rhpkg co <package> <rheldir>
   (or "git fetch origin" to get the latest state)
 $ git checkout rhel-8-main
 $ git push origin rhel-8-main:rhel-8.9.0
 $ centpkg fork[1]
 $ git checkout -b <branchname[2]>
+
+# tboot example
+#
 $ curl -L \
 	https://sourceforge.net/projects/tboot/files/latest/download?source=files \
-	-o tboot-1.9.6.tar.gz
-$ 
+	-o tboot-1.11.2.tar.gz
+$
 $ centpkg upload <package.tar.gz>
-$ <Packaging changes>
+
+# Make packaging changes, including updating the NVR and change log
+# in the spec file.
+
+# Test the build and make any required fixes
+#
 $ centpkg local
+
+$ git commit -s .
+
+# If all is good with the local build, testing the resulting rpm, then...
+#
 $ git push <gitlabusername> <branchname>
 
-If all is good with the local build, testing the resulting rpm, then...
-$ git push gitlabusername c9s
+# This step should provide you with a URL to create a merge request into CentOS
+# Stream[3]. That will trigger some CI checks as well. Once the MR is approved,
+# you can merge it through the Gitlab WebUI.
+#
+# After the MR is merged (into the c8s or c9s branch), create or cd to a centos
+# directory.
+#
+$ centpkg co <package> <centosdir>
 
-This step should provide you with a URL to create a merge request into CentOS
-Stream[3]. That will trigger some CI checks as well. Once the MR is approved,
-you can merge it through the Gitlab WebUI.
+# Make sure you have the commit from the merged MR.
+#
+$ git pull
 
-Back at the console, you can now do:
+# Now build the package
+#
+$ kinit
+$ centpkg build
 
 $ centpkg build
 
