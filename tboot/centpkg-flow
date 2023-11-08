@@ -59,12 +59,19 @@ an example):
 #
 $ rhpkg co <package> <rheldir>
   (or "git fetch origin" to get the latest state)
+
+# rhel-8 example
+# NOTE:
+#  You must push the point release PREVIOUS to the point release you are
+#  working on.
+#  So, for rhel-8.10.0 ...
+#
 $ git checkout rhel-8-main
 $ git push origin rhel-8-main:rhel-8.9.0
 $ centpkg fork[1]
 $ git checkout -b <branchname[2]>
 
-# tboot example
+# tboot example for fetching an upstream tar file
 #
 $ curl -L \
 	https://sourceforge.net/projects/tboot/files/latest/download?source=files \
@@ -98,8 +105,51 @@ $ centpkg co <package> <centosdir>
 #
 $ git pull
 
-# Now build the package
+# Now test build the package
 #
+rhpkg --release rhel-8.10.0 build --scratch --srpm # <- test build
+
+# Now you must create or update a centos directory.
+#
+# The directory tree I'm using is ...
+
+/work/tboot/devel/rhel
+
+# ... for all the above steps.
+# Now you must create or update a centos directory
+
+$ cd ..
+$ pwd
+/work/tboot/devel
+
+$ centpkg co tboot cpkg
+   ... or ...
+$ git fetch --all
+$ cd cpkg
+
+# Example for RHEL-8,10.0 ...
+#
+# These are the branches ...
+$ git branch -r
+  origin/HEAD -> origin/c9s
+  origin/c10s
+  origin/c8s
+  origin/c9s
+
+# Checkout the c8s branch
+$ git checkout -b c8s origin/c8s
+
+# Make sure your changes have propagated from the merge
+$ gitnice -d
+873df01  2023-11-03 Rebase to upstream 1.11.2 and bump nvr to 1.11.2-1
+
+# Now do the formal build ...
+#
+rhpkg --release rhel-8.10.0 build
+
+
+
+
 $ kinit
 $ centpkg build
 
