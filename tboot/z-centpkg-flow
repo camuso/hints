@@ -1,0 +1,54 @@
+
+On Mon, May 15, 2023 at 10:09 AM Leigh Griffin <lgriffin@redhat.com> wrote:
+
+    Adding 2 folks who might be able to help here :)
+
+    Leigh
+
+    On Mon, May 15, 2023 at 2:54 PM Leigh Griffin <lgriffin@redhat.com> wrote:
+
+        I don't have the skills / context to answer this, I'm wondering were you looking for some of my old reports?
+
+        Leigh
+
+        On Mon, May 15, 2023 at 2:44 PM Tony Camuso <tcamuso@redhat.com> wrote:
+
+
+            Good morning.
+
+            I have a package that needs to be updated. This used to be
+            a relatively simple process consisting of ...
+
+            . Download the new package tar
+
+            . Do a local build for sanity check using ...
+               rhpkg local
+               centpkg local
+
+            . Make any necessary code changes
+            . Test
+
+            . Upload the new tar to the dist-git
+               rhpkg upload
+               centpkg upload
+
+            . Remove the old SHA hash from the sources file.
+            . Update the spec file
+            . Commit the changes to git
+
+            . Push the updated package
+               rhpkg push
+               centpkg push
+
+            . Build the updated package
+               rhpkg build
+               centpkg build
+
+            . Create and manage Errata
+
+            This process does not work anymore, and I have no idea how to
+            get this done.
+
+First of all, the above behavior is still the proper course for changes going
+$ git push <gitlabusername> <branchname>
+into a Z-stream release. If they are instead going into the next Y-stream
