@@ -31,10 +31,9 @@ $ centpkg upload <package.tar.gz>
 #
 $ centpkg local
 
-$ git commit -s .
-
 # If all is good with the local build, testing the resulting rpm, then...
 #
+$ git commit -s .
 $ git push <gitlabusername> <branchname>
 
 # This step should provide you with a URL to create a merge request into CentOS
@@ -54,13 +53,12 @@ $ git pull
 #
 rhpkg --release rhel-8.10.0 build --scratch --srpm # <- test build
 
-# Now you must create or update a centos directory.
-#
 # The directory tree I'm using is ...
 
 /work/tboot/devel/rhel
 
 # ... for all the above steps.
+#
 # Now you must create or update a centos directory
 
 $ cd ..
@@ -68,13 +66,15 @@ $ pwd
 /work/tboot/devel
 
 $ centpkg co tboot cpkg
-   ... or ...
-$ git fetch --all
 $ cd cpkg
+   ... or if you already have a centos directory for this package  ...
+$ cd cpkg
+$ git fetch --all
 
-# Example for RHEL-8,10.0 ...
+# Example for RHEL-8,10.0
 #
-# These are the branches ...
+# These are the branches you will see in the centos directory.
+#
 $ git branch -r
   origin/HEAD -> origin/c9s
   origin/c10s
@@ -98,7 +98,7 @@ This last step will trigger both the CentOS Stream and RHEL builds.
 [1] This may fail the first time if you don't have an API token set up. Run
 `centpkg fork -h` for instructions on how to do so.
 
-[2] Don't start the branch with `rhel-`. There's a known bug in Gitlab:
+[2] Don't start the branch name with `rhel-`. There's a known bug in Gitlab:
 https://gitlab.com/gitlab-org/gitlab/-/issues/378945
 
 [3] If you haven't logged into the `/redhat/centos` section of the Gitlab Web
