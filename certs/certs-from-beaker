@@ -1,0 +1,41 @@
+
+
+
+---------- Forwarded message ---------
+From: Jeff Moyer <jmoyer@redhat.com>
+Date: Fri, Dec 1, 2023 at 5:36 PM
+Subject: Re: cannot install rcm-tools
+To: Tony Camuso <tcamuso@redhat.com>
+Cc: kernel-info <kernel-info@redhat.com>
+
+
+This is what works for me on beaker systems:
+
+Install the appropriate rcm-tools repo file[1] in /etc/yum.repos.d:
+
+# curl -o /etc/yum.repos.d/rcm-tools-rhel-9-baseos.repo https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-rhel-9-baseos.repo
+
+Aternatively ...
+	wget --no-check-certificate \
+	https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-rhel-9-baseos.repo
+
+Install the IT CA certificates:
+
+# curl -o /etc/pki/ca-trust/source/anchors/RH-IT-Root-CA.crt https://certs.corp.redhat.com/certs/2015-IT-Root-CA.pem
+# curl -o /etc/pki/ca-trust/source/anchors/2022-IT-Root-CA.pem https://certs.corp.redhat.com/certs/2022-IT-Root-CA.pem
+# update-ca-trust
+
+After that, installing packages from the rcm repo works for me.
+
+Cheers,
+Jeff
+
+[1] https://docs.engineering.redhat.com/pages/viewpage.action?spaceKey=RCMDOC&title=RCM+Tools+Release+Guide
+
+
+
+-- 
+Desnes Nunes
+Principal Software Engineer
+Red Hat Brasil
+

@@ -1,0 +1,40 @@
+
+
+On Tue, 30 Jan 2024 17:52:19 -0600, David Marlin wrote:
+> I also tried searching the log for any references to 'hci_cleanup_dev'
+>
+>     git log -S"hci_cleanup_dev" include/net/bluetooth/hci_core.h
+>
+> In it only finds e04480920d1ee in our RHEL8 code (where it was added).  
+> Current upstream returns no references.
+
+It's important to understand how git log walks the history if you
+specify the path. See all the explanation about "TREESAME" in the man.
+
+In your case, when run on upstream, the path with the hci_cleanup_dev
+change gets pruned. If you try:
+
+git log --full-history -S"hci_cleanup_dev" include/net/bluetooth/hci_core.h
+
+you will get e04480920d1ee as you expect.
+
+Now, why you don't see anything that removes the line? It's because
+there's no such removal(!). In general, when something weird like what
+you're seeing happens, in 99% cases the culprit is a merge commit.
+
+This will help to see what was going on:
+
+git log --full-history --simplify-merges --graph v5.15 -- include/net/bluetooth/hci_core.h
+
+Search for e04480920d1ee and follow the graph up. The suspected merge
+is e61fbee7be4b9. Indeed, if you look at the two commits that it
+merged, 815cc21d8d2e and 61969ef867d4[*], the merge took the right side
+and dropped the left side.
+
+ Jiri
+
+[*] Beware: --simplify-merges rewrite parents, so you can't take the
+    parents from the above output, you have to invoke a separate
+    git show e61fbee7be4b9.
+
+
