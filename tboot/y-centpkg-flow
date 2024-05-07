@@ -4,17 +4,21 @@
 #
 $ rhpkg co <package> <rheldir>
   (or "git fetch origin" to get the latest state)
+  Example for RHEL9.
+  $ rhpkg clone tboot 9.5 # clones tboot into directory 9.5
+  # NOTE: This is the only place you use rhpkg. centpkg is used for the
+  # remainder of the process.
 
-# rhel-8 example
+# rhel-9 example
 # NOTE:
 #  You must push the point release PREVIOUS to the point release you are
 #  working on.
-#  So, for rhel-8.10.0 ...
+#  So, for rhel-9.5 ...
 #
-$ git checkout rhel-8-main
-$ git push origin rhel-8-main:rhel-8.9.0
-$ centpkg fork[1]
-$ git checkout -b <branchname[2]>
+$ git checkout rhel-9-main
+$ git push origin rhel-9-main:rhel-9.4.0  # <- note PREVIOUS RHEL
+$ centpkg fork[1]  # <- MUST use centpkg fork
+$ git checkout -b <branchname[2]>  # <- use JIRA number for branchname
 
 # tboot example for fetching an upstream tar file
 #
@@ -51,11 +55,11 @@ $ git pull
 
 # Now test build the package
 #
-rhpkg --release rhel-8.10.0 build --scratch --srpm # <- test build
+rhpkg --release rhel-9.5.0 build --scratch --srpm # <- test build
 
 # The directory tree I'm using is ...
-
-/work/tboot/devel/rhel
+/work/tboot/rhel-9.5
+# /work/tboot/devel/rhel
 
 # ... for all the above steps.
 #
@@ -71,7 +75,7 @@ $ cd cpkg
 $ cd cpkg
 $ git fetch --all
 
-# Example for RHEL-8,10.0
+# Example for RHEL-9.5.0
 #
 # These are the branches you will see in the centos directory.
 #
@@ -82,21 +86,22 @@ $ git branch -r
   origin/c9s
 
 # Checkout the c8s branch
-$ git checkout -b c8s origin/c8s
+$ git checkout -b c9s origin/c9s
 
 # Make sure your changes have propagated from the merge
 $ gitnice -d
 873df01  2023-11-03 Rebase to upstream 1.11.2 and bump nvr to 1.11.2-1
 
-# Now do the formal build ...
+# Now do the formal build in the c9s directory
 #
-rhpkg --release rhel-8.10.0 build
+rhpkg --release rhel-9.5.0 build
 
 This last step will trigger both the CentOS Stream and RHEL builds.
 
 
 [1] This may fail the first time if you don't have an API token set up. Run
 `centpkg fork -h` for instructions on how to do so.
+ MUST use centpkg fork.
 
 [2] Don't start the branch name with `rhel-`. There's a known bug in Gitlab:
 https://gitlab.com/gitlab-org/gitlab/-/issues/378945
