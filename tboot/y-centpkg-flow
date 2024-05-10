@@ -9,10 +9,11 @@
 
 
 # If there is no Jira ticket, you must create one. You cannot proceed
-# without a Jura ticket.
+# without a Jira ticket.
 #
 # Start the update process.
  $ rhpkg co <package-name> <rheldir>
+ $ cd <rheldir>
  $ git push origin rhel-<release>-main:rhel-<current-rhel-point-release>
  $ centpkg fork                     # see note [1] below
  $ git checkout -b <new-branchname> # see note [2] below
@@ -56,8 +57,8 @@
 #
 # If you don't already have that directory, then clone the
 # centos-stream for your package into a new directory.
- $ centpkg co <oackage-name> <new-centos-stream-directory
- $ cd <new-centos-stream-directory
+ $ centpkg co <package-name> <new-centos-stream-directory>
+ $ cd <new-centos-stream-directory>
 
 # Checkout the centos-stream branch for the release you are
 # updating.
@@ -69,7 +70,7 @@
 # something else to do for a bit.
  $ git log
 
-# Do a local buld to see that all is well.
+# Do a local build to see that all is well.
  $ centpkg local
 
 # If the local build succeeds, and all tests have been completed,
@@ -159,7 +160,7 @@ total 708
 -rw-r--r--. 1 root root 307835 May  7 11:53 tboot-debuginfo-1.11.3-1.el9.x86_64.rpm
 -rw-r--r--. 1 root root 119083 May  7 11:53 tboot-debugsource-1.11.3-1.el9.x86_64.rpm
 
-# Install the new package on a live system and peform tboot functional and
+# Install the new package on a live system and perform tboot functional and
 # regression testing
 
 # If all is good, commit and push the changes.
@@ -196,7 +197,7 @@ $ git checkout -b 34941 origin/c9s
 
 # Check to see that my work has propagated to centos-stream.
 $ git pull
-$ gitlog --onnline -n1
+$ gitlog --oneline -n1
 92a892f (HEAD -> 34941, tcamuso/34941) Rebase to upstream 1.11.3 and bump nvr to 1.11.3-1
 
 # The following is all done in the cos directory created by cloning tboot.
