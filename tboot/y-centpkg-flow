@@ -7,14 +7,21 @@
 #
 # A full example of a package update for tboot is at the end.
 
-
 # If there is no Jira ticket, you must create one. You cannot proceed
 # without a Jira ticket.
 #
 # Start the update process.
- $ rhpkg co <package-name> <rheldir>
+# Clone the package and enter its directory
+ $ centpkg co <package-name> [rheldir]
  $ cd <rheldir>
- $ git push origin rhel-<release>-main:rhel-<current-rhel-point-release>
+
+# Checkout the mainline. Then checkout the current release  and push it
+# back
+ $ git checkout rhel-<maj-release>-main
+ $ git checkout -b rhel-<maj-release>.<point-release>.0
+ $ git push origin rhel-<maj-release>.<point-release>.0
+
+# Get your fork and checkout a branch to work on.
  $ centpkg fork                     # see note [1] below
  $ git checkout -b <new-branchname> # see note [2] below
 
@@ -71,6 +78,7 @@
  $ git log
 
 # Do a local build to see that all is well.
+ $ centpkg switch-branch <centos-stream, e.g. c9s>
  $ centpkg local
 
 # If the local build succeeds, and all tests have been completed,
@@ -132,11 +140,13 @@ EPM->Architecture: <select from list, e.g. "x86_64">
 # -----------------------------------------------------------------------
 # Clone the package from rhel into a rhel directory
 #
-$ rhpkg co tboot rhel-9.5
+$ centpkg co tboot
+$ cd tboot
 $ git checkout rhel-9-main
-$ git push origin rhel-9-main:rhel-9.4.0  # <- note PREVIOUS RHEL
-$ centpkg fork           # <- MUST use centpkg fork
-$ git checkout -b 34941  # <- using JIRA number for branchname
+$ git checkout -b rhel-9.4.0
+$ git push origin rhel-9.4.0  	# <- note PREVIOUS RHEL
+$ centpkg fork           	# get your fork
+$ git checkout -b 34941  	# <- using JIRA number for branchname
 
 # Get the latest tboot.
 $ curl -L \
@@ -173,10 +183,12 @@ $ git push tcamuso 34941
 # succeed, and the MR is approved for merge, press the 'Merge' link on the
 # Gitlab WebUI.
 #
-# After the MR is merged, clone centos version of tboot into a new directory.
-$ cd ..
-$ centpkg co tboot cos
-$ cd cos
+# After the MR is merged, 'git pull' to get the changes in to a test branch.
+$ git checkout main
+$ git pull
+$ git checkout -b test
+$ gitlog --oneline -n1
+92a892f (HEAD -> 34941, tcamuso/34941) Rebase to upstream 1.11.3 and bump nvr to 1.11.3-1
 
 # Make sure my fork is there.
 $ git remote -v
@@ -192,19 +204,11 @@ $ git branch -r
   origin/c8s
   origin/c9s
 
-# Checkout the c9s branch to a branch named by the Jira number.
-$ git checkout -b 34941 origin/c9s
-
-# Check to see that my work has propagated to centos-stream.
-$ git pull
-$ gitlog --oneline -n1
-92a892f (HEAD -> 34941, tcamuso/34941) Rebase to upstream 1.11.3 and bump nvr to 1.11.3-1
-
 # The following is all done in the cos directory created by cloning tboot.
 # Test builds
 centpkg local
-rhpkg --release rhel-9.5.0 build --scratch --srpm
+centpkg --release rhel-9.5.0 build --scratch --srpm
 
 # Formal release build
-rhpkg --release rhel-9.5.0 build
+centpkg --release rhel-9.5.0 build
 
