@@ -12,23 +12,61 @@
 #
 # Start the update process.
 # Clone the package and enter its directory
- $ centpkg co <package-name> [rheldir]
- $ cd <rheldir>
+# MUST USE centpkg for y-stream!
+ $ centpkg co <package-name> [dir]
+ $ cd <dir>
 
-# Checkout the mainline. Then checkout the current release  and push it
+Example:
+ $ centpkg co tboot
+ $ cd tboot
+
+# Checkout the mainline. Then checkout the current release
 # back
- $ git checkout rhel-<maj-release>-main
+#
+$ git branch -r
+  origin/HEAD -> origin/c10s
+  origin/c10s
+  origin/c8s
+  origin/c9s
+
+$ git checkout -b 67949 origin/c9s
+
+# For RHEL
+ $ git checkout -b <branchname> origin/rhel-<maj-release>-[main | master]
  $ git checkout -b rhel-<maj-release>.<point-release>.0
  $ git push origin rhel-<maj-release>.<point-release>.0
+# For Centos
+ $ git checkout -b <branchname> origin/centos-gitlab/<stream>
+ e.g.
+ $ git checkout -b c9s origin/centos-gitlab/c9s
 
 # Get your fork and checkout a branch to work on.
+# If you already have a fork, skip this step.
+# e.g.
+ git remote -v
+centos-gitlab	https://gitlab.com/redhat/centos-stream/rpms/tboot (fetch)
+centos-gitlab	https://gitlab.com/redhat/centos-stream/rpms/tboot (push)
+origin	ssh://tcamuso@pkgs.devel.redhat.com/rpms/tboot (fetch)
+origin	ssh://tcamuso@pkgs.devel.redhat.com/rpms/tboot (push)
+# shows that I alreday have a fork, so I can skip the next step.
+
  $ centpkg fork                     # see note [1] below
  $ git checkout -b <new-branchname> # see note [2] below
 
-# For rebases, get the latest upstream version of the package and
-# upload it to the centpkg repo. This will also update the sources
-# file in your package repo directory.
- $ centpkg upload <package.tar.gz>
+# Get the latest package from the developer's website.
+# e.g.
+ $ curl -L \
+        https://sourceforge.net/projects/tboot/files/latest/download?source=files \
+        -o tboot-1.11.9.tar.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   611  100   611    0     0   2923      0 --:--:-- --:--:-- --:--:--  2937
+100   353  100   353    0     0    735      0 --:--:-- --:--:-- --:--:--   735
+100  906k  100  906k    0     0   811k      0  0:00:01  0:00:01 --:--:-- 2209k
+$
+
+# Upload the package to the repo
+ $ rhpkg upload tboot-1.11.9.tar.gz
 
 # Make your edits, updates, rebase, etc.
 # Update the .spec file to the appropriate NVR.
@@ -36,6 +74,7 @@
 #   Resolves: RHEL-<Jira-number>
 #
 # Test the build
+# For some reason I don't yet understand, rhpkg local won't do this.
  $ centpkg local
 
 # Make necessary changes until the build succeeds.
