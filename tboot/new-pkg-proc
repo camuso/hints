@@ -1,0 +1,167 @@
+# !text
+#
+
+# Prep
+# ====
+
+# Directory tree:
+
+/work --+--- pigz --+-- cs	# For CentOs side
+        |           |
+	|           +-- rh	# For RHEL side
+	:
+
+# CENTOS side
+# ===========
+
+$ cd /work/pigz
+$ centpkg co pigz cs
+$ cd cs
+$ git branch -r
+  origin/HEAD -> origin/c10s
+  origin/c10s
+  origin/c8s
+  origin/c9s
+
+## If it doesn't exist, create your fork using the gitlab web ui.
+## Go to https://gitlab.com/dashboard/projects
+## Use the search bar to find the project, e.g. pigz
+## Click on the Red Hat / centos-stream / rpms / pigz link
+## In the upper right hand corner, click on Fork and go through
+## the guided interface to create your fork.
+##
+## In your directory, add your fork.
+
+$ git remote add tcamuso git@gitlab.com:tcamuso/pigz.git
+$ git remote -v
+origin	git+ssh://git@gitlab.com/redhat/centos-stream/rpms/pigz.git (fetch)
+origin	git+ssh://git@gitlab.com/redhat/centos-stream/rpms/pigz.git (push)
+tcamuso	git@gitlab.com:tcamuso/pigz.git (fetch)
+tcamuso	git@gitlab.com:tcamuso/pigz.git (push)
+
+##  get on the right branch
+$ git checkout -b 9 origin/c9s
+Switched to branch '9'
+Your branch is up to date with 'origin/c9s'.
+
+##  checkout a working branch for this JIRA story
+$ git checkout -b 70287	# using the Jira issue number for the work branch
+
+## make and commit changes
+## Get the new tar file.
+## For tboot ...
+$ curl -L \
+        https://sourceforge.net/projects/tboot/files/latest/download?source=files \
+        -o tboot-1.11.9.tar.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   611  100   611    0     0   2923      0 --:--:-- --:--:-- --:--:--  2937
+100   353  100   353    0     0    735      0 --:--:-- --:--:-- --:--:--   735
+100  906k  100  906k    0     0   811k      0  0:00:01  0:00:01 --:--:-- 2209k
+$
+
+## For pigz
+##
+$ wget https://zlib.net/pigz/pigz-2.8.tar.gz
+--2024-12-11 12:29:03--  https://zlib.net/pigz/pigz-2.8.tar.gz
+Resolving zlib.net (zlib.net)... 85.187.148.2
+Connecting to zlib.net (zlib.net)|85.187.148.2|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 121304 (118K) [application/x-gzip]
+Saving to: ‘pigz-2.8.tar.gz.1’
+
+pigz-2.8.tar.gz.1 100%[=========================>] 118.46K 610KB/s in 0.2s
+
+2024-12-11 12:29:04 (610 KB/s) - ‘pigz-2.8.tar.gz.1’ saved [121304/121304]
+
+## Push the new tar file into the centos-stream.
+$ centpkg upload pigz-2.8.tar.gz
+
+## That should change the sources file in your current directory,
+## so that git status will show the source diff to have the new
+## version number of the upstream tar file.
+
+# Make your edits, updates, rebase, etc.
+# Update the .spec file to the appropriate NVR.
+# - Update the changelog in the .spec file and be sure to include
+#   Resolves: RHEL-<Jira-number>
+#
+# Test the build
+# For some reason I don't yet understand, rhpkg local won't do this.
+ $ centpkg local
+
+# Make necessary changes until the build succeeds.
+# Run tests on the resulting package from the build.
+# If the build and tests succeed, commit your changes.
+$ git commit . -s
+#
+# Be sure to add the following to the commit message.
+# Resolves: RHEL-<Jira-number>
+#
+# Now push your changes to your fork
+$ git push tcamuso 70287
+
+# The push will give you a link to a new MR. Go to that link
+# and fill out the new MR. Opt for AutoMerge and delete branch
+# when merged.
+# NOTE:
+#   MAKE SURE THAT YOU ARE MERGING INTO THE CORRECT BRANCH!
+#   THE DEFAULT IS c10s !!
+#
+# The CKI test will likely fail, so the branch won't merge
+# until you prep the RHEL side.
+
+##  Create the MR and go through the process of getting merged.
+##  (magic occurs here...    :-/   )
+
+# =========
+# RHEL side
+# =========
+
+# Get the RHEL version of the package.
+$ cd /work/pigz
+$ rhpkg co pigz rh
+$ cd rh
+$ git checkout rhel-9-main
+# In this example, we are building for RHEL-9.6, but we must
+# push RHEL-9.5.0 into the origin. This is a mystery to me,
+# but nothing on the RHEL side works until you do this.
+$ git push origin rhel-9-main:rhel-9.5.0
+
+# Go back to the MR for c9s that you created and rerun the CKI
+# test that failed. After the above RHEL side prep, it should
+# now succeed.
+#
+# After your MR has been merged, you can pull the changes into
+# the RHEL-9 side.
+
+$ git pull
+
+# You should see a git update.
+# Check the git log to be sure your changes are there.
+# Do a scratch build.
+# Looking for scratch builds ...
+$ brew list-targets | grep 9\.6\.0 | grep ^rhel | grep scratch
+
+# Do a scratch build to see that it all works without errors.
+$ rhpkg --release rhel-9.6.0 scratch-build
+
+# And do any testing needed.
+#
+# If all goes well, do a formal build.
+#
+rhpkg --release rhel-9.6.0 build
+
+# That should kick-off the whole errata thing.
+# You will be alerted if there are any problems that need fixing
+# or waiving.
+
+
+##  Once it is built and gating is complete, I think we need to:
+##     Set:  Preliminary testing 'Requested' in Edit | Development
+##  in the Issue to move it to QA.
+##
+##  After QA does their job and sets Pass, the automation will create an
+## erratum (in NEW_FILES), which will have to be moved to the QE state.
+
+
