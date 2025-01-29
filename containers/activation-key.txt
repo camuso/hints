@@ -1,0 +1,21 @@
+
+Perplexity prompt:
+"How do I get or use an activation key?"
+
+Obtain an activation key:
+
+    Log in to the Red Hat Hybrid Cloud Console (https://console.redhat.com)
+    Navigate to ...
+      Services > System Configuration > Activation Keys
+    Click "Create activation key"
+    Provide a unique name for the key
+    Configure desired settings like workload, system purpose attributes, etc.
+    Click "Create" to generate the activation key
+
+Log in to the Hybrid Cloud Console:
+    Go to console.redhat.com and log in with your Red Hat account credentials.
+Navigate to Activation Keys:
+    In the left-hand navigation menu, go to...
+     RHEL > System Configuration > Activation Keys.
+View Organization ID:
+    The Organization ID is displayed alongside your activation keys on this page. It is typically a numeric value (e.g., 1234567) that identifies your organization within Red Hat's systems

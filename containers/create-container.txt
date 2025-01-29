@@ -1,0 +1,56 @@
+Perplexity prompt:
+"Guide me through the steps of creating a Container on a RHEL-9 system."
+
+Once you have the Organization ID (See activation-key.txt),
+you can use it to register systems with commands like:
+
+sudo subscription-manager register \
+	     --activationkey=<activation_key> \
+	     --org=<organization_id>
+
+Example:
+
+$ sudo subscription-manager register \
+		--activationkey=tcamuso \
+		--org=6340056
+The system has been registered with ID: 87911531-6608-490f-afb2-5539d247097b
+The registered system name is: dell-per640-01.khw.eng.rdu2.dc.redhat.com
+
+Next, intall the tools.
+
+$ sudo dnf update -y
+$ sudo dnf install container-tools -y
+
+Verify podman installation.
+
+$ podman --version
+
+Optional: Configure rootless containers
+
+$ podman system migrate
+
+Pull a test container image
+
+$ podman pull ubi9/ubi
+Resolved "ubi9/ubi" as an alias (/etc/containers/registries.conf.d/001-rhel-shortnames.conf)
+Trying to pull registry.access.redhat.com/ubi9/ubi:latest...
+Getting image source signatures
+Checking if image destination supports signatures
+Copying blob ec465ce79861 done   |
+Copying blob facf1e7dd3e0 done   |
+Copying config 4d9d358589 done   |
+Writing manifest to image destination
+Storing signatures
+4d9d3585895106bd08273429983b91f401339b921cf03c6ecfaaffc8a40b2ad5
+
+Verify the pulled image
+
+$ podman images
+REPOSITORY                           TAG         IMAGE ID      CREATED      SIZE
+registry.access.redhat.com/ubi9/ubi  latest      4d9d35858951  2 weeks ago  234 MB
+
+Run the container
+$ podman run -it ubi9/ubi
+# Where -i: Interactive mode.
+# and   -t: Allocate a pseudo-TTY.
+
