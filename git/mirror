@@ -1,0 +1,67 @@
+#! bash
+
+Where updir=/work/upstream/kernel/
+
+	local loc_main
+	local rem_main
+
+	# The mirror repo is going to be parallel to the upstream repo.
+	# If it's not there, create it.
+	mirror="$(realpath "${updir%/}/../mirror")"
+	[ -d "$mirror" ] || mkdir -p "$mirror"
+
+	# Shared upstream repo housekeeping.
+	#
+	git --git-dir="$mirror" rev-parse --is-bare-repository > /dev/null 2>&1 || {
+		ui_log "init_common: git clone --mirror $updir $mirror"
+		git clone --mirror "${updir%/}" "${mirror%/}"
+	}
+
+	# Update the mirror
+	gu_pushd "$mirror"
+	ui_log "init_common: git fetch origin --prune"
+	git fetch origin --prune
+	gu_popd
+
+	# If we don't have a reference to the upstream mirror yet, then
+	# add it.
+	if ! git config --get remote.mirror.url > /dev/null; then
+		ui_log "init_common: remote add mirror $mirror"
+		git remote add mirror "$mirror"
+	fi
+
+	# Check for updates in the mirror.
+	#
+	rem_main=$(git --git-dir="${mirror%/}" rev-parse refs/heads/master 2>/dev/null)
+	loc_main=$(git for-each-ref --format='%(objectname) %(refname)' refs/remotes/mirror/ | \
+		awk '$2 ~ /(heads\/)?master$/ {print $1; exit}')
+
+	local infostr="$INF
+If this is the first time running this script in this directory, or
+if there have been significant changes upstream since you last used
+it, please allow a couple minutes to fetch the upstream mirror.
+You will not need to add the upstream kernel as a remote, since your
+existing upstream kernel in $STA$updir$INF will be mirrored in
+$STA$mirror$INF"
+
+	if [ "$rem_main" != "$loc_main" ]; then
+	    echo -e "$infostr"
+	    ui_log "Master branch updated; fetching changes..."
+	    git fetch mirror --prune
+	fi
+
+##########################################
+# Accessing the references in the mirror
+#
+$ cat .git/config
+   :
+[remote "mirror"]
+	url = /work/upstream/mirror
+	fetch = +refs/*:refs/remotes/mirror/*
+
+$ gitnice mirror/heads/master
+088d13246a46 Merge tag 'kbuild-fixes-v6.15' of git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
+
+$ $ gitlasttag mirror/heads/master
+v6.15-rc6
+
