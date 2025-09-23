@@ -4,6 +4,15 @@
 # Prep
 # ====
 
+# Make sure you have the RCM tools repo.
+#
+# rhel-10: https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-rhel-10-baseos.repo
+# rhel-9:  https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-rhel-9-baseos.repo
+# Fedora:  https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-fedora.repo
+#
+# You should build these images natively, i.e, rhel-10 on a rhel-10
+# provisioned system.
+
 # Directory tree:
 
 /work --+--- pigz --+-- cs	# For CentOs side
@@ -133,35 +142,28 @@ $ git push origin rhel-9-main:rhel-9.5.0
 # now succeed.
 #
 # After your MR has been merged, you can pull the changes into
-# the RHEL-9 side.
+# the cs side.
 
+$ cd ../cd
 $ git pull
 
 # You should see a git update.
 # Check the git log to be sure your changes are there.
-# Do a scratch build.
-# Looking for scratch builds ...
-$ brew list-targets | grep 9\.6\.0 | grep ^rhel | grep scratch
-
+# If all is well, built the release rpm
 # Do a scratch build to see that it all works without errors.
-$ rhpkg --release rhel-9.6.0 scratch-build
-
-# And do any testing needed.
-#
-# If all goes well, do a formal build.
-#
-rhpkg --release rhel-9.6.0 build
+$ centpkg build
 
 # That should kick-off the whole errata thing.
 # You will be alerted if there are any problems that need fixing
 # or waiving.
 
 
-##  Once it is built and gating is complete, I think we need to:
-##     Set:  Preliminary testing 'Requested' in Edit | Development
-##  in the Issue to move it to QA.
+##  Preliminary testing 'Requested' should be set by the Jira bot,
+##  If not, in the Jira: Edit > Development
 ##
 ##  After QA does their job and sets Pass, the automation will create an
-## erratum (in NEW_FILES), which will have to be moved to the QE state.
-
-
+##  erratum (in NEW_FILES), which will have to be moved to the QE state.
+#
+##  When you are notified that the Errata has been created, log into
+##  the Errata and move it to QE
+##
