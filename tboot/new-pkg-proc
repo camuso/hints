@@ -9,8 +9,21 @@
 # rhel-10: https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-rhel-10-baseos.repo
 # rhel-9:  https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-rhel-9-baseos.repo
 # Fedora:  https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-fedora.repo
-#
-# You should build these images natively, i.e, rhel-10 on a rhel-10
+
+$ sudo su -
+$ cd /etc/yum.repos.d
+$ curl -o rcmtools.repo \
+  https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-rhel-9-baseos.repo
+
+# Install or update
+#   brewkoji
+#   rhpkg
+#   rhel-packager
+#   centpkg
+
+$ dnf install -y brewkoji rhpkg rhel-packager centos
+
+# You should build rpm images natively, i.e, rhel-10 on a rhel-10
 # provisioned system.
 
 # Directory tree:
@@ -72,16 +85,11 @@ $
 ## For pigz
 ##
 $ wget https://zlib.net/pigz/pigz-2.8.tar.gz
---2024-12-11 12:29:03--  https://zlib.net/pigz/pigz-2.8.tar.gz
-Resolving zlib.net (zlib.net)... 85.187.148.2
-Connecting to zlib.net (zlib.net)|85.187.148.2|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 121304 (118K) [application/x-gzip]
-Saving to: ‘pigz-2.8.tar.gz.1’
 
-pigz-2.8.tar.gz.1 100%[=========================>] 118.46K 610KB/s in 0.2s
-
-2024-12-11 12:29:04 (610 KB/s) - ‘pigz-2.8.tar.gz.1’ saved [121304/121304]
+## For tboot
+##
+wget -O tboot-1.11.10.tar.gz \
+  https://sourceforge.net/projects/tboot/files/tboot-1.11.10.tar.gz/download
 
 ## Push the new tar file into the centos-stream.
 $ centpkg upload pigz-2.8.tar.gz
@@ -154,9 +162,12 @@ $ git pull
 $ centpkg build
 
 # That should kick-off the whole errata thing.
-# You will be alerted if there are any problems that need fixing
-# or waiving.
-
+# You will receive email from [CI] [GATING] [INFO]
+# Look in that email for any problems that need fixing # or waiving.
+#
+# After CI GATING is satified, you will receive email from
+# [errata_automation]. The errata cannot be addressed until the
+# Preliminary testing is completed by the RTT.
 
 ##  Preliminary testing 'Requested' should be set by the Jira bot,
 ##  If not, in the Jira: Edit > Development
