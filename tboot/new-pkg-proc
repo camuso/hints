@@ -56,18 +56,20 @@ $ git branch -r
 
 $ git remote add tcamuso git@gitlab.com:tcamuso/pigz.git
 $ git remote -v
-origin	git+ssh://git@gitlab.com/redhat/centos-stream/rpms/pigz.git (fetch)
-origin	git+ssh://git@gitlab.com/redhat/centos-stream/rpms/pigz.git (push)
-tcamuso	git@gitlab.com:tcamuso/pigz.git (fetch)
-tcamuso	git@gitlab.com:tcamuso/pigz.git (push)
+origin git+ssh://git@gitlab.com/redhat/centos-stream/rpms/pigz.git (fetch)
+origin git+ssh://git@gitlab.com/redhat/centos-stream/rpms/pigz.git (push)
+tcamuso        git@gitlab.com:tcamuso/pigz.git (fetch)
+tcamuso        git@gitlab.com:tcamuso/pigz.git (push)
 
 ##  get on the right branch
-$ git checkout -b 9 origin/c9s
+$ git checkout origin/c9s
 Switched to branch '9'
 Your branch is up to date with 'origin/c9s'.
 
-##  checkout a working branch for this JIRA story
-$ git checkout -b 70287	# using the Jira issue number for the work branch
+## Checkout a working branch using the Jira issue number for the
+## working-branch
+$ workingbranch="<jira-nuber>
+$ git checkout -b "$workingbranch"
 
 ## make and commit changes
 ## Get the new tar file.
@@ -91,8 +93,20 @@ $ wget https://zlib.net/pigz/pigz-2.8.tar.gz
 wget -O tboot-1.11.10.tar.gz \
   https://sourceforge.net/projects/tboot/files/tboot-1.11.10.tar.gz/download
 
+## For intel-cmt-cat
+##
+wget -O intel-cmt-cat-25.04.tar.gz \
+	     https://github.com/intel/intel-cmt-cat/releases/tag/v25.04
+
+# NOTE: Uppercase O in the wget command.
+
 ## Push the new tar file into the centos-stream.
 $ centpkg upload pigz-2.8.tar.gz
+
+# NOTE:
+#   If you MUST re-upload a tarball with the same name.version,
+#   use...
+$ centpkg new-sources intel-cmt-cat-25.04.tar.gz
 
 ## That should change the sources file in your current directory,
 ## so that git status will show the source diff to have the new
@@ -116,7 +130,7 @@ $ git commit . -s
 # Resolves: RHEL-<Jira-number>
 #
 # Now push your changes to your fork
-$ git push tcamuso 70287
+$ git push tcamuso "$workingbranch"
 
 # The push will give you a link to a new MR. Go to that link
 # and fill out the new MR. Opt for AutoMerge and delete branch
@@ -152,7 +166,7 @@ $ git push origin rhel-9-main:rhel-9.5.0
 # After your MR has been merged, you can pull the changes into
 # the cs side.
 
-$ cd ../cd
+$ cd ../cs
 $ git pull
 
 # You should see a git update.
