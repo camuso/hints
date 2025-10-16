@@ -52,6 +52,12 @@ $ git branch -r
 ## In the upper right hand corner, click on Fork and go through
 ## the guided interface to create your fork.
 ##
+## Your username, e.g. tcamuso, is the namespace. Start typing
+## it into the droplist and select it when it appears.
+## Do NOT press RETURN!
+##
+## Press "Fork Project" at the bottom of the fork Web UI.
+##
 ## In your directory, add your fork.
 
 $ git remote add tcamuso git@gitlab.com:tcamuso/pigz.git
@@ -159,20 +165,33 @@ $ git checkout rhel-9-main
 # but nothing on the RHEL side works until you do this.
 $ git push origin rhel-9-main:rhel-9.5.0
 
-# Go back to the MR for c9s that you created and rerun the CKI
-# test that failed. After the above RHEL side prep, it should
+# For RHEL-10.2, push RHEL-10.1.
+$ git push origin rhel-10-main:rhel-10.1
+
+# NOTE:
+# Be sure that the JIRA has the "Fixed-In" field updated!
+# The MR will fail the "Ticket" test without this.
+#
+# Go back to the MR for c9s that you created and rerun the ticket
+# test that if it failed. After the above RHEL side prep, it should
 # now succeed.
 #
-# After your MR has been merged, you can pull the changes into
+# After your MR has been merged, you must pull the changes into
 # the cs side.
 
 $ cd ../cs
+
+# Checkout the main branch and update it.
+$ git checkout c10s
 $ git pull
 
 # You should see a git update.
 # Check the git log to be sure your changes are there.
 # If all is well, built the release rpm
 # Do a scratch build to see that it all works without errors.
+$ centpkg local
+
+# If all is well, do the main build
 $ centpkg build
 
 # That should kick-off the whole errata thing.
