@@ -120,6 +120,10 @@ $
  $ centpkg switch-branch <centos-stream, e.g. c9s>
  $ centpkg local
 
+# ==================================================================
+# NOTE: FOR TESTING USE lenovo-sr630V4-01.khw.eng.bos2.dc.redhat.com
+# ==================================================================
+
 # If the local build succeeds, and all tests have been completed,
 # you can initiate a formal releaase build from the centos-stream
 # directory. This will trigger both the CentOS Stream and RHEL builds.
