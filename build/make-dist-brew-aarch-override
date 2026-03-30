@@ -1,0 +1,1 @@
+make dist-brew BUILD_FLAGS="--arch-override=x86_64,noarch"
