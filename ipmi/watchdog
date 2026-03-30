@@ -1,4 +1,70 @@
 
+ipmitool configuration
+======================
+
+Setup
+-----
+# Blacklist competing watchdog driver
+echo "blacklist iTCO_wdt" >> /etc/modprobe.d/watchdog.conf
+
+# Load IPMI watchdog with options
+modprobe ipmi_watchdog timeout=30 action=reset
+
+# Configure watchdog daemon to use the device
+echo "watchdog-device = /dev/watchdog" >> /etc/watchdog.conf
+
+# (Optional) Configure retry timeout for transient errors
+echo "retry-timeout = 120" >> /etc/watchdog.conf
+
+# Enable and start watchdog service
+systemctl enable watchdog
+systemctl restart watchdog
+
+# Make module load at boot
+echo "ipmi_watchdog" > /etc/modules-load.d/ipmi_watchdog.conf
+echo "options ipmi_watchdog timeout=30 action=reset" > /etc/modprobe.d/ipmi_watchdog.conf
+
+Verification
+------------
+# Check module is loaded and in use
+lsmod | grep ipmi_watchdog
+
+# Check watchdog service status
+systemctl status watchdog
+
+# Check device exists
+ls -la /dev/watchdog*
+
+# Check watchdog identity
+cat /sys/class/watchdog/watchdog*/identity
+
+# Check BMC watchdog timer status
+ipmitool mc watchdog get
+
+Testing
+-------
+# Terminal 1: Monitor kernel messages
+dmesg -w | grep -i "heartbeat\|retry\|watchdog\|ipmi"
+
+# Terminal 2: Trigger BMC reset
+ipmitool mc reset cold
+
+Troubleshooting
+---------------
+# Check what has /dev/watchdog open
+fuser -v /dev/watchdog
+lsof /dev/watchdog
+
+# Check timeout parameter
+cat /sys/module/ipmi_watchdog/parameters/timeout
+
+# Unload/reload module
+rmmod ipmi_watchdog
+modprobe ipmi_watchdog timeout=30 action=reset
+
+======================
+OpenIPMI configuration
+======================
 Load watchdog with timeout=60
 
 # modprobe -v ipmi_watchdog timeout=60
