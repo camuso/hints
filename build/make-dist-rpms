@@ -1,0 +1,19 @@
+# Option 1: Use the built-in dist-rpm-baseonly target (easiest)
+# This passes 
+# --without debug
+# --without debuginfo
+# --without vdso_install
+# --without bpftool
+# --without perf
+# --without tools. 
+#
+make dist-rpm-baseonly
+
+
+# To also skip selftests, override it with ...
+make dist-rpm-baseonly \
+	RPMBUILDOPTS="--target x86_64 --without debug --without debuginfo --without vdso_install --without bpftool --without perf --without tools --without selftests -bb"
+
+# Option 2: Use dist-rpms with RPMBUILDOPTS
+make dist-rpms RPMBUILDOPTS="--target x86_64 --without debug --without debuginfo --without selftests -bb"
+
