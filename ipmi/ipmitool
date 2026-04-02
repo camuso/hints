@@ -1,4 +1,10 @@
 
+Reset a system's bmc over the network.
+ipmitool -I lanplus -H <bmc-ip> -U <user> -P <password> mc reset cold
+
+Reset (reboot) a system over the network.
+ipmitool -I lanplus -H <bmc-ip> -U <user> -P <password> chassis power reset
+
 On the target (server) system, you can clear the password with the following
 command.
 

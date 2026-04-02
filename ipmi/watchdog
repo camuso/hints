@@ -17,7 +17,7 @@ echo "watchdog-device = /dev/watchdog" >> /etc/watchdog.conf
 # (Optional) Configure retry timeout for transient errors
 echo "retry-timeout = 120" >> /etc/watchdog.conf
 
-# Configrure 
+# Configrure
 
 # Enable and start watchdog service
 systemctl enable watchdog
@@ -36,6 +36,7 @@ lsmod | grep ipmi_watchdog
 systemctl status watchdog
 
 # View current settings
+grep -v "^#" /etc/watchdog.conf | grep -v "^$"
 cat /sys/module/ipmi_watchdog/parameters/timeout
 cat /sys/module/ipmi_watchdog/parameters/action
 ipmitool mc watchdog get
