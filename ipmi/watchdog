@@ -7,14 +7,17 @@ Setup
 # Blacklist competing watchdog driver
 echo "blacklist iTCO_wdt" >> /etc/modprobe.d/watchdog.conf
 
-# Load IPMI watchdog with options
+# Load IPMI watchdog with options for different watchdog timeouts
 modprobe ipmi_watchdog timeout=30 action=reset
+modprobe ipmi_watchdog timeout=120 action=reset
 
 # Configure watchdog daemon to use the device
 echo "watchdog-device = /dev/watchdog" >> /etc/watchdog.conf
 
 # (Optional) Configure retry timeout for transient errors
 echo "retry-timeout = 120" >> /etc/watchdog.conf
+
+# Configrure 
 
 # Enable and start watchdog service
 systemctl enable watchdog
@@ -32,14 +35,19 @@ lsmod | grep ipmi_watchdog
 # Check watchdog service status
 systemctl status watchdog
 
+# View current settings
+cat /sys/module/ipmi_watchdog/parameters/timeout
+cat /sys/module/ipmi_watchdog/parameters/action
+ipmitool mc watchdog get
+
+# Check BMC watchdog timer status
+systemctl status watchdog
+
 # Check device exists
 ls -la /dev/watchdog*
 
 # Check watchdog identity
 cat /sys/class/watchdog/watchdog*/identity
-
-# Check BMC watchdog timer status
-ipmitool mc watchdog get
 
 Testing
 -------
