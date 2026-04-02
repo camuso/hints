@@ -1,0 +1,17 @@
+On the receiver machine (10.6.10.143):
+
+nc -u -l 6666
+On the test machine (Dell R640):
+
+# Find the right interface
+ip route get 10.6.10.143
+
+# Load netconsole (replace eno1 with whatever the above command shows)
+modprobe netconsole netconsole=@/eno1,6666@10.6.10.143/
+
+# Verify it's working:
+echo "netconsole test" > /dev/kmsg
+
+You should see "netconsole test" appear on the receiver. If it does, you're
+capturing kernel messages. Trigger the BMC reset and the pr_crit messages will
+appear on the receiver before the system goes down.
