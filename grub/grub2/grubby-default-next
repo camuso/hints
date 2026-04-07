@@ -1,0 +1,21 @@
+List available boot entries:
+grubby --info=ALL | grep -E "^index|^kernel|^title"
+
+Or more concisely:
+grep -E "^menuentry|^submenu" /boot/grub2/grub.cfg | head -20
+
+Set the next boot to a specific entry (one-time, reverts after):
+grub2-reboot <index-or-title>
+
+For example:
+grub2-reboot 1
+
+Or by title:
+grub2-reboot "CentOS Stream (5.14.0-688.el9.x86_64) 9"
+
+Set the default permanently:
+grub2-set-default <index-or-title>
+
+After either command, the change takes effect on the next reboot.
+
+
