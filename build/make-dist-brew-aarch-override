@@ -1,1 +1,27 @@
 make dist-brew BUILD_FLAGS="--arch-override=x86_64,noarch"
+
+make dist-rpm-baseonly \
+	     RPMBUILDOPTS="--target x86_64 \
+	     --without debug \
+	     --without debuginfo \
+	     --without vdso_\
+	     install \
+	     --without bpftool \
+	     --without perf \
+	     --without tools \
+	     --without selftests \
+	     -bb"
+
+
+# Also ...
+make dist-srpm
+rpmbuild --rebuild --target x86_64 \
+    --without debug \
+    --without debuginfo \
+    --without vdso_install \
+    --without bpftool \
+    --without perf \
+    --without tools \
+    --without selftests \
+    -bb redhat/SRPMS/*.src.rpm
+
