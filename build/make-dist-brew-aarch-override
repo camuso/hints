@@ -1,16 +1,19 @@
+# Use brew to build for just one arch
 make dist-brew BUILD_FLAGS="--arch-override=x86_64,noarch"
 
+# Build kernel rpm for install on x86_84 host only
 make dist-rpm-baseonly \
-	     RPMBUILDOPTS="--target x86_64 \
-	     --without debug \
-	     --without debuginfo \
-	     --without vdso_\
-	     install \
-	     --without bpftool \
-	     --without perf \
-	     --without tools \
-	     --without selftests \
-	     -bb"
+	RPMBUILDOPTS="--target x86_64 \
+	--without debug \
+	--without debuginfo \
+	--without vdso_install \
+	--without perf \
+	--without tools \
+	--without selftests \
+	--without realtime \
+	--without doc \
+	--without cross_headers \
+	-bb"
 
 
 # Also ...
@@ -23,5 +26,8 @@ rpmbuild --rebuild --target x86_64 \
     --without perf \
     --without tools \
     --without selftests \
+    --without realtime \
+    --without doc \
+    --without cross_headers \
     -bb redhat/SRPMS/*.src.rpm
 
