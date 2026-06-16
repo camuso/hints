@@ -28,26 +28,63 @@ $ curl -o rcmtools.repo \
 $ dnf install -y brewkoji rhpkg rhel-packager centos
 
 # You should build rpm images natively, i.e, rhel-10 on a rhel-10
-# provisioned system.
+# provisioned system or use the developer toolbox.
 
-# Directory tree:
+# Suggested Directory tree, where 99 is for rhel-9.9
 
-/work --+--- pigz --+-- cs	# For CentOs side
-        |           |
-	|           +-- rh	# For RHEL side
-	:
+/work --+--- tboot -- rh9 -- 99 --+-- cs	# For CentOs side
+        |              |          |
+	|              |          +-- rh	# For RHEL side
+	:             rh10
+	               :
 
-# CENTOS side
-# ===========
+# Create the directory tree
+$ cd /work/tboot
+$ mkdir -p rh9/99/cs
+$ mkdir -p rh9/99/rh
 
-$ cd /work/pigz
-$ centpkg co pigz cs
-$ cd cs
+# Clone the package repos into their respective directories.
+$ cd /work/tboot/rh9/99
+$ centpkg co tboot cs
+$ rhpkg co tboot rh
+$ cd /work/tboot/rh9/99/rh
+
+$ git branch -r | grep rhel-9
+  origin/rhel-9-main   # <- rhel-9-main
+  origin/rhel-9.0.0
+  origin/rhel-9.0.0-alpha
+  origin/rhel-9.0.0-beta
+  origin/rhel-9.1.0
+  origin/rhel-9.2.0
+  origin/rhel-9.3.0
+  origin/rhel-9.4.0
+  origin/rhel-9.5.0
+  origin/rhel-9.7.0
+  origin/rhel-9.8.0
+
+# checkout the main branch
+$ git checkout -b rhel-9-main origin/rhel-9-main
+
+# Push the old branch in to main in order to create the new branch
+$ git push origin rhel-9-main:rhel-9.8.0
+Using tboot.spec
+The --release was set to 'rhel-9.9.0'
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: * Publishing information for 1 commits
+To ssh://pkgs.devel.redhat.com/rpms/tboot
+ * [new branch]      rhel-9-main -> rhel-9.8.0
+
+# Now do the work on the cs branch
+$ cd /work/tboot/rh9/99/cs
 $ git branch -r
   origin/HEAD -> origin/c10s
   origin/c10s
   origin/c8s
   origin/c9s
+
+$ git checkout -b c9s-<jira-number> origin/c9s
+Switched to branch 'c9s-<jira-number>'
+Your branch is up to date with 'origin/c9s'.
 
 ## If it doesn't exist, create your fork using the gitlab web ui.
 ## Go to https://gitlab.com/dashboard/projects
@@ -70,16 +107,6 @@ origin git+ssh://git@gitlab.com/redhat/centos-stream/rpms/pigz.git (fetch)
 origin git+ssh://git@gitlab.com/redhat/centos-stream/rpms/pigz.git (push)
 tcamuso        git@gitlab.com:tcamuso/pigz.git (fetch)
 tcamuso        git@gitlab.com:tcamuso/pigz.git (push)
-
-##  get on the right branch
-$ git checkout origin/c9s
-Switched to branch '9'
-Your branch is up to date with 'origin/c9s'.
-
-## Checkout a working branch using the Jira issue number for the
-## working-branch
-$ workingbranch="<jira-nuber>
-$ git checkout -b "$workingbranch"
 
 ## make and commit changes
 ## Get the new tar file.
@@ -155,23 +182,6 @@ $ git push tcamuso "$workingbranch"
 ##  Create the MR and go through the process of getting merged.
 ##  (magic occurs here...    :-/   )
 
-# =========
-# RHEL side
-# =========
-
-# Get the RHEL version of the package.
-$ cd /work/pigz
-$ rhpkg co pigz rh
-$ cd rh
-$ git checkout rhel-9-main
-# In this example, we are building for RHEL-9.6, but we must
-# push RHEL-9.5.0 into the origin. This is a mystery to me,
-# but nothing on the RHEL side works until you do this.
-$ git push origin rhel-9-main:rhel-9.5.0
-
-# For RHEL-10.2, push RHEL-10.1.
-$ git push origin rhel-10-main:rhel-10.1
-
 # NOTE:
 # Be sure that the JIRA has the "Fixed-In" field updated!
 # The MR will fail the "Ticket" test without this.
@@ -185,6 +195,7 @@ $ git push origin rhel-10-main:rhel-10.1
 
 $ cd ../cs
 
+# AFTER the MR has merged ...
 # Checkout the main branch and update it.
 $ git checkout c10s
 $ git pull
