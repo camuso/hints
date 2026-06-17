@@ -1,0 +1,109 @@
+===================================================================
+Setting Up Toolbox Containers for Building on c9s and c10s
+===================================================================
+
+Prerequisites
+-------------------------------------------------------------------
+- Fedora, CentOS Stream, or RHEL host with podman installed
+- toolbox (toolbx) installed on the host
+
+  sudo dnf install toolbox
+
+===================================================================
+Creating Toolbox Containers
+===================================================================
+
+Create a c9s container:
+
+  toolbox create --image quay.io/centos/centos:stream9 c9s
+
+Create a c10s container:
+
+  toolbox create --image quay.io/centos/centos:stream10 c10s
+
+===================================================================
+Entering the Containers
+===================================================================
+
+Enter the c9s container:
+
+  toolbox enter c9s
+
+Enter the c10s container:
+
+  toolbox enter c10s
+
+===================================================================
+Setting Up the Build Environment Inside Each Container
+===================================================================
+
+After entering each container, install the development tools
+and build dependencies.
+
+1. Enable CRB (CodeReady Builder) repository:
+
+  sudo dnf install -y dnf-plugins-core
+  sudo dnf config-manager --set-enabled crb
+
+2. Install base development tools:
+
+  sudo dnf groupinstall -y "Development Tools"
+
+3. Install kernel build dependencies:
+
+  sudo dnf install -y                                          \
+      elfutils-libelf-devel openssl-devel perl              \
+      bc bison flex dwarves python3                         \
+      rpm-build redhat-rpm-config                           \
+      pesign grubby                                         \
+      hmaccalc net-tools hostname                           \
+      ncurses-devel
+
+4. Install additional useful packages:
+
+  sudo dnf install -y vim git wget curl
+
+5. (Optional) Kernel development tools -- not needed for RPM
+   package rebases, but useful for kernel source analysis:
+
+  sudo dnf install -y sparse coccinelle
+
+===================================================================
+Managing Containers
+===================================================================
+
+List all toolbox containers:
+
+  toolbox list
+
+Stop a container (from the host):
+
+  podman stop c9s
+  podman stop c10s
+
+Remove a container:
+
+  toolbox rm c9s
+  toolbox rm c10s
+
+===================================================================
+Tips
+===================================================================
+
+- Your home directory is automatically shared between the
+  host and the container, so files are accessible in both.
+
+- DNS and networking are inherited from the host.
+
+- To run a single command without entering the container:
+
+  toolbox run -c c9s <command>
+  toolbox run -c c10s <command>
+
+- If you need to reset a container to a clean state, remove
+  it and recreate it from the image.
+
+- The container inherits your user account, UID, and GID
+  from the host, so file permissions stay consistent.
+
+===================================================================
