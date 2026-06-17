@@ -1,0 +1,187 @@
+# !text
+#
+# intel-cmt-cat rebase procedure
+
+# Prep
+# ====
+
+# Make sure you have the RCM tools repo.
+#
+# rhel-10: https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-rhel-10-baseos.repo
+# rhel-9:  https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-rhel-9-baseos.repo
+# Fedora:  https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-fedora.repo
+
+$ sudo su -
+$ cd /etc/yum.repos.d
+$ curl -o rcmtools.repo \
+  https://download.devel.redhat.com/rel-eng/RCMTOOLS/rcm-tools-rhel-9-baseos.repo
+
+# Install or update
+$ dnf install -y brewkoji rhpkg rhel-packager centpkg
+
+# You should build rpm images natively, i.e, rhel-10 on a rhel-10
+# provisioned system, or use the developer toolbox.
+#
+# Toolbox setup
+# -------------
+# If you don't have a matching toolbox container, create one.
+# See ~/toolbox/toolbox-setup.txt for detailed instructions.
+#
+# Quick start:
+$ toolbox create --image quay.io/centos/centos:stream9 c9s
+#
+# Enter the container and install build dependencies:
+$ toolbox enter c9s
+$ sudo dnf install -y dnf-plugins-core
+$ sudo dnf config-manager --set-enabled crb
+$ sudo dnf groupinstall -y "Development Tools"
+$ sudo dnf install -y rpm-build redhat-rpm-config
+# exit the toolbox when done with setup
+
+# Directory tree
+#
+# /work/intel-cmt-cat --+-- cs    # CentOS Stream side
+#                       |
+#                       +-- rh    # RHEL side
+
+$ mkdir -p /work/intel-cmt-cat/{cs,rh}
+
+# Clone the package repos into their respective directories.
+$ cd /work/intel-cmt-cat
+$ centpkg co intel-cmt-cat cs
+$ rhpkg co intel-cmt-cat rh
+
+# ---------------------------------------------------------------
+# RHEL side: create the new release branch
+# ---------------------------------------------------------------
+$ cd /work/intel-cmt-cat/rh
+
+$ git branch -r | grep rhel-9
+
+# checkout the main branch
+$ git checkout -b rhel-9-main origin/rhel-9-main
+
+# Push the old branch into main in order to create the new branch
+$ git push origin rhel-9-main:rhel-9.8.0
+
+# ---------------------------------------------------------------
+# CentOS Stream side: do the rebase work
+# ---------------------------------------------------------------
+$ cd /work/intel-cmt-cat/cs
+
+$ git branch -r
+$ git checkout -b c9s-<jira-number> origin/c9s
+
+## If it doesn't exist, create your fork using the gitlab web ui.
+## Go to https://gitlab.com/dashboard/projects
+## Search for intel-cmt-cat
+## Click on the Red Hat / centos-stream / rpms / intel-cmt-cat link
+## In the upper right hand corner, click on Fork and go through
+## the guided interface to create your fork.
+##
+## Your username, e.g. tcamuso, is the namespace. Start typing
+## it into the droplist and select it when it appears.
+## Do NOT press RETURN!
+##
+## Press "Fork Project" at the bottom of the fork Web UI.
+##
+## In your directory, add your fork.
+
+$ git remote add tcamuso git@gitlab.com:tcamuso/intel-cmt-cat.git
+$ git remote -v
+origin  git+ssh://git@gitlab.com/redhat/centos-stream/rpms/intel-cmt-cat.git (fetch)
+origin  git+ssh://git@gitlab.com/redhat/centos-stream/rpms/intel-cmt-cat.git (push)
+tcamuso git@gitlab.com:tcamuso/intel-cmt-cat.git (fetch)
+tcamuso git@gitlab.com:tcamuso/intel-cmt-cat.git (push)
+
+## Get the new upstream tar file.
+## NOTE: Uppercase -O in the wget command.
+##       Use /archive/refs/tags/ for the source tarball (not /releases/tag/).
+##
+$ wget -O intel-cmt-cat-25.04.tar.gz \
+  https://github.com/intel/intel-cmt-cat/archive/refs/tags/v25.04.tar.gz
+
+## Push the new tar file into centos-stream.
+$ centpkg upload intel-cmt-cat-25.04.tar.gz
+
+# NOTE:
+#   If you MUST re-upload a tarball with the same name.version,
+#   use...
+$ centpkg new-sources intel-cmt-cat-25.04.tar.gz
+
+## That should change the sources file in your current directory,
+## so that git status will show the source diff to have the new
+## version number of the upstream tar file.
+
+# Make your edits, updates, rebase, etc.
+# Update the .spec file to the appropriate NVR.
+# - Update the changelog in the .spec file and be sure to include
+#   Resolves: RHEL-<Jira-number>
+#
+# Test the build
+# ~~~~~~~~~~~~~~
+# Option 1: centpkg local (native only -- must be on the target OS)
+$ centpkg local
+
+# Option 2: pkglocal script (auto-detects a matching toolbox)
+#   By default, pkglocal reads the .spec Release tag (e.g. .el9)
+#   and runs rpmbuild inside the corresponding toolbox container.
+#   Use -n to force a native (host) build, or -t NAME to pick a
+#   specific toolbox.
+$ pkglocal            # auto-detect toolbox from .spec
+$ pkglocal -t c9s     # explicit toolbox name
+$ pkglocal -n         # build on the host, no toolbox
+
+# Make necessary changes until the build succeeds.
+# Run tests on the resulting package from the build.
+# If the build and tests succeed, commit your changes.
+$ git commit . -s
+#
+# Be sure to add the following to the commit message.
+# Resolves: RHEL-<Jira-number>
+#
+# Now push your changes to your fork
+$ git push tcamuso "$workingbranch"
+
+# The push will give you a link to a new MR. Go to that link
+# and fill out the new MR. Opt for AutoMerge and delete branch
+# when merged.
+# NOTE:
+#   MAKE SURE THAT YOU ARE MERGING INTO THE CORRECT BRANCH!
+#   THE DEFAULT IS c10s !!
+#
+# The CKI test will likely fail, so the branch won't merge
+# until you prep the RHEL side.
+
+# NOTE:
+# Be sure that the JIRA has the "Fixed-In" field updated!
+# The MR will fail the "Ticket" test without this.
+#
+# Go back to the MR for c9s that you created and rerun the ticket
+# test if it failed. After the above RHEL side prep, it should
+# now succeed.
+
+# ---------------------------------------------------------------
+# After the MR has merged: build
+# ---------------------------------------------------------------
+# Pull the merged changes.
+$ cd /work/intel-cmt-cat/cs
+$ git checkout c9s
+$ git pull
+
+# You should see a git update.
+# Check the git log to be sure your changes are there.
+# Do a scratch build to see that it all works without errors.
+$ centpkg local       # native
+$ pkglocal            # or via toolbox (auto-detects from .spec)
+
+# The merged MR should kick-off the whole errata thing.
+# You will receive email from [CI] [GATING] [INFO]
+# Look in that email for any problems that need fixing or waiving.
+#
+# After CI GATING is satisfied, you will receive email from
+# [errata_automation]. The errata cannot be addressed until the
+# Preliminary testing is completed by the RTT.
+
+##  Preliminary testing 'Requested' should be set by the Jira bot.
+##  If not, in the Jira: Edit > Development
