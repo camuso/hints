@@ -1,0 +1,206 @@
+========================================================================
+VNC + SSH Tunnel Setup: W11 Desktop → Thinkpad → Remote Systems
+========================================================================
+
+Overview
+--------
+The Thinkpad runs CSB Fedora, which blocks all inbound connections.
+The W11 desktop has a large 3440x1440 monitor. We use reverse SSH
+tunnels from the Thinkpad to the W11 to expose VNC and SSH ports.
+
+The W11 cannot initiate connections to the Thinkpad, but the
+Thinkpad can connect to the W11 (same LAN, 192.168.3.x).
+
+Machines
+--------
+  W11 Desktop : 192.168.3.252  (user: tony)
+  Thinkpad    : 192.168.3.86   (user: tcamuso, CSB Fedora 44)
+  dl380       : 10.6.10.143    (user: tcamuso, remote behind RH VPN)
+
+========================================================================
+1. SSH Config (~/.ssh/config on the Thinkpad)
+========================================================================
+
+  Host w11
+      HostName 192.168.3.252
+      User tony
+      RemoteForward 2222 localhost:22
+      RemoteForward 5901 localhost:5901
+      RemoteForward 5902 localhost:5902
+
+  Host *.redhat.com
+      RemoteForward 2222 localhost:22
+
+  Port explanations:
+    2222 → Thinkpad SSH (so W11 can ssh back via localhost:2222)
+    5901 → Thinkpad VNC (TigerVNC, display :1, 3440x1440)
+    5902 → Forwarded remote VNC (e.g. dl380 display :2)
+
+========================================================================
+2. VNC Server on the Thinkpad (TigerVNC)
+========================================================================
+
+  Display assignment (/etc/tigervnc/vncserver.users):
+    :1=tcamuso
+
+  VNC config (~/.vnc/config):
+    session=gnome
+    geometry=3440x1440
+    alwaysshared
+
+  Set VNC password:
+    vncpasswd
+
+  Start/stop:
+    sudo systemctl enable --now vncserver@:1
+    sudo systemctl stop vncserver@:1
+
+  This creates a SEPARATE desktop session at 3440x1440.
+  It is NOT a mirror of the laptop screen.
+  The session persists even when the VNC viewer disconnects.
+
+========================================================================
+3. Daily Workflow: Thinkpad VNC on the Big Monitor
+========================================================================
+
+  From the Thinkpad terminal:
+
+    ssh w11                     # opens reverse tunnels, keep open
+
+  From the W11:
+
+    VNC viewer → localhost:5901   # Thinkpad desktop at 3440x1440
+
+========================================================================
+4. Direct VNC to Remote System (dl380) on the Big Monitor
+========================================================================
+
+  This bypasses the Thinkpad VNC session entirely. The chain:
+
+    W11 :5902 → Thinkpad :5902 → dl380 :5902
+
+  ORDER MATTERS. Do these steps in sequence:
+
+  Step 1: From the Thinkpad, SSH to the remote with local forward:
+
+    ssh -L 5902:localhost:5902 tcamuso@10.6.10.143
+
+    (Keep this session open. This makes thinkpad:5902 forward
+    to dl380:5902.)
+
+  Step 2: Disconnect and reconnect the W11 tunnel:
+
+    ssh w11
+
+    (Keep this session open. This reverse-forwards W11:5902
+    to thinkpad:5902. Must be done AFTER step 1 so that
+    thinkpad:5902 is already listening.)
+
+  Step 3: From the W11:
+
+    VNC viewer → localhost:5902   # Direct to dl380 desktop
+
+========================================================================
+5. SSH from W11 Back to Thinkpad
+========================================================================
+
+  While ssh w11 is open, from the W11:
+
+    ssh -p 2222 tcamuso@localhost
+
+========================================================================
+6. W11 OpenSSH Server Setup (already done)
+========================================================================
+
+  Installed via PowerShell (Admin):
+
+    Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+    Start-Service sshd
+    Set-Service -Name sshd -StartupType Automatic
+
+  Firewall rule:
+
+    New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server' \
+      -Enabled True -Direction Inbound -Protocol TCP \
+      -Action Allow -LocalPort 22
+
+  Passwordless auth (admin users use a special file):
+
+    Add-Content -Path `
+      C:\ProgramData\ssh\administrators_authorized_keys `
+      -Value "<thinkpad public key>"
+
+    icacls C:\ProgramData\ssh\administrators_authorized_keys `
+      /inheritance:r /grant "SYSTEM:(F)" `
+      /grant "BUILTIN\Administrators:(F)"
+
+========================================================================
+7. Firefox Dual-Profile Setup
+========================================================================
+
+  The Thinkpad VNC session is a separate desktop, so Firefox
+  can only run in one session at a time (profile lock).
+
+  Solution: separate profile for Google Meet on the laptop screen.
+
+  On the laptop's local terminal:
+
+    DISPLAY=:0 firefox -P "meet" --no-remote &
+
+  In the VNC session:
+
+    firefox -P "default-redhat" --no-remote &
+
+  The --no-remote flag allows both to run simultaneously.
+  Do NOT check "Use selected profile without asking at startup."
+
+========================================================================
+8. Microphone Fix
+========================================================================
+
+  The internal mic was overdriven (+30dB boost + 100% capture),
+  causing clipping and "warbly" distortion.
+
+  Fixed settings:
+
+    amixer -c 0 sset 'Internal Mic Boost' 0
+    amixer -c 0 sset 'Capture' 60%
+
+  Test with:
+
+    arecord -d 5 -f S16_LE -r 44100 -c 1 /tmp/test.wav
+    aplay /tmp/test.wav
+
+  If too quiet on Meet calls, bump capture:
+
+    amixer -c 0 sset 'Capture' 70%
+
+========================================================================
+9. Root SSH on CSB Fedora
+========================================================================
+
+  CSB sets PermitRootLogin no in:
+    /etc/ssh/sshd_config.d/99-csb-remote-access.conf
+
+  Changed to:
+    PermitRootLogin prohibit-password
+
+  Thinkpad pubkey copied to /root/.ssh/authorized_keys.
+
+========================================================================
+10. Notes
+========================================================================
+
+  - The VNC session on the Thinkpad persists when the viewer
+    disconnects. Do NOT log out from the GNOME menu inside VNC.
+
+  - Suspend (close lid) is safe. USB devices (SSD + boot stick)
+    stay connected. Reconnect ssh w11 after waking.
+
+  - The ssh w11 session must stay open for all tunnels to work.
+    If it drops, just reconnect.
+
+  - For the remote VNC tunnel (section 4), the SSH to the
+    remote MUST be established before reconnecting ssh w11.
+
+========================================================================
