@@ -1,0 +1,8 @@
+# record 5 seconds of 44100 Hz audo
+arecord -d 5 -f S16_LE -r 44100 -c 1 /tmp/voice_test.wav && aplay /tmp/voice_test.wav
+
+# Play it back
+aplay /tmp/voic_test.wav
+
+# Change mic volume to 70% max
+amixer -c 0 sset 'Capture' 70%
